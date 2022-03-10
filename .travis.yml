@@ -10,7 +10,7 @@ script:
   - git clone https://gitee.com/hitsz-lab/net-work-security.git
   - mv NetworkSecurity site
   - mkdocs build
-  - git config user.name "NetworkSecurity"
+  - git config user.name "18575534628"
   - git config user.email "76212788@qq.com"
   - cd site
   - git add * 
