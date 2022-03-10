@@ -1,0 +1,74 @@
+# 所有网页的统一标题
+# 标题建议统一格式，如：计算机体系结构实验（2022春季） | 哈工大（深圳）
+site_name: GiteePage入门指南
+# 版权信息————记得更新年份
+copyright: 'Copyright &copy; 2019 - 2022 哈尔滨工业大学（深圳）'
+# 仓库名称(非必须)————可自定义
+repo_name: 'NetworkSecurity'
+# 仓库URL(非必须)
+repo_url: 'https://gitee.com/hitsz-cslab/net-work-security'
+
+# 所使用的Markdown扩展————一般不需要改动
+markdown_extensions:
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  # 支持emoji表情
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed
+  - pymdownx.tilde
+  - admonition
+  - mdx_math:
+      enable_dollar_delimiter: True
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML
+  # - mathjaxhelper.js
+
+# GiteePage主题————使用统一模板：material
+theme:
+  language: 'zh'
+  name: material
+  features:
+    - navigation.tabs
+  icon:
+    # 网页标题左侧的图标————可更换成其他fontawesome图标，详见https://fontawesome.com/
+    logo: fontawesome/solid/microchip
+    repo: fontawesome/brands/git-alt
+    # favicon: fontawesome/solid/microchip
+  palette:
+    primary: 'blue'   # 网页底色
+    accent: 'red'    # 交互元素颜色
+
+# 导航设置
+# （1）最多三级缩进，每一级缩进对应一个级别层次
+# （2）可使用中文或其他语言的字符，但文字与markdown文件之间的冒号必须是英文冒号
+nav:
+  - 首页:
+    - 实验须知: index.md
+    - 作业提交说明: ojguide.md
+  - 实验1：XXX:
+    - 实验概述: lab1/overview.md
+    - 实验原理: lab1/theory.md
+    - 实验步骤: lab1/step.md
+    - 附加题: lab1/extra.md
+    - 验收与提交: lab1/submit.md
+  - 实验2：XXX:
+    - 实验概述: lab2/overview.md
+    - 实验原理: lab2/theory.md
+    - 实验步骤: lab2/step.md
+    - 附加题: lab2/extra.md
+    - 验收与提交: lab2/submit.md
+  - MkDocs使用说明: mkdocs_guide/mkdocs_guide.md
+ 
