@@ -1,6 +1,6 @@
 # 哈尔滨工业大学（深圳）2022年春《网络安全》课程实验指导书 
 
-![](https://api.travis-ci.org/Bohan-hu/HITSZ-COMP2008-Course.svg?branch=master)
+
 
 - 声明：本课程资料仅限于哈尔滨工业大学（深圳）《网络安全》（2022春）课程使用，严禁扩散或用作其他用途。
 
