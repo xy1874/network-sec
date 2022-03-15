@@ -45,6 +45,7 @@
 <center>图1-3 启动</center>
 
 ### 2. 部署容器
+
 &emsp;&emsp;Step1：下载本次实验需要的容器压缩包[PKI_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[SEED实验室PKI Lab](https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/)。
 
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中，并解压。使用命令为 unzip Labsetup.zip
