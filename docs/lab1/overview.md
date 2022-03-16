@@ -58,10 +58,15 @@
 <center><img src="../assets/1-4.png" width = 200></center>
 <center>图1-4 容器正常启动</center>
 
+&emsp;&emsp;Step5: 最后，在主机的/etc/hosts文件增加如下一条配置10.9.0.80       www.bank32.com ，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。
+<center><img src="../assets/1-5.png" width = 200></center>
+<center>图1-5 配置主机hosts文件</center>
+
+
 !!! info "说明 :sparkles:"
 &emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
-<center><img src="../assets/1-5.png" width = 200></center>
-<center>图1-5 查看正在启动的容器ID</center>
 <center><img src="../assets/1-6.png" width = 200></center>
-<center>图1-6 进入容器的shell</center>
+<center>图1-6 查看正在启动的容器ID</center>
+<center><img src="../assets/1-7.png" width = 200></center>
+<center>图1-7 进入容器的shell</center>
          

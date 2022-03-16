@@ -62,30 +62,30 @@ nav:
     - 实验概述: lab1/overview.md
     - 实验原理: lab1/theory.md
     - 实验步骤: lab1/step.md
-    - 附加题: lab1/extra.md
+  #  - 附加题: lab1/extra.md
     - 验收与提交: lab1/submit.md
   - 实验2：TLS:
     - 实验概述: lab2/overview.md
     - 实验原理: lab2/theory.md
     - 实验步骤: lab2/step.md
-    - 附加题: lab2/extra.md
+  #  - 附加题: lab2/extra.md
     - 验收与提交: lab2/submit.md
   - 实验3：DNS:
     - 实验概述: lab3/overview.md
     - 实验原理: lab3/theory.md
     - 实验步骤: lab3/step.md
-    - 附加题: lab3/extra.md
+  #  - 附加题: lab3/extra.md
     - 验收与提交: lab3/submit.md
   - 实验4：防火墙 iptables:
     - 实验概述: lab4/overview.md
     - 实验原理: lab4/theory.md
     - 实验步骤: lab4/step.md
-    - 附加题: lab4/extra.md
+  #  - 附加题: lab4/extra.md
     - 验收与提交: lab4/submit.md
   - 附加题：XXX:
     - 实验概述: lab5/overview.md
     - 实验原理: lab5/theory.md
     - 实验步骤: lab5/step.md
-    - 附加题: lab5/extra.md
+  #  - 附加题: lab5/extra.md
     - 验收与提交: lab5/submit.md
  
