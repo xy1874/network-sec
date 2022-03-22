@@ -13,16 +13,18 @@
 
 &emsp;&emsp;本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/ ，我们只需要完成其中的前2个任务。通过任务1，我们完成TLS客户端的握手抓包分析过程和TLS的证书验证过，并理解分析TLS的客户端编程；通过任务2我们利用多种该方式完成TLS的服务器端响应客户端的过程，并理解分析TLS的服务器端编程。第三个任务作为附加题，欢迎大家完成附加题。任务列表如下：
 
-&emsp;&emsp;Task1 TLS 客户端
-&emsp;&emsp;&emsp; Task1.1 TLS握手
-&emsp;&emsp;&emsp; Task1.2 TLS协议中的CA认证
-&emsp;&emsp;&emsp; Task1.3 TLS认证中的校验服务器的主机名
-&emsp;&emsp;&emsp; Task1.4 利用TLS协议传输应用数据
+### Task1 TLS 客户端
 
-&emsp;&emsp;Task2 TLS 服务器端
-&emsp;&emsp;&emsp; Task2.1 实现一个简单的TLS服务器
-&emsp;&emsp;&emsp; Task2.2 利用主机浏览器测试实现是TLS服务器
-&emsp;&emsp;&emsp; Task2.3 测试服务器有别名的情况
+&emsp;&emsp;Task1.1 TLS握手
+&emsp;&emsp;Task1.2 TLS协议中的CA认证
+&emsp;&emsp;Task1.3 TLS认证中的校验服务器的主机名
+&emsp;&emsp;Task1.4 利用TLS协议传输应用数据
+
+### Task2 TLS 服务器端
+
+&emsp;&emsp;Task2.1 实现一个简单的TLS服务器
+&emsp;&emsp;Task2.2 利用主机浏览器测试实现是TLS服务器
+&emsp;&emsp;Task2.3 测试服务器有别名的情况
 
 
 ## 实验环境
@@ -36,21 +38,21 @@
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/TLS目录下，并解压。使用命令为 unzip TLS_Labsetup.zip
 
 &emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，server和proxy三个容器
-cd Labsetup/
-dcbuild # Alias for: docker-compose build
-dcup # Alias for: docker-compose up
+    cd Labsetup/
+    dcbuild # Alias for: docker-compose build
+    dcup # Alias for: docker-compose up
 
-dcup
-WARNING: Found orphan containers (www-10.9.0.80) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
-Starting client-10.9.0.5       ... done
-Starting server-10.9.0.43      ... done
-Starting mitm-proxy-10.9.0.143 ... done
-Attaching to mitm-proxy-10.9.0.143, server-10.9.0.43, client-10.9.0.5
+    dcup
+    WARNING: Found orphan containers (www-10.9.0.80) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+    Starting client-10.9.0.5       ... done
+    Starting server-10.9.0.43      ... done
+    Starting mitm-proxy-10.9.0.143 ... done
+    Attaching to mitm-proxy-10.9.0.143, server-10.9.0.43, client-10.9.0.5
 
 
 !!! info "说明 :sparkles:"
 &emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
-dockps // Alias for: docker ps --format "{{.ID}} {{.Names}}"
-docksh <id> // Alias for: docker exec -it <id> /bin/bash   id的前两个字符就行
+    dockps // Alias for: docker ps --format "{{.ID}} {{.Names}}"
+    docksh <id> // Alias for: docker exec -it <id> /bin/bash   id的前两个字符就行
 
 
