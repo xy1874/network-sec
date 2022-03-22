@@ -37,7 +37,7 @@
 &emsp;&emsp;Step1：下载已经做好镜像环境压缩包，通过[SEED实验室环境部署链接](https://seedsecuritylabs.org/labsetup.html)。
 <center><img src="../assets/1-1.png" width = 200></center>
 <center>图1-1 导入镜像</center>
-&emsp;&emsp;Step2：在VirtualBox上导入镜像并启动。用户名为SEED，密码为dees
+&emsp;&emsp;Step2：在VirtualBox上导入镜像并启动。用户名为seed，密码为dees
 <center><img src="../assets/1-2.png" width = 200></center>
 <center>图1-2 导入镜像</center>
 

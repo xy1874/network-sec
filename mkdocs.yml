@@ -68,7 +68,7 @@ nav:
     - 实验概述: lab2/overview.md
     - 实验原理: lab2/theory.md
     - 实验步骤: lab2/step.md
-  #  - 附加题: lab2/extra.md
+#  -  附加题: lab2/extra.md
     - 验收与提交: lab2/submit.md
   - 实验3：DNS:
     - 实验概述: lab3/overview.md
