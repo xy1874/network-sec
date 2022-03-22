@@ -16,14 +16,19 @@
 ### Task1 TLS 客户端
 
 &emsp;&emsp;Task1.1 TLS握手
+
 &emsp;&emsp;Task1.2 TLS协议中的CA认证
+
 &emsp;&emsp;Task1.3 TLS认证中的校验服务器的主机名
+
 &emsp;&emsp;Task1.4 利用TLS协议传输应用数据
 
 ### Task2 TLS 服务器端
 
 &emsp;&emsp;Task2.1 实现一个简单的TLS服务器
+
 &emsp;&emsp;Task2.2 利用主机浏览器测试实现是TLS服务器
+
 &emsp;&emsp;Task2.3 测试服务器有别名的情况
 
 
@@ -38,6 +43,7 @@
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/TLS目录下，并解压。使用命令为 unzip TLS_Labsetup.zip
 
 &emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，server和proxy三个容器
+    
     cd Labsetup/
     dcbuild # Alias for: docker-compose build
     dcup # Alias for: docker-compose up
@@ -52,6 +58,7 @@
 
 !!! info "说明 :sparkles:"
 &emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
+    
     dockps // Alias for: docker ps --format "{{.ID}} {{.Names}}"
     docksh <id> // Alias for: docker exec -it <id> /bin/bash   id的前两个字符就行
 
