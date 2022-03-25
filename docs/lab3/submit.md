@@ -12,5 +12,5 @@
 
 
 !!! warning "作业提交 :calendar:"
-    &emsp;&emsp;作业提交<font color = red>**Deadline**</font>：<font color = purple>**下周同一上课时间前**</font>。
+    &emsp;&emsp;作业提交<font color = red>**Deadline**</font>：<font color = purple>**下周一24:00之前**</font>。
 
