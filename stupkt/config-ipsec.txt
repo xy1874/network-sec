@@ -1,0 +1,41 @@
+
+
+crypto isakmp policy 1
+encryption aes
+group 2
+hash sha
+authentication pre-share
+exit
+crypto isakmp key coderge address 200.1.1.2
+acc 100 permit ip 192.168.1.0 0.0.0.255 172.16.1.0 0.0.0.255
+crypto ipsec transform-set getran esp-aes esp-sha-hmac
+crypto map gemap 1 ipsec-isakmp
+set peer 200.1.1.2
+match address 100
+set transform-set getran
+exit
+int f0/0
+crypto map gemap
+
+
+
+
+
+
+
+crypto isakmp policy 2
+encryption aes
+group 2
+hash sha
+authentication pre-share
+exit
+crypto isakmp key coderge address 100.1.1.1 
+acc 102 permit ip 172.16.1.0 0.0.0.255 192.168.1.0 0.0.0.255
+crypto ipsec transform-set ge2tran esp-aes esp-sha-hmac  
+crypto map ge2map 1 ipsec-isakmp
+set peer 100.1.1.1
+match address 102
+set transform-set ge2tran
+exit 
+int f0/1
+crypto map ge2map
