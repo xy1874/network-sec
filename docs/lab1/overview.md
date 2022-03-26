@@ -67,7 +67,7 @@
 &emsp;&emsp;下载本次绿色版压缩包[MobaXterm_Portable_v21.1.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)，直接解药到后，点击MobaXterm_Personal_21.1.exe文件即可使用。
 
 &emsp;&emsp;打开后，按照下图即可连接虚拟机。
-<center><img src="../assets/1-5.png" width = 400></center>
+<center><img src="../assets/1-8.png" width = 400></center>
 
 !!! info "说明 :sparkles:"
 &emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
