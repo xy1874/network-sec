@@ -18,10 +18,11 @@
 | R2-f0/0   | 172.16.1.254/24 |
 
 &emsp;&emsp;两台路PC机IP地址列表如下：
+
 |  计算机   | IP地址  | 默认网关  |
-|  ----  | ----  | ----  |
+|  ----    | ----    | ----  |
 | P0  | 192.168.1.1 | 192.168.1.254 |
-| P1  | 172.16.1.1 | 172.16.1.254 |
+| P1  | 172.16.1.1  | 172.16.1.254  |
 
 <center><img src="../assets/2-2.png" width = 200></center>
 <center><img src="../assets/2-3.png" width = 200></center>
@@ -244,7 +245,7 @@
 &emsp;&emsp;配置完成后点击play键，然后再从PC1 ping PC0，观察抓包结果。
 <center><img src="../assets/2-8.png" width = 200></center>
 
-&emsp;&emsp;分别观察发送成功和发送不成功的数据包信息，查看2者的区别，可以看到成功的数据包中是由IPSec包头的。
+&emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
 <center><img src="../assets/2-9.png" width = 200></center>
 
 

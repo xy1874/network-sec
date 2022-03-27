@@ -34,15 +34,35 @@
 
 ### 1. 搭建Seed服务器，需要在Oracle VM VirtualBox上部署Seed实验室的Ubuntu20.04。
 
-&emsp;&emsp;Step1：下载已经做好镜像环境压缩包，通过[SEED实验室环境部署链接](https://seedsecuritylabs.org/labsetup.html)。
-<center><img src="../assets/1-1.png" width = 200></center>
-<center>图1-1 导入镜像</center>
-&emsp;&emsp;Step2：在VirtualBox上导入镜像并启动。用户名为seed，密码为dees
-<center><img src="../assets/1-2.png" width = 200></center>
-<center>图1-2 导入镜像</center>
+<center><img src="../assets/0-1.png" width = 600></center>
+<center>进入虚拟机页面显示结果</center>
 
-<center><img src="../assets/1-3.png" width = 200></center>
-<center>图1-3 启动</center>
+&emsp;&emsp;下载已经做好镜像环境压缩包，通过[SEED实验室环境部署链接](https://seedsecuritylabs.org/labsetup.html)。
+<center><img src="../assets/1-1.png" width = 600></center>
+
+#### 1.1 如果解压后是vdi文件，按照下面步骤导入并启动
+
+<center><img src="../assets/0-2.png" width = 600></center>
+
+<center><img src="../assets/0-3.png" width = 600></center>
+
+<center><img src="../assets/0-4.png" width = 600></center>
+
+<center><img src="../assets/0-5.png" width = 600></center>
+
+<center><img src="../assets/0-6.png" width = 600></center>
+
+<center><img src="../assets/0-7.png" width = 600></center>
+
+<center><img src="../assets/0-8.png" width = 600></center>
+
+#### 1.1 如果解压后是vbox文件，按照下面步骤导入并启动
+
+&emsp;&emsp;Step1：在VirtualBox上导入镜像并启动。用户名为seed，密码为dees
+<center><img src="../assets/1-2.png" width = 600></center>
+
+<center><img src="../assets/1-3.png" width = 600></center>
+
 
 ### 2. 部署容器
 
@@ -55,11 +75,11 @@
     &emsp;&emsp;   docker-compose build
 
 &emsp;&emsp;Step4：启动  命令为 dcup
-<center><img src="../assets/1-4.png" width = 200></center>
+<center><img src="../assets/1-4.png" width = 600></center>
 <center>图1-4 容器正常启动</center>
 
 &emsp;&emsp;Step5: 最后，在主机的/etc/hosts文件增加如下一条配置10.9.0.80       www.bank32.com ，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。
-<center><img src="../assets/1-5.png" width = 200></center>
+<center><img src="../assets/1-5.png" width = 600></center>
 <center>图1-5 配置主机hosts文件</center>
 
 ### 3. 安装连接虚拟机的工具MobaXterm
@@ -67,12 +87,12 @@
 &emsp;&emsp;下载本次绿色版压缩包[MobaXterm_Portable_v21.1.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)，直接解药到后，点击MobaXterm_Personal_21.1.exe文件即可使用。
 
 &emsp;&emsp;打开后，按照下图即可连接虚拟机。
-<center><img src="../assets/1-8.png" width = 400></center>
+<center><img src="../assets/1-8.png" width = 600></center>
 
 !!! info "说明 :sparkles:"
 &emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
-<center><img src="../assets/1-6.png" width = 200></center>
+<center><img src="../assets/1-6.png" width = 600></center>
 <center>图1-6 查看正在启动的容器ID</center>
-<center><img src="../assets/1-7.png" width = 200></center>
+<center><img src="../assets/1-7.png" width = 600></center>
 <center>图1-7 进入容器的shell</center>
          

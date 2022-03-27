@@ -1286,11 +1286,28 @@
 </tr>
 </tbody>
 </table>
-<p>&emsp;&emsp;两台路PC机IP地址列表如下：
-|  计算机   | IP地址  | 默认网关  |
-|  ----  | ----  | ----  |
-| P0  | 192.168.1.1 | 192.168.1.254 |
-| P1  | 172.16.1.1 | 172.16.1.254 |</p>
+<p>&emsp;&emsp;两台路PC机IP地址列表如下：</p>
+<table>
+<thead>
+<tr>
+<th>计算机</th>
+<th>IP地址</th>
+<th>默认网关</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>192.168.1.1</td>
+<td>192.168.1.254</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>172.16.1.1</td>
+<td>172.16.1.254</td>
+</tr>
+</tbody>
+</table>
 <p><center><img src="../assets/2-2.png" width = 200></center>
 <center><img src="../assets/2-3.png" width = 200></center></p>
 <h2 id="2-ip">2. 路由器接口IP和路由表项</h2>
@@ -1488,7 +1505,7 @@ PERMIT, flags={origin_is_acl,}
 单击Show All/None，Event List Filters-Visible Events窗口栏中变成None。然后，再点击Edit Filters。在弹出的窗口里，选择IPv4选项卡，选择ICMP协议，本实验只需观察这个协议即可。</p>
 <p>&emsp;&emsp;配置完成后点击play键，然后再从PC1 ping PC0，观察抓包结果。
 <center><img src="../assets/2-8.png" width = 200></center></p>
-<p>&emsp;&emsp;分别观察发送成功和发送不成功的数据包信息，查看2者的区别，可以看到成功的数据包中是由IPSec包头的。
+<p>&emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
 <center><img src="../assets/2-9.png" width = 200></center></p>
 
               

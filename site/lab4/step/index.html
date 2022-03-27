@@ -753,29 +753,98 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-xxx" class="md-nav__link">
-    1. XXX
+  <a href="#1" class="md-nav__link">
+    1. 网络部署
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-xxx" class="md-nav__link">
-    2. XXX
+  <a href="#2-tun" class="md-nav__link">
+    2. 创建和配置TUN接口
   </a>
   
-    <nav class="md-nav" aria-label="2. XXX">
+    <nav class="md-nav" aria-label="2. 创建和配置TUN接口">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-xxx" class="md-nav__link">
-    2.1 XXX
+  <a href="#21tunpytun" class="md-nav__link">
+    2.1通过tun.py脚本配置tun并启动，启动后请保持不动
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-tun" class="md-nav__link">
+    2.2 配置TUN接口
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-tun" class="md-nav__link">
+    2.3 从TUN接口读取信息
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-tuntunpytunpyping-1921685388" class="md-nav__link">
+    2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tunnelvpnip" class="md-nav__link">
+    3. 通过Tunnel向VPN服务器发IP数据包
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 通过Tunnel向VPN服务器发IP数据包">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31vpntunpyservepy" class="md-nav__link">
+    3.1设置VPN服务器端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32hostutunpyclientpy" class="md-nav__link">
+    3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33vpnhostuserverpyclientpyhostuping-192168605hostvtcpdump-i-eth0tunnelhostvhostu" class="md-nav__link">
+    3.3分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器中，执行ping 192.168.60.5,分别观察三个容器中的信息，并在HostV中执行tcpdump -i eth0的命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-tunnel" class="md-nav__link">
+    4. 处理Tunnel的双向通道
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tunnel" class="md-nav__link">
+    5. 观察Tunnel短暂中断发生的情况
+  </a>
   
 </li>
       
@@ -1015,29 +1084,98 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-xxx" class="md-nav__link">
-    1. XXX
+  <a href="#1" class="md-nav__link">
+    1. 网络部署
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-xxx" class="md-nav__link">
-    2. XXX
+  <a href="#2-tun" class="md-nav__link">
+    2. 创建和配置TUN接口
   </a>
   
-    <nav class="md-nav" aria-label="2. XXX">
+    <nav class="md-nav" aria-label="2. 创建和配置TUN接口">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-xxx" class="md-nav__link">
-    2.1 XXX
+  <a href="#21tunpytun" class="md-nav__link">
+    2.1通过tun.py脚本配置tun并启动，启动后请保持不动
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-tun" class="md-nav__link">
+    2.2 配置TUN接口
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-tun" class="md-nav__link">
+    2.3 从TUN接口读取信息
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-tuntunpytunpyping-1921685388" class="md-nav__link">
+    2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tunnelvpnip" class="md-nav__link">
+    3. 通过Tunnel向VPN服务器发IP数据包
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 通过Tunnel向VPN服务器发IP数据包">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31vpntunpyservepy" class="md-nav__link">
+    3.1设置VPN服务器端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32hostutunpyclientpy" class="md-nav__link">
+    3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33vpnhostuserverpyclientpyhostuping-192168605hostvtcpdump-i-eth0tunnelhostvhostu" class="md-nav__link">
+    3.3分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器中，执行ping 192.168.60.5,分别观察三个容器中的信息，并在HostV中执行tcpdump -i eth0的命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-tunnel" class="md-nav__link">
+    4. 处理Tunnel的双向通道
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-tunnel" class="md-nav__link">
+    5. 观察Tunnel短暂中断发生的情况
+  </a>
   
 </li>
       
@@ -1056,12 +1194,159 @@
 
 
 <h1 id="_1">实验步骤</h1>
-<h2 id="1-xxx">1. XXX</h2>
 <p>&emsp;&emsp;XXXXX</p>
-<h2 id="2-xxx">2. XXX</h2>
-<p>&emsp;&emsp;XXX</p>
-<h3 id="21-xxx">2.1 XXX</h3>
-<p>&emsp;&emsp;XXXXX</p>
+<h2 id="1">1. 网络部署</h2>
+<p>&emsp;&emsp;本次实验的网络部署如下图所示。</p>
+<p><center><img src="../assets/2-1.png" width = 400></center></p>
+<p>&emsp;&emsp;容器启动后就可以在后台继续运行了，我们开一个新的连接，查看容器信息。</p>
+<pre><code>dockps
+19f26b5bdb71  client-10.9.0.5
+e019b7e018b1  server-router
+af2671fc2a0e  host-192.168.60.6
+b5378add757b  host-192.168.60.5
+</code></pre>
+<p>&emsp;&emsp;分别验证HostU、VPN服务器和HostV的连通性。进入容器命令为 docksh 容器id的前两个字符。</p>
+<p>&emsp;&emsp;根据前面的网络部署图我们知道VPN服务的IP地址分别为10.9.0.11和192.168.60.11，也可通过进入VNP服务器的容器中通过ip addr命令查看。</p>
+<pre><code>docksh e0
+root@e019b7e018b1:/# ip addr
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+73: eth0@if74: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:0a:09:00:0b brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.9.0.11/24 brd 10.9.0.255 scope global eth0
+       valid_lft forever preferred_lft forever
+75: eth1@if76: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:c0:a8:3c:0b brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.60.11/24 brd 192.168.60.255 scope global eth1
+       valid_lft forever preferred_lft forever
+</code></pre>
+<p>&emsp;&emsp;通过下面的命令测试，可以发现HostU可以与VPN服务器的通信，但是不能与主机HostV通信</p>
+<pre><code>docksh 19
+ping 10.9.0.11
+ping 192.168.60.5
+</code></pre>
+<p>&emsp;&emsp;•VPN服务器可以与HostU、HostV通信。</p>
+<pre><code>docksh e0
+ping 10.9.0.5
+ping 192.168.60.5
+</code></pre>
+<p>&emsp;&emsp;•在路由器上运行tcpdump，并嗅探每个网络上的流量。使用下面的命令，分别通过容器HostU和HostV发送ping命令，显示你可以捕获的数据包。</p>
+<pre><code>tcpdump -i eth0 -n  //捕获 10.9.0.5发送过来的ICMP数据包
+tcpdump -i eth1 -n  ////捕获 192.168.60.5发送过来的ICMP数据包
+</code></pre>
+<p><center><img src="../assets/2-2.png" width = 400></center></p>
+<h2 id="2-tun">2. 创建和配置TUN接口</h2>
+<h3 id="21tunpytun">2.1通过tun.py脚本配置tun并启动，启动后请保持不动</h3>
+<pre><code>root@19f26b5bdb71:/volumes# ls -l
+total 4
+-rwxr-xr-x 1 seed seed 511 Dec  5  2020 tun.py
+root@19f26b5bdb71:/volumes# chmod a+x tun.py
+root@19f26b5bdb71:/volumes# ./tun.py
+Interface Name: tun0
+</code></pre>
+<p>提示：执行命令前请给./tun.py通过chmod a+x 文件名  加权限。</p>
+<p>&emsp;&emsp;从另一个连接启动client客户端，利用ip addr查看ip配置信息，发现多了一个接口tun0，如下图所示。</p>
+<p><center><img src="../assets/2-3.png" width = 400></center></p>
+<h3 id="22-tun">2.2 配置TUN接口</h3>
+<p>&emsp;&emsp;使用下面两条命令给TUN接口配置ip并启动，然后再通过ip addr命令观察TUN接口的信息如下图所示，ip地址已经配置上了。</p>
+<pre><code>ip addr add 192.168.53.99/24 dev tun0
+ip link set dev tun0 up
+</code></pre>
+<p><center><img src="../assets/2-4.png" width = 400></center></p>
+<h3 id="23-tun">2.3 从TUN接口读取信息</h3>
+<p>&emsp;&emsp;将如下两条命令和上面的配置TUN接口的两台命令一起写入tun.py</p>
+<pre><code>//下面这段代码放在打印接口名字后面
+# Set up the tun interface
+os.system("ip addr add 192.168.53.99/24 dev {}".format(ifname))
+os.system("ip link set dev {} up".format(ifname))
+
+//下面这段代码替换原来的循环语句
+while True:
+# Get a packet from the tun interface
+  packet = os.read(tun, 2048)
+  if packet:
+    ip = IP(packet)
+    print(ip.summary())
+</code></pre>
+<p>&emsp;&emsp;重新运行tun.py, 并从另外一个连接进入客户端查看TUN接口的情况（ip addr）,然后分别执行如下命令，查看tun.py的运行结果，分析说明下原因。</p>
+<pre><code>ping 192.168.53.88
+ping 192.168.60.6
+</code></pre>
+<h3 id="24-tuntunpytunpyping-1921685388">2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。</h3>
+<pre><code>  # Send out a spoof packet using the tun interface
+  if ICMP in ip:
+     newip = IP(src=ip[IP].dst, dst=ip[IP].src, ihl=ip[IP].ihl)
+     newip.ttl = 99
+     newicmp   = ICMP(type=0, id=ip[ICMP].id, seq=ip[ICMP].seq)
+     if ip.haslayer(Raw):
+        data = pkt[Raw].load
+        newpkt = newip/newicmp/data
+     else:
+        newpkt = newip/newicmp
+</code></pre>
+<h2 id="3-tunnelvpnip">3. 通过Tunnel向VPN服务器发IP数据包</h2>
+<h3 id="31vpntunpyservepy">3.1设置VPN服务器端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件</h3>
+<pre><code>IP_A = "0.0.0.0"
+PORT = 9090
+......
+# Set up the tun interface
+os.system("ip addr add 192.168.53.1/24 dev {}".format(ifname))
+os.system("ip link set dev {} up".format(ifname))
+......
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((IP_A, PORT))
+
+while True:
+    data, (ip, port) = sock.recvfrom(2048)
+    print("{}:{} --&gt; {}:{}".format(ip, port, IP_A, PORT))
+    pkt = IP(data)
+    print(" Inside: {} --&gt; {}".format(pkt.src, pkt.dst))
+</code></pre>
+<h3 id="32hostutunpyclientpy">3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件</h3>
+<pre><code>SERVER_IP   = "10.9.0.11"
+SERVER_PORT = 9090
+
+# Set up routing
+os.system("ip route add 192.168.60.0/24 dev {}".format(ifname))
+
+# Create UDP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+while True:
+# Get a packet from the tun interface
+packet = os.read(tun, 2048)
+if packet:
+   ip = IP(packet)
+   print(ip.summary())
+</code></pre>
+<h3 id="33vpnhostuserverpyclientpyhostuping-192168605hostvtcpdump-i-eth0tunnelhostvhostu">3.3分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器中，执行ping 192.168.60.5,分别观察三个容器中的信息，并在HostV中执行tcpdump -i eth0的命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。</h3>
+<p><center><img src="../assets/2-5.png" width = 400></center></p>
+<p>提示：执行命令前请给server.py和client.py通过chmod a+x 文件名  加权限。</p>
+<h2 id="4-tunnel">4. 处理Tunnel的双向通道</h2>
+<p>&emsp;&emsp;在任务3中我们可以看到，HostU可以成功地向HostV发送消息，但是却收不到HostV回复的消息，这个问题在本次任务中解决。</p>
+<pre><code># We assume that sock and tun file descriptors have already been created.
+while True:
+# this will block until at least one interface is ready
+    ready, _, _ = select.select([sock, tun], [], [])
+    for fd in ready:
+        if fd is sock:
+            data, (ip, port) = sock.recvfrom(2048)
+            pkt = IP(data)
+            print("From socket &lt;==: {} --&gt; {}".format(pkt.src, pkt.dst))
+            ... (code needs to be added by students) ...
+
+        if fd is tun:
+            packet = os.read(tun, 2048)
+            pkt = IP(packet)
+            print("From tun ==&gt;: {} --&gt; {}".format(pkt.src, pkt.dst))
+            ... (code needs to be added by students) ...
+</code></pre>
+<p>&emsp;&emsp;启动VPN服务器和HostU客户端的tun接口后（./tun_server_select.py和./tun_client_select.py），在从HostU客户端ping HostV，就可以得到回应了，整个Tunnel就通了。</p>
+<p><center><img src="../assets/2-6.png" width = 400></center></p>
+<h2 id="5-tunnel">5. 观察Tunnel短暂中断发生的情况</h2>
+<p>&emsp;&emsp;完成任务4，Tunnel两边就通了，现在我们从HostU客户端telnet HostV，用户名密码是seed/dees。完成登录后请暂停下VPN服务器和HostU客户端的连接，在HostU客户当已经telnet的界面输入一些命令，然后立即再通过./tun_server_select.py和./tun_client_select.py。启动后观察telnet的界面出现的内容，思考下为什么？</p>
 
               
             </article>
