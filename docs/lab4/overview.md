@@ -35,7 +35,7 @@
 
     docker rm 1a3dc7dce80f2c68a937090408c98875e566242579ac2cb2a5f06ab98f3fe1f2
 
-&emsp;&emsp;如果启动中遇到如下警告，直接用dcup --remove-orphans 启动即可。
+&emsp;&emsp;如果启动中遇到如下warning，直接用dcup --remove-orphans 启动即可。
 
     WARNING: Found orphan containers (mitm-proxy-10.9.0.143, server-10.9.0.43, www-10.9.0.80) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
 
