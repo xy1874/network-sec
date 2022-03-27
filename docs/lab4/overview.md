@@ -2,14 +2,14 @@
 
 &emsp;&emsp;1. 了解VPN的工作原理；
 
-&emsp;&emsp;2. XXXXX；
+&emsp;&emsp;2. 
 
-&emsp;&emsp;3. XXXXX。
+&emsp;&emsp;3. 
 
 
 ## 实验内容
 
-&emsp;&emsp;XXXXX
+&emsp;&emsp;
 
 
 ## 实验环境
@@ -22,7 +22,7 @@
 
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/VPN_Tunnel目录下，并解压。使用命令为 unzip VPN_Labsetup.zip
 
-&emsp;&emsp;Step3：删除其中的文件docker-compose2.yml，然后再Build容器，并启动，启动后应该能够看到client，server router和另外两台计算机共4个容器
+&emsp;&emsp;Step3：删除其中的文件docker-compose2.yml，然后再Build容器，并启动，启动后应该能够看到client，Router和另外两台计算机共4个容器
     
     cd Labsetup/
     dcbuild # Alias for: docker-compose build
