@@ -1,6 +1,6 @@
 ## 实验目的
 
-&emsp;&emsp;1. 了解VPN的工作原理；
+&emsp;&emsp;1. 了解xx的工作原理；
 
 &emsp;&emsp;2. 
 
@@ -18,7 +18,7 @@
 
 ###  部署容器
 
-&emsp;&emsp;Step1：下载本次实验需要的容器压缩包[VPN_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[SEED实验室VPN Tunneling Lab](https://seedsecuritylabs.org/Labs_20.04/Networking/VPN_Tunnel/)。
+&emsp;&emsp;Step1：下载本次实验需要的容器压缩包[VPN_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/Networking/VPN_Tunnel/)。
 
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/VPN_Tunnel目录下，并解压。使用命令为 unzip VPN_Labsetup.zip
 
@@ -38,7 +38,7 @@
 &emsp;&emsp;如果启动中遇到如下warning，直接用dcup --remove-orphans 启动即可。
 
     WARNING: Found orphan containers (mitm-proxy-10.9.0.143, server-10.9.0.43, www-10.9.0.80) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
-
+    
 
 !!! info "说明 :sparkles:"
 &emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
