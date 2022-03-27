@@ -1,6 +1,6 @@
 # 实验步骤
 
-&emsp;&emsp;XXXXX
+&emsp;&emsp;
 
 ## 1. 网络部署
 
@@ -41,7 +41,7 @@
     ping 10.9.0.11
     ping 192.168.60.5
 
-&emsp;&emsp;•VPN服务器可以与HostU、HostV通信。
+&emsp;&emsp;VPN服务器可以与HostU、HostV通信。
     
     docksh e0
     ping 10.9.0.5
