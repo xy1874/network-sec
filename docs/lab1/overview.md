@@ -89,7 +89,11 @@
 
 &emsp;&emsp;Step1：下载本次实验需要的容器压缩包[PKI_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[SEED实验室PKI Lab](https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/)。
 
-&emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中，并解压。使用命令为 unzip Labsetup.zip
+&emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中，建议先新建一个文件夹PKI，让压缩包传到/home/seed/PKI路径下并解压。使用命令为 unzip PKI_Labsetup.zip
+
+    mkdir PKI
+    cd PKI
+    unzip PKI_Labsetup.zip
 
 &emsp;&emsp;Step3：Build容器
     &emsp;&emsp;   cd Labsetup/

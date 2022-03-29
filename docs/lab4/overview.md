@@ -22,6 +22,10 @@
 
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/VPN_Tunnel目录下，并解压。使用命令为 unzip VPN_Labsetup.zip
 
+    mkdir VPN_Tunnel
+    cd VPN_Tunnel
+    unzip VPN_Labsetup.zip
+
 &emsp;&emsp;Step3：删除其中的文件docker-compose2.yml，然后再Build容器，并启动，启动后应该能够看到client，Router和另外两台计算机共4个容器
     
     cd Labsetup/

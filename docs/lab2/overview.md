@@ -38,9 +38,13 @@
 
 ###  部署容器
 
-&emsp;&emsp;Step1：下载本次实验需要的容器压缩包[TLS_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[SEED实验室PKI Lab](https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/)。
+&emsp;&emsp;Step1：下载本次实验需要的容器压缩包[TLS_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[SEED实验室TLS Lab](https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/)。
 
 &emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/TLS目录下，并解压。使用命令为 unzip TLS_Labsetup.zip
+
+    mkdir TLS
+    cd TLS
+    unzip TLS_Labsetup.zip
 
 &emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，server和proxy三个容器
     
