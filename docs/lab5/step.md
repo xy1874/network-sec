@@ -88,16 +88,7 @@
 
 <center><img src="../assets/1-4.png" width = 500></center>
 
-#### 1.2.2 阻止UDP数据包
-
-
-
-
-
-
-
-
-
+#### 1.2.2 给Netfilter的5个钩子函数打印信息。
 
 ## 2. XXX
 

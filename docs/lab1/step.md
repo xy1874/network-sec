@@ -12,26 +12,21 @@
 ### Step1.部署CA。
 
 &emsp;&emsp;签名时，openssl会使用一个默认的配置文件（/usr/lib/ssl/openssl.cnf）,该文件中已经配置了需要的文件夹和文件的名字，因为我们要修改这个配置文件，因此我们cp这个文件到自己的目录下，新cp的文件命名为myCA_openssl.cnf。Openssl.cnf文件部分配置内容如下,将unique_subject前面的注释去掉。
-<center><img src="../assets/3-1.png" width = 200></center>
+<center><img src="../assets/3-1.png" width = 500></center>
 <center>图3-1 openssl.conf</center>
 
 &emsp;&emsp;因此需要在/home/seed/PKI下创建一个demoCA的目录，并在该文件夹下创建三个文件夹certs、crl和newcerts和两个文件index.txt和serial。Seiral文件包含证书的序列号可以将任意数字反正文件中来初始化序列号，我们采用1000为例。具体命令如下
 
-&emsp;&emsp;sudo mkdir PKIlib   //在 /home/seed目录下创建本次实验的文件夹 PKIlib
+    sudo mkdir PKIlib   //在 /home/seed目录下创建本次实验的文件夹 PKIlib
+    cp /usr/lib/ssl/openssl.cnf myCA_openssl.cnf   //将openssl.cnf 拷贝一份到myCA_openssl.cnf中
+    vi myCA_openssl.cnf  //查看文件的配置内容，并把unique_subject和copy_extensions前面的注释去掉
 
-&emsp;&emsp;cp /usr/lib/ssl/openssl.cnf myCA_openssl.cnf   //将openssl.cnf 拷贝一份到myCA_openssl.cnf中
+    sudo mkdir demoCA   //根据myCA_openssl.cnf中的内容创建需要的文件夹和文件
+    cd demoCA
+    sudo mkdir certs crl newcerts
 
-&emsp;&emsp;vi myCA_openssl.cnf  //查看文件的配置内容，并把unique_subject和copy_extensions前面的注释去掉
-
-&emsp;&emsp;sudo mkdir demoCA   //根据myCA_openssl.cnf中的内容创建需要的文件夹和文件
-
-&emsp;&emsp;cd demoCA
-
-&emsp;&emsp;sudo mkdir certs crl newcerts
-
-&emsp;&emsp;sudo touch index.txt serial
-
-&emsp;&emsp;sudo vi serial   //最后打开serial写入1000
+    sudo touch index.txt serial
+    sudo vi serial   //最后打开serial写入1000
 
 &emsp;&emsp;设置好配置文件myCA_openssl.cnf中需要的信息之后，就可以创建和颁发证书了。
 
@@ -39,7 +34,7 @@
 
 &emsp;&emsp;具体命令如下：
 
-&emsp;&emsp;sudo openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -keyout ca.key -out ca.crt -subj "/CN=www.modelCA.com/O=Model CA LTD./C=US" -passout pass:dees
+    sudo openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -keyout ca.key -out ca.crt -subj "/CN=www.modelCA.com/O=Model CA LTD./C=US" -passout pass:dees
 
 &emsp;&emsp;其中-subj用来设置Subject域信息，-passout是使用证书时需要的密码信息，因为每次要使用此CA为其他人签名证书时，都必须输入该密码。
 
@@ -54,7 +49,7 @@
 &emsp;&emsp;问题2：证书的哪个部分表明这是自签名证书？
 
 &emsp;&emsp;可参考证书的说明如下图所示：
-<center><img src="../assets/3-2.png" width = 200></center>
+<center><img src="../assets/3-2.png" width = 500></center>
 <center>图3-2 证书说明</center>
 
 
@@ -69,7 +64,14 @@
 ## Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）
 根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.
 
-&emsp;&emsp;sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key -passout pass:dees
+    sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key
+    
+    在接下来需要输入密码的地方输入dees
+    Using configuration from myCA_openssl.cnf
+    Enter pass phrase for ca.key:
+    Check that the request matches the signature
+
+<center><img src="../assets/6-1.png" width = 500></center>
 
 &emsp;&emsp;下面的命令可以查看server.crt的内容，观察下与ca.crt有什么不同？
 
@@ -85,11 +87,11 @@
 
 &emsp;&emsp;Step2 启动容器服务器，进入shell，dockps 命令查看容器ID，docksh id的前两个符号即可进入容器shell
     
-    &emsp;&emsp;dockps
+    dockps
     
-    &emsp;&emsp;4ce9ed77a653  www-10.9.0.80
+    4ce9ed77a653  www-10.9.0.80
     
-    &emsp;&emsp;docksh 4c
+    docksh 4c
 
 &emsp;&emsp;Step3 将主机传递过来的证书和私钥放到/certs路径下
     
@@ -113,16 +115,18 @@
 &emsp;&emsp;service apache2 restart //重启服务器，如果报错，根据提示修改配置文件即可
 
 &emsp;&emsp;Step6 进入主机，打开浏览器输入https://www.bank32.com的网址，不加证书的情况是报错的，加入开始生成的证书ca.crt,没加证书前，提醒你可能有风险，需要添加证书。
-<center><img src="../assets/4-1.png" width = 200></center>
+<center><img src="../assets/4-1.png" width = 500></center>
 <center>图4-1 提示风险</center>
-<center><img src="../assets/4-2.png" width = 200></center>
+<center><img src="../assets/4-2.png" width = 500></center>
 <center>图4-2 添加证书1</center>
-<center><img src="../assets/4-3.png" width = 200></center>
+<center><img src="../assets/4-3.png" width = 500></center>
 <center>图4-3 添加证书2</center>
-<center><img src="../assets/4-4.png" width = 200></center>
+<center><img src="../assets/4-4.png" width = 500></center>
 <center>图4-4 选择CA证书</center>
-<center><img src="../assets/4-5.png" width = 200></center>
+<center><img src="../assets/4-5.png" width = 500></center>
 <center>图4-5 能够正常访问</center>
+
+&emsp;&emsp;请将能够正确访问www.bank32.com的截图放到实验报告中。
 
 ## Task5. 抵御中间人攻击
 
@@ -136,18 +140,20 @@
 
 &emsp;&emsp;Step4 使能SSL和hitsz-ssl的配置，并重启apache。
 
-&emsp;&emsp;Step5 在主机的/etc/hosts中添加一条信息 10.9.0.80 www.hitsz.edu.cn
+&emsp;&emsp;Step5 在主机的/etc/hosts中添加一条信息 10.9.0.80 www.hitsz.edu.cn，这里的主机是指虚拟机，不是自己的电脑，主机是相对于容器的叫法。使用下面的命令添加一条数据。
+
+    sudo vi /etc/hosts
 
 &emsp;&emsp;Step6 打开https://www.hitsz.edu.cn，发现报错，报证书有误的信息。
-<center><img src="../assets/4-4.png" width = 200></center>
+<center><img src="../assets/4-4.png" width = 500></center>
 <center>图5-1 提示有风险</center>
-<center><img src="../assets/4-5.png" width = 200></center>
+<center><img src="../assets/4-5.png" width = 500></center>
 <center>图5-2 查看详细信息，证书有问题</center>
 
 ## Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）
 
 &emsp;&emsp;假设hitsz也是使用我们的根CA证书，而且这个证书的私钥已经被我们劫持了，使用task1和task2来生成hitsz的证书和私钥进行攻击。完成后的结果如下图所示，攻击成功。
-<center><img src="../assets/6-1.png" width = 200></center>
+<center><img src="../assets/6-1.png" width = 500></center>
 <center>图6-1 可以访问我们虚假构建的hitsz的网站了</center>
 
 
