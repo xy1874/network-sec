@@ -28,11 +28,13 @@
     sudo touch index.txt serial
     sudo vi serial   //最后打开serial写入1000
 
-&emsp;&emsp;设置好配置文件myCA_openssl.cnf中需要的信息之后，就可以创建和颁发证书了。
+&emsp;&emsp;设置好配置文件myCA_openssl.cnf中需要的信息之后，就可以创建和颁发证书了。具体文件路径如下：
+
+<center><img src="../assets/10-3.png" width = 500></center>
 
 ### Step2.生成自签名证书ca.key (私钥证书)和 ca.crt (公钥证书)。
 
-&emsp;&emsp;具体命令如下：
+&emsp;&emsp;在PKI或者PKIlib(自己所建目录下)，执行如下命令，具体命令如下：
 
     sudo openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -keyout ca.key -out ca.crt -subj "/CN=www.modelCA.com/O=Model CA LTD./C=US" -passout pass:dees
 
@@ -40,9 +42,9 @@
 
 &emsp;&emsp;利用下面两个命令查看ca.crt和ca.key的内容，回答下面两个问题
 
-&emsp;&emsp;openssl x509 -in ca.crt -text -noout 
+    openssl x509 -in ca.crt -text -noout 
 
-&emsp;&emsp;sudo openssl rsa -in ca.key -text -noout
+    sudo openssl rsa -in ca.key -text -noout
 
 &emsp;&emsp;问题1：证书的哪个部分表明这是CA的证书？
 
@@ -59,7 +61,7 @@
 
 &emsp;&emsp;生成CSR的命令如下，与Task1中生成自签名的证书类似，去掉了-x509的选项，没有这个选项就是生成了CSR，有这个选项就是生成了自签名证书。命令如下，其中bank32A和bank32B是bank32网站的别名。
 
-&emsp;&emsp;sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
+    sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
 
 ## Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）
 根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.
@@ -81,30 +83,32 @@
 
 &emsp;&emsp;一旦银行收到了数字证书，它就可以在HTTPS网站中部署该证书。我们会基于Apache部署一个HTTPS web服务器。首先需要将在主机中生成的证书server.crt和私钥server.key通过volumes文件夹传递给容器（volumes这个文件夹为主机和容器共享的文件夹，主机中放入这个文件夹的文件，容器中可以直接获取到）。
 
-&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下
+&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下，volumes路径再我们建的目录PKI或者PKIlib路径下的Labsetup路径下
 
-&emsp;&emsp;cp server.crt server.key ../volumes
+    cp server.crt server.key ../volumes
 
-&emsp;&emsp;Step2 启动容器服务器，进入shell，dockps 命令查看容器ID，docksh id的前两个符号即可进入容器shell
+<center><img src="../assets/10-1.png" width = 400></center>
+
+&emsp;&emsp;Step2 在Lapsetup路径下启动容器服务器，进入shell，dockps 命令查看容器ID，docksh id的前两个符号即可进入容器shell
     
-    dockps
+    dockps    
+    2e6d2c851fcd  www-10.9.0.80
+    8e37ba198b2f  mitm-proxy-10.9.0.143
+    15097d1000a3  server-10.9.0.43
     
-    4ce9ed77a653  www-10.9.0.80
-    
-    docksh 4c
+    docksh 2e
 
 &emsp;&emsp;Step3 将主机传递过来的证书和私钥放到/certs路径下
     
-    &emsp;&emsp;cd volumes
-    
-    &emsp;&emsp;cp server.crt server.key ../certs
+    cd volumes
+    cp server.crt server.key ../certs
+
+<center><img src="../assets/10-2.png" width = 400></center>
 
 &emsp;&emsp;Step4 进入到目录/etc/apache2/sites-available中查看文件,site-available是存放的所有可用站点信息。
-修改文件中的配置如下bank32_apache_ssl.conf和default_ssl.conf：
-<center><img src="../assets/3-3.png" width = 200></center>
+修改文件中的配置如下bank32_apache_ssl.conf：
+<center><img src="../assets/3-3.png" width = 300></center>
 <center>图3-3 配置bank32网站信息1</center>
-<center><img src="../assets/3-4.png" width = 200></center>
-<center>图3-4 配置bank32网站信息2</center>
 
 &emsp;&emsp;Step5 重启apache
 

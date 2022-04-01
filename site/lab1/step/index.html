@@ -1147,15 +1147,18 @@ sudo mkdir certs crl newcerts
 sudo touch index.txt serial
 sudo vi serial   //最后打开serial写入1000
 </code></pre>
-<p>&emsp;&emsp;设置好配置文件myCA_openssl.cnf中需要的信息之后，就可以创建和颁发证书了。</p>
+<p>&emsp;&emsp;设置好配置文件myCA_openssl.cnf中需要的信息之后，就可以创建和颁发证书了。具体文件路径如下：</p>
+<p><center><img src="../assets/10-3.png" width = 500></center></p>
 <h3 id="step2cakey-cacrt">Step2.生成自签名证书ca.key (私钥证书)和 ca.crt (公钥证书)。</h3>
-<p>&emsp;&emsp;具体命令如下：</p>
+<p>&emsp;&emsp;在PKI或者PKIlib(自己所建目录下)，执行如下命令，具体命令如下：</p>
 <pre><code>sudo openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -keyout ca.key -out ca.crt -subj "/CN=www.modelCA.com/O=Model CA LTD./C=US" -passout pass:dees
 </code></pre>
 <p>&emsp;&emsp;其中-subj用来设置Subject域信息，-passout是使用证书时需要的密码信息，因为每次要使用此CA为其他人签名证书时，都必须输入该密码。</p>
 <p>&emsp;&emsp;利用下面两个命令查看ca.crt和ca.key的内容，回答下面两个问题</p>
-<p>&emsp;&emsp;openssl x509 -in ca.crt -text -noout </p>
-<p>&emsp;&emsp;sudo openssl rsa -in ca.key -text -noout</p>
+<pre><code>openssl x509 -in ca.crt -text -noout
+
+sudo openssl rsa -in ca.key -text -noout
+</code></pre>
 <p>&emsp;&emsp;问题1：证书的哪个部分表明这是CA的证书？</p>
 <p>&emsp;&emsp;问题2：证书的哪个部分表明这是自签名证书？</p>
 <p>&emsp;&emsp;可参考证书的说明如下图所示：
@@ -1164,7 +1167,8 @@ sudo vi serial   //最后打开serial写入1000
 <h2 id="task2-web-servertask2-generating-a-certificate-request-for-your-web-server">Task2. 为web server生成签名请求（Task2 Generating a Certificate Request for Your Web Server）</h2>
 <p>&emsp;&emsp;如果银行要部署一个基于HTTPS的网络服务器（比如www.bank32.com）来保护客户与服务器之间的交互，就需要从根CA那里获取一个公钥证书。首先需要生成一个签名请求（CSR—Certificate Singing Request），CSR中包含银行的公钥与其身份细节，如机构名称、地址与域名等信息。</p>
 <p>&emsp;&emsp;生成CSR的命令如下，与Task1中生成自签名的证书类似，去掉了-x509的选项，没有这个选项就是生成了CSR，有这个选项就是生成了自签名证书。命令如下，其中bank32A和bank32B是bank32网站的别名。</p>
-<p>&emsp;&emsp;sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=<a href="http://www.bank32.com/O=Bank32">www.bank32.com/O=Bank32</a> Inc./C=US" -addext "subjectAltName = DNS:<a href="http://www.bank32.com">www.bank32.com</a>, DNS:<a href="http://www.bank32A.com">www.bank32A.com</a>, DNS:<a href="http://www.bank32B.com">www.bank32B.com</a>" -passout pass:dees</p>
+<pre><code>sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
+</code></pre>
 <h2 id="task3-web-servertask3-generating-a-certificate-for-your-server">Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）</h2>
 <p>根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.</p>
 <pre><code>sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key
@@ -1180,26 +1184,27 @@ Check that the request matches the signature
 </code></pre>
 <h2 id="task4-task-4-deploying-certificate-in-an-apache-based-https-website">Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）</h2>
 <p>&emsp;&emsp;一旦银行收到了数字证书，它就可以在HTTPS网站中部署该证书。我们会基于Apache部署一个HTTPS web服务器。首先需要将在主机中生成的证书server.crt和私钥server.key通过volumes文件夹传递给容器（volumes这个文件夹为主机和容器共享的文件夹，主机中放入这个文件夹的文件，容器中可以直接获取到）。</p>
-<p>&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下</p>
-<p>&emsp;&emsp;cp server.crt server.key ../volumes</p>
-<p>&emsp;&emsp;Step2 启动容器服务器，进入shell，dockps 命令查看容器ID，docksh id的前两个符号即可进入容器shell</p>
-<pre><code>dockps
+<p>&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下，volumes路径再我们建的目录PKI或者PKIlib路径下的Labsetup路径下</p>
+<pre><code>cp server.crt server.key ../volumes
+</code></pre>
+<p><center><img src="../assets/10-1.png" width = 400></center></p>
+<p>&emsp;&emsp;Step2 在Lapsetup路径下启动容器服务器，进入shell，dockps 命令查看容器ID，docksh id的前两个符号即可进入容器shell</p>
+<pre><code>dockps    
+2e6d2c851fcd  www-10.9.0.80
+8e37ba198b2f  mitm-proxy-10.9.0.143
+15097d1000a3  server-10.9.0.43
 
-4ce9ed77a653  www-10.9.0.80
-
-docksh 4c
+docksh 2e
 </code></pre>
 <p>&emsp;&emsp;Step3 将主机传递过来的证书和私钥放到/certs路径下</p>
-<pre><code>&amp;emsp;&amp;emsp;cd volumes
-
-&amp;emsp;&amp;emsp;cp server.crt server.key ../certs
+<pre><code>cd volumes
+cp server.crt server.key ../certs
 </code></pre>
+<p><center><img src="../assets/10-2.png" width = 400></center></p>
 <p>&emsp;&emsp;Step4 进入到目录/etc/apache2/sites-available中查看文件,site-available是存放的所有可用站点信息。
-修改文件中的配置如下bank32_apache_ssl.conf和default_ssl.conf：
-<center><img src="../assets/3-3.png" width = 200></center>
-<center>图3-3 配置bank32网站信息1</center>
-<center><img src="../assets/3-4.png" width = 200></center>
-<center>图3-4 配置bank32网站信息2</center></p>
+修改文件中的配置如下bank32_apache_ssl.conf：
+<center><img src="../assets/3-3.png" width = 300></center>
+<center>图3-3 配置bank32网站信息1</center></p>
 <p>&emsp;&emsp;Step5 重启apache</p>
 <p>&emsp;&emsp;a2enmod ssl    // 使能SSL模式 </p>
 <p>&emsp;&emsp;a2ensite bank32_apache_ssl   //使能文件中的配置信息</p>
