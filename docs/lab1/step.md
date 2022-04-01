@@ -152,9 +152,9 @@
     sudo vi /etc/hosts
 
 &emsp;&emsp;Step6 打开https://www.hitsz.edu.cn，发现报错，报证书有误的信息。
-<center><img src="../assets/4-4.png" width = 500></center>
+<center><img src="../assets/5-1.png" width = 500></center>
 <center>图5-1 提示有风险</center>
-<center><img src="../assets/4-5.png" width = 500></center>
+<center><img src="../assets/5-2.png" width = 500></center>
 <center>图5-2 查看详细信息，证书有问题</center>
 
 ## Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）
