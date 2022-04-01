@@ -105,18 +105,21 @@
 
 <center><img src="../assets/10-2.png" width = 400></center>
 
-&emsp;&emsp;Step4 进入到目录/etc/apache2/sites-available中查看文件,site-available是存放的所有可用站点信息。
+&emsp;&emsp;Step4 进入到目录/etc/apache2/sites-available中查看文件,site-available是存放的所有可用站点信息。修改可以有两种方式，一种是直接再容器踪下载vi编辑器。命令如下：
+    apt-get update
+    apt-get install vim
+
+&emsp;&emsp;另一种是通过共享目录volumes传递文件进行修改，主机volumes路径为Lapsetup路径下，容器再跟目录下。
+
 修改文件中的配置如下bank32_apache_ssl.conf：
 <center><img src="../assets/3-3.png" width = 300></center>
 <center>图3-3 配置bank32网站信息1</center>
 
 &emsp;&emsp;Step5 重启apache
 
-&emsp;&emsp;a2enmod ssl    // 使能SSL模式 
-
-&emsp;&emsp;a2ensite bank32_apache_ssl   //使能文件中的配置信息
-
-&emsp;&emsp;service apache2 restart //重启服务器，如果报错，根据提示修改配置文件即可
+    a2enmod ssl    // 使能SSL模式 
+    a2ensite bank32_apache_ssl   //使能文件中的配置信息
+    service apache2 restart //重启服务器，如果报错，根据提示修改配置文件即可
 
 &emsp;&emsp;Step6 进入主机，打开浏览器输入https://www.bank32.com的网址，不加证书的情况是报错的，加入开始生成的证书ca.crt,没加证书前，提醒你可能有风险，需要添加证书。
 <center><img src="../assets/4-1.png" width = 500></center>
