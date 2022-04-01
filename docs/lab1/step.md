@@ -134,7 +134,7 @@
 
 &emsp;&emsp;Step1 打开学校网站首页，按ctrl+s 保存文件的内容为index.html
 
-&emsp;&emsp;Step2 在容器的/etc/www目录下创建一个和bank32类似的目录hitsz，并将index.html通过volumes文件夹传到容器的/etc/www/hitsz目录下，并拷贝一份内容一样的文件index_red.html。
+&emsp;&emsp;Step2 在client容器的/var/www目录下创建一个和bank32类似的目录hitsz，并将index.html通过volumes文件夹传到容器的/var/www/hitsz目录下，并拷贝一份内容一样的文件index_red.html。
 
 &emsp;&emsp;Step3 将bank32_apache_ssl.conf文件copy一份为hitsz-ssl.conf，内容修改为hitsz相关的网页信息，证书信息用www.bank32.com服务器的。
 

@@ -1219,7 +1219,7 @@ docksh 4c
 <h2 id="task5">Task5. 抵御中间人攻击</h2>
 <p>&emsp;&emsp;根据task4中配置服务器的方式，配置一个我们学校的网页，同学们可以尝试任何其他的网页。</p>
 <p>&emsp;&emsp;Step1 打开学校网站首页，按ctrl+s 保存文件的内容为index.html</p>
-<p>&emsp;&emsp;Step2 在容器的/etc/www目录下创建一个和bank32类似的目录hitsz，并将index.html通过volumes文件夹传到容器的/etc/www/hitsz目录下，并拷贝一份内容一样的文件index_red.html。</p>
+<p>&emsp;&emsp;Step2 在client容器的/var/www目录下创建一个和bank32类似的目录hitsz，并将index.html通过volumes文件夹传到容器的/var/www/hitsz目录下，并拷贝一份内容一样的文件index_red.html。</p>
 <p>&emsp;&emsp;Step3 将bank32_apache_ssl.conf文件copy一份为hitsz-ssl.conf，内容修改为hitsz相关的网页信息，证书信息用www.bank32.com服务器的。</p>
 <p>&emsp;&emsp;Step4 使能SSL和hitsz-ssl的配置，并重启apache。</p>
 <p>&emsp;&emsp;Step5 在主机的/etc/hosts中添加一条信息 10.9.0.80 <a href="http://www.hitsz.edu.cn">www.hitsz.edu.cn</a>，这里的主机是指虚拟机，不是自己的电脑，主机是相对于容器的叫法。使用下面的命令添加一条数据。</p>
