@@ -1174,9 +1174,10 @@ Using configuration from myCA_openssl.cnf
 Enter pass phrase for ca.key:
 Check that the request matches the signature
 </code></pre>
-<p><center><img src="../assets/6-1.png" width = 500></center></p>
+<p><center><img src="../assets/6-2.png" width = 500></center></p>
 <p>&emsp;&emsp;下面的命令可以查看server.crt的内容，观察下与ca.crt有什么不同？</p>
-<p>&emsp;&emsp;openssl x509 -in server.crt -text -noout</p>
+<pre><code>openssl x509 -in server.crt -text -noout
+</code></pre>
 <h2 id="task4-task-4-deploying-certificate-in-an-apache-based-https-website">Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）</h2>
 <p>&emsp;&emsp;一旦银行收到了数字证书，它就可以在HTTPS网站中部署该证书。我们会基于Apache部署一个HTTPS web服务器。首先需要将在主机中生成的证书server.crt和私钥server.key通过volumes文件夹传递给容器（volumes这个文件夹为主机和容器共享的文件夹，主机中放入这个文件夹的文件，容器中可以直接获取到）。</p>
 <p>&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下</p>

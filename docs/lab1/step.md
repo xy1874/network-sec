@@ -71,11 +71,11 @@
     Enter pass phrase for ca.key:
     Check that the request matches the signature
 
-<center><img src="../assets/6-1.png" width = 500></center>
+<center><img src="../assets/6-2.png" width = 500></center>
 
 &emsp;&emsp;下面的命令可以查看server.crt的内容，观察下与ca.crt有什么不同？
 
-&emsp;&emsp;openssl x509 -in server.crt -text -noout
+    openssl x509 -in server.crt -text -noout
 
 ## Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）
 
