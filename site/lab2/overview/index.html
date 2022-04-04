@@ -1106,13 +1106,12 @@
   <h1>实验概述</h1>
 
 <h2 id="_1">实验目的</h2>
-<p>&emsp;&emsp;传输层安全协议（transport layer security, TLS）是一种在两个通信应用程序之间提供安全通道的协议，该通道中的数据传输时加密的，数据的完整性也是被保护的。从先前的SSL(secure socket layer)发展而来，并逐渐q取代SSL。
-&emsp;&emsp;通过本次实验的系列任务期望能够达到如下几个目的。</p>
+<p>&emsp;&emsp;传输层安全协议（transport layer security, TLS）是一种在两个通信应用程序之间提供安全通道的协议，该通道中的数据传输时加密的，数据的完整性也是被保护的。从先前的SSL(secure socket layer)发展而来，并逐渐取代SSL。通过本次实验的系列任务期望能够达到如下几个目的。</p>
 <p>&emsp;&emsp;1. 了解TLS的工作原理；</p>
 <p>&emsp;&emsp;2. 通过抓包分析，理解TLS握手过程中的各字段的含义；</p>
 <p>&emsp;&emsp;3. 掌握TLS协议的工作过程。</p>
 <h2 id="_2">实验内容</h2>
-<p>&emsp;&emsp;本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/ ，我们只需要完成其中的前2个任务。通过任务1，我们完成TLS客户端的握手抓包分析过程和TLS的证书验证过，并理解分析TLS的客户端编程；通过任务2我们利用多种该方式完成TLS的服务器端响应客户端的过程，并理解分析TLS的服务器端编程。第三个任务作为附加题，欢迎大家完成附加题。任务列表如下：</p>
+<p>&emsp;&emsp;本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/ ，我们只需要完成其中的前2个任务。通过任务1，我们完成TLS客户端的握手抓包分析过程和TLS的证书验证过程，并理解分析TLS的客户端编程；通过任务2我们利用多种方式完成TLS的服务器端响应客户端的过程，并理解分析TLS的服务器端编程。第三个任务作为附加题，欢迎大家完成附加题。任务列表如下：</p>
 <h3 id="task1-tls">Task1 TLS 客户端</h3>
 <p>&emsp;&emsp;Task1.1 TLS握手</p>
 <p>&emsp;&emsp;Task1.2 TLS协议中的CA认证</p>
@@ -1120,7 +1119,7 @@
 <p>&emsp;&emsp;Task1.4 利用TLS协议传输应用数据</p>
 <h3 id="task2-tls">Task2 TLS 服务器端</h3>
 <p>&emsp;&emsp;Task2.1 实现一个简单的TLS服务器</p>
-<p>&emsp;&emsp;Task2.2 利用主机浏览器测试实现是TLS服务器</p>
+<p>&emsp;&emsp;Task2.2 利用主机浏览器测试实现的TLS服务器</p>
 <p>&emsp;&emsp;Task2.3 测试服务器有别名的情况</p>
 <h2 id="_3">实验环境</h2>
 <p>&emsp;&emsp;本次实验需要的主机沿用实验一搭建好的SEED实验室虚拟环境，另外我们还需要三个容器来分别模拟客户端、服务器和中间代理（用做附加题），因为实验一已经安装好了VM虚拟主机，本次只需要部署容器即可。</p>

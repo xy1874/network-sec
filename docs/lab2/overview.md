@@ -1,6 +1,5 @@
 ## 实验目的
-&emsp;&emsp;传输层安全协议（transport layer security, TLS）是一种在两个通信应用程序之间提供安全通道的协议，该通道中的数据传输时加密的，数据的完整性也是被保护的。从先前的SSL(secure socket layer)发展而来，并逐渐q取代SSL。
-&emsp;&emsp;通过本次实验的系列任务期望能够达到如下几个目的。
+&emsp;&emsp;传输层安全协议（transport layer security, TLS）是一种在两个通信应用程序之间提供安全通道的协议，该通道中的数据传输时加密的，数据的完整性也是被保护的。从先前的SSL(secure socket layer)发展而来，并逐渐取代SSL。通过本次实验的系列任务期望能够达到如下几个目的。
 
 &emsp;&emsp;1. 了解TLS的工作原理；
 
@@ -11,7 +10,7 @@
 
 ## 实验内容
 
-&emsp;&emsp;本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/ ，我们只需要完成其中的前2个任务。通过任务1，我们完成TLS客户端的握手抓包分析过程和TLS的证书验证过，并理解分析TLS的客户端编程；通过任务2我们利用多种该方式完成TLS的服务器端响应客户端的过程，并理解分析TLS的服务器端编程。第三个任务作为附加题，欢迎大家完成附加题。任务列表如下：
+&emsp;&emsp;本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_TLS/ ，我们只需要完成其中的前2个任务。通过任务1，我们完成TLS客户端的握手抓包分析过程和TLS的证书验证过程，并理解分析TLS的客户端编程；通过任务2我们利用多种方式完成TLS的服务器端响应客户端的过程，并理解分析TLS的服务器端编程。第三个任务作为附加题，欢迎大家完成附加题。任务列表如下：
 
 ### Task1 TLS 客户端
 
@@ -27,7 +26,7 @@
 
 &emsp;&emsp;Task2.1 实现一个简单的TLS服务器
 
-&emsp;&emsp;Task2.2 利用主机浏览器测试实现是TLS服务器
+&emsp;&emsp;Task2.2 利用主机浏览器测试实现的TLS服务器
 
 &emsp;&emsp;Task2.3 测试服务器有别名的情况
 

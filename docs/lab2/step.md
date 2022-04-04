@@ -2,7 +2,6 @@
 
 &emsp;&emsp;本次实验通过2个程序来看TLS是如何在程序中来保护通信安全的，并讨论TLS编程中常见的错误。一个是HTTPS客户端程序，它可以从HTTPS网络服务器获取网页；另一个是HTTPS服务器程序，它可以给浏览器返回网页。HTTPS是建立在TLS之上的应用层协议。
 
-
 ## 1. TLS客户端
 
 ### 1.1 TLS握手
@@ -24,7 +23,7 @@
 
 &emsp;&emsp;进入主机，打开wireshark工具，选择我们正在使用的网卡开始抓包。然后在客户端容器中重复执行 ./handshake.py www.baidu.com  命令，可以查看分析TLS握手协议。建议大家再通过主机的浏览器访问下www.baidu.com网站，抓包分析下，可以看到握手后的应用层的协议信息。
 
-<center><img src="../assets/2-1.png" width = 200></center>
+<center><img src="../assets/2-1.png" width = 400></center>
 <center>图2-1 抓包网卡选择</center>
 
 &emsp;&emsp;问题1：根据执行结果，客户端和服务器端使用的加密算法有哪些？
@@ -44,7 +43,8 @@
 
 &emsp;&emsp;任务1：请同学们尝试其他的一个网站来测试对应的结果，并将过程截图保存在报告里。
 
-!!! info "提示 :" 如果找到网站需要的证书呢？我们可以根据第一步执行结果中的信息，查看subjec中的commonName信息，再根据代码中的证书路径/etc/ssl/certs找到对应的证书，copy到client-certs目录下。
+!!! info "提示 :sparkles:"
+&emsp;&emsp;如果找到网站需要的证书呢？我们可以根据第一步执行结果中的信息，查看subjec中的commonName信息，再根据代码中的证书路径/etc/ssl/certs找到对应的证书，copy到client-certs目录下。
   'subject': ((('countryName', 'BE'),),
               (('organizationName', 'GlobalSign nv-sa'),),
               (('organizationalUnitName', 'Root CA'),),
@@ -85,7 +85,7 @@
 
 ### 2.1 实现一个简单的TLS服务器
 
-&emsp;&emsp;这个任务中我们将使用实验中生成的CA证书和www.bank32.com的证书和私钥，首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。
+&emsp;&emsp;这个任务中我们将使用实验一中生成的CA证书和www.bank32.com的证书和私钥，首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。
 
     cp ca.crt ../TLS/Labsetup/volumes/client-certs/
     sudo cp server.crt server.key ../TLS/Labsetup/volumes/server-certs/
@@ -114,9 +114,10 @@
 
 &emsp;&emsp;从主机的浏览器进入到https://www.bank32.com网站，查看服务器的链接情况，如果还是在第一次的实验环境中，我们已经加入了证书，如果没有加入证书，需要在firefox浏览器加入ca.crt的证书。
 
-
 ### 2.3 测试服务器有别名的情况
 
-&emsp;&emsp;因为我们在第一个PKI的实验中已经让大家添加过www.bank32.com的别名，所以证书部分我们不需要修改，只需要在客户端容器中的/etc/hosts中添加另外两个别名和对应的服务器IP就可以了。
+&emsp;&emsp;因为我们在第一个PKI的实验中已经让大家添加过www.bank32.com的别名，所以证书部分我们不需要修改，只需要在客户端容器中的/etc/hosts中添加一个个别名和对应的服务器IP就可以了。
+
+<center><img src="../assets/2-2.png" width = 400></center>
 
 &emsp;&emsp;问题6：请分别用client.py和浏览器两种方式访问服务器，并记录你观察的结果（截图）。
