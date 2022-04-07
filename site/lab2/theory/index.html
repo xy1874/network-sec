@@ -273,7 +273,7 @@
   
     <li class="md-tabs__item">
       <a href="../../lab6/overview/" class="md-tabs__link">
-        附加题：XXX
+        附加题：
       </a>
     </li>
   
@@ -936,14 +936,14 @@
       
       
         <label class="md-nav__link" for="__nav_7">
-          附加题：XXX
+          附加题：
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="附加题：XXX" data-md-level="1">
+      <nav class="md-nav" aria-label="附加题：" data-md-level="1">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
-          附加题：XXX
+          附加题：
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -955,34 +955,6 @@
     <li class="md-nav__item">
       <a href="../../lab6/overview/" class="md-nav__link">
         实验概述
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../lab6/theory/" class="md-nav__link">
-        实验原理
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../lab6/step/" class="md-nav__link">
-        实验步骤
       </a>
     </li>
   
@@ -1129,7 +1101,7 @@
 <p>&emsp;&emsp;在TLS握手协议中，上面的第五步，预主密钥在发送给服务器时用服务器的公钥进行加密，由上一次的PKI实验我们可以知道，如果直接发送服务器公钥可能会受到中间人攻击，因此服务器应该给发送一个公钥证书。</p>
 <p>&emsp;&emsp;服务器的证书包含服务器的公钥、身份信息、截止日期、CA的签名及其他相关信息。当客户端受到服务器证书时，最重要的是检查证书是否有效。但是并不检查证书中包含的身份信息是否与目标服务器的身份匹配。这一点非常重要，需要应用程序进行检查，如果没有此项检查，中间人攻击也将成为可能。</p>
 <h3 id="23">2.3 密钥生成和交换</h3>
-<p>&emsp;&emsp;上面的第六步，之所以要更改密码规范，是因为公钥算法加密要比对称加密算法慢得多。因此，TLS仅使用公钥算法来帮助客户端和服务器生成一个共同的密钥，一旦密钥生成后，客户端和服务器将切换到对车加密算法。密钥生成过程分为生成预主密钥、生成主密钥和生成会话密钥三个步骤，如下图所示。</p>
+<p>&emsp;&emsp;上面的第六步，之所以要更改密码规范，是因为公钥算法加密要比对称加密算法慢得多。因此，TLS仅使用公钥算法来帮助客户端和服务器生成一个共同的密钥，一旦密钥生成后，客户端和服务器将切换到对称加密算法。密钥生成过程分为生成预主密钥、生成主密钥和生成会话密钥三个步骤，如下图所示。</p>
 <p><center><img src="../assets/1-3.png" width = 500></center>
 <center>图1-3 TLS密钥生成</center></p>
 <p>&emsp;&emsp;预主密钥：服务器证书验证成功后，客户端程序会生成一个随机数，称为预主密钥。</p>

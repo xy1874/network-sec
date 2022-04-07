@@ -15,7 +15,7 @@
     5883d206e679  mitm-proxy-10.9.0.143
     1a3dc7dce80f  client-10.9.0.5
 
-&emsp;&emsp;进入容器端的shell，执行如下命令，可以根据结果查看到交换的密钥和证书等信息
+&emsp;&emsp;进入容器客户端端的shell，执行如下命令，可以根据结果查看到交换的密钥和证书等信息
     
     docksh 1a
     cd volumes/
@@ -37,11 +37,15 @@
 
 &emsp;&emsp;将代码中的证书文件路径改成 ./client-certs,再次在客户端容器运行 ./handshake.py www.baidu.com,观察出现的结果，想想为什么？将www.baidu.com需要的证书copy到 ./client-certs下，根据下面的命令生成hash并做个软链接，再次运行./handshake.py www.baidu.com，查看出现的结果。
 
+<center><img src="../assets/2-3.png" width = 400></center>
+<center>更改handshake.py代码中的证书文件路径</center>
+
+    cp /etc/ssl/certs/GlobalSign_Root_CA.pem client-certs/    //copy百度网站的证书，如果是其他网站，请先根据下面的提示查找对应的证书
     openssl x509 -in GlobalSign_Root_CA.pem -noout -subject_hash
     5ad8a5d6
     ln -s GlobalSign_Root_CA.pem 5ad8a5d6.0
 
-&emsp;&emsp;任务1：请同学们尝试其他的一个网站来测试对应的结果，并将过程截图保存在报告里。
+&emsp;&emsp;问题4：请同学们将www.baidu.com网站的测试过程截图保存在报告里，也可选用其他网站做测试。
 
 !!! info "提示 :sparkles:"
 &emsp;&emsp;如果找到网站需要的证书呢？我们可以根据第一步执行结果中的信息，查看subjec中的commonName信息，再根据代码中的证书路径/etc/ssl/certs找到对应的证书，copy到client-certs目录下。
@@ -50,27 +54,33 @@
               (('organizationalUnitName', 'Root CA'),),
               (('commonName', 'GlobalSign Root CA'),)),
 
+
 ### 1.3 TLS认证中的校验服务器的主机名
 
-&emsp;&emsp;用dig命令查看www.baidu.com的服务器IP地址：
+&emsp;&emsp;因为容器中没有dig命令，所以需要再主机中用dig命令查看www.baidu.com的服务器IP地址：
 
     dig www.baidu.com
     www.baidu.com.          0       IN      A       163.177.151.110
 
 &emsp;&emsp;然后将一个假的主机名比如www.baidu.2022.com写入到客户端的/etc/hosts中
 
-    echo 163.177.151.110 wwww.baidu2022.com >> /etc/hosts
+    echo 163.177.151.110 www.baidu2022.com >> /etc/hosts
 
 &emsp;&emsp;然后将代码中的主机名检测分别设置False和True的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现的问题。
 
+<center><img src="../assets/2-4.png" width = 400></center>
+<center>更改handshake.py代码中的主机名检测信息</center>
+
     ./handshake.py www.baidu2022.com
+
+&emsp;&emsp;问题5：请同学们将www.baidu.com网站的测试过程截图保存在报告里并分析执行的结果，也可选用其他网站做测试。
 
 ### 1.4 利用TLS协议传输应用数据
 
 &emsp;&emsp;利用hankshake.py的代码，增加下面的代码内容放在client.py文件中，尝试传送应用数据，建议删除等待press。
 
     # Send HTTP Request to Server
-    request = b"GET / HTTP/1.0\r\nHost: " + hostname.encode(’utf-8’) + b"\r\n\r\n"
+    request = b"GET / HTTP/1.0\r\nHost: " + hostname.encode('utf-8') + b"\r\n\r\n"
     ssock.sendall(request)
     # Read HTTP Response from Server
     response = ssock.recv(2048)
@@ -78,7 +88,7 @@
      pprint.pprint(response.split(b"\r\n"))
      response = ssock.recv(2048)
 
-&emsp;&emsp;问题4：简单分析TLS客户端编程的几个主要步骤。
+&emsp;&emsp;问题5：简单分析TLS客户端编程的几个主要步骤。
 
 ## 2. TLS 服务器
 
@@ -92,6 +102,8 @@
 
 &emsp;&emsp;在主机中，修改server.py的证书正确的路径和名称(server.crt 和server.key)，并绑定服务器的ip 10.9.0.43。
 
+<center><img src="../assets/2-5.png" width = 400></center>
+
 &emsp;&emsp;在服务器容器中，启动服务器 ./server.py,输入我们实验中设置的证书密码dees
 
 &emsp;&emsp;在客户端容器中，将ca.crt做软链接，并将www.bank32.com的信息写入/etc/hosts中
@@ -101,7 +113,7 @@
     ln -s ca.crt dbb9c584.0
     echo 10.9.0.43 www.bank32.com >> /etc/hosts
 
-&emsp;&emsp;更改client.py中证书的路径为 client-certs，并将端口号改为4433和服务器保持一致。
+&emsp;&emsp;更改client.py中证书的路径为 client-certs，并将端口号改为和服务器保持一致。
 
 &emsp;&emsp;在客户端容器中,启动客户端。
     ./client.py www.bank32.com
