@@ -23,7 +23,7 @@
 
 &emsp;&emsp;进入主机，打开wireshark工具，选择我们正在使用的网卡开始抓包。然后在客户端容器中重复执行 ./handshake.py www.baidu.com  命令，可以查看分析TLS握手协议。建议大家再通过主机的浏览器访问下www.baidu.com网站，抓包分析下，可以看到握手后的应用层的协议信息。
 
-<center><img src="../assets/2-1.png" width = 400></center>
+<center><img src="../assets/2-1.png" width = 500></center>
 <center>图2-1 抓包网卡选择</center>
 
 &emsp;&emsp;问题1：根据执行结果，客户端和服务器端使用的加密算法有哪些？
@@ -88,8 +88,6 @@
      pprint.pprint(response.split(b"\r\n"))
      response = ssock.recv(2048)
 
-&emsp;&emsp;问题5：简单分析TLS客户端编程的几个主要步骤。
-
 ## 2. TLS 服务器
 
 
@@ -120,7 +118,7 @@
 
 &emsp;&emsp;再切换到服务器端可以看到有消息接收。
 
-&emsp;&emsp;问题5：请分析server.py的代码，说明下服务器程序的关键步骤。
+&emsp;&emsp;问题5：请分析TLS客户端编程和server.py的代码，说明下服务器程序的关键步骤。
 
 ### 2.2 利用主机浏览器测试实现的TLS服务器
 
