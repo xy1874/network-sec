@@ -86,4 +86,6 @@
 
 &emsp;&emsp;长度字段：表明有效载荷字段的长度.
 
+<center><img src="../assets/2-6.png" width = 400></center>
+
 
