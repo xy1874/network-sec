@@ -4,7 +4,7 @@
 
 &emsp;&emsp;要求在中间路由器R1没有设置路由转发表的前提下，深圳——哈尔滨建立VPN隧道互通。组网方式如下图所示。
 
-<center><img src="../assets/2-1.png" width = 200></center>
+<center><img src="../assets/2-1.png" width = 500></center>
 
 &emsp;&emsp;三台路由器IP地址列表如下：
 
@@ -24,8 +24,8 @@
 | P0  | 192.168.1.1 | 192.168.1.254 |
 | P1  | 172.16.1.1  | 172.16.1.254  |
 
-<center><img src="../assets/2-2.png" width = 200></center>
-<center><img src="../assets/2-3.png" width = 200></center>
+<center><img src="../assets/2-2.png" width = 500></center>
+<center><img src="../assets/2-3.png" width = 500></center>
 
 ## 2. 路由器接口IP和路由表项
 
@@ -75,13 +75,13 @@
     R2(config)#ip route 0.0.0.0 0.0.0.0 200.1.1.1
 
 ## 3. 配置IPsec信息
-&emsp;&emsp;管理连接、创建连接、创建map映射表、将map表应用到外网端口，3.1-3.4解释了这四个阶段的命令，3.5和3.6是直接进行配置信息。
+&emsp;&emsp;管理连接、配置IPsec策略、配置IPsec安全策略映射、将应用安全策略映射到外网口，3.1-3.4解释了这四个阶段的命令，3.5和3.6是直接进行配置信息。
 
-### 3.1 阶段1--管理连接
+### 3.1 阶段1--配置IKE，管理连接
 
 &emsp;&emsp;通信双方设备通过非对称加密算法 加密 对称加密算法 所使用的 对称密钥。具体命令如下，后面是命令解释说明。
 
-    crypto isakmp policy 1          （ IKE     传输集/策略集，可以多配置几个策略集）
+    crypto isakmp policy 1          （ IKE     传输集/策略集，数字越小优先级越高）
     encryption des/3des/aes         (加密算法类型)
     hash md5/sha                        （完整性校验算法类型）
     group 1/2/5                              （使用D-H算法的版本？）
@@ -90,21 +90,21 @@
     exit
     crypto isakmp key 预共享密钥 address 对方的公网IP地址
 
-### 3.2 阶段2--创建连接
+### 3.2 阶段2--配置IPsec策略
 
-&emsp;&emsp;通过 对称加密算法 加密 实际所要传输的私网数据。具体命令如下
+&emsp;&emsp;配置保护的数据流和定义传输集。具体命令如下
 
-    access-list 100 permit ip 192.168.1.0 0.0.0.255 172.16.0.0 0.0.255.255 （定义允许的流量列表：）
+    access-list 100 permit ip 192.168.1.0 0.0.0.255 172.16.0.0 0.0.255.255 （定义允许的流量列表：）    
+
+### 3.3 阶段3--配置IPsec安全策略映射
+
     crypto ipsec transform-set 传输模式名 esp-des/3des/aes esp/ah-md5/sha-hmac （定义加密及认证方式：）
-
-### 3.3 阶段3--创建MAP映射表
-
     crypto map map名 1 ipsec-isakmp         （1是隧道1）
     match address ACL表名               （阶段2里面的ACL表名）
     set transform-set 传输模式名
     set peer 对方的公网IP
 
-### 3.4 阶段4--将map表应用到外网端口
+### 3.4 阶段4--应用安全策略映射到外网口
 &emsp;&emsp; 到对应接口下映射map
     crypto map map名
 
@@ -134,7 +134,7 @@
     crypto map gemap
 
 &emsp;&emsp;可以通过命令查看当前连接未建立
-<center><img src="../assets/2-4.png" width = 200></center>
+<center><img src="../assets/2-4.png" width = 500></center>
 
 ### 3.6 配置另一端R2的IPsec信息
 
@@ -162,10 +162,10 @@
 
 &emsp;&emsp;可以通过命令查看当前连接建立完成
     do sh crypto isakmp sa
-<center><img src="../assets/2-5.png" width = 200></center>
+<center><img src="../assets/2-5.png" width = 500></center>
 
 &emsp;&emsp;查看R0的状态
-<center><img src="../assets/2-5.png" width = 200></center>
+<center><img src="../assets/2-5.png" width = 500></center>
 
     R0(config)#do sh crypto ipsec sa
 
@@ -235,7 +235,7 @@
 ## 4. 在PC端发送ICMP信息，抓包分析
 
 ### 2.1 从PC1 ping PC0，如图所示，时间响应较慢但是能够互通。
-<center><img src="../assets/2-7.png" width = 200></center>
+<center><img src="../assets/2-7.png" width = 500></center>
 
 ### 2.1 抓包分析
 
@@ -243,10 +243,10 @@
 单击Show All/None，Event List Filters-Visible Events窗口栏中变成None。然后，再点击Edit Filters。在弹出的窗口里，选择IPv4选项卡，选择ICMP协议，本实验只需观察这个协议即可。
 
 &emsp;&emsp;配置完成后点击play键，然后再从PC1 ping PC0，观察抓包结果。
-<center><img src="../assets/2-8.png" width = 200></center>
+<center><img src="../assets/2-8.png" width = 500></center>
 
 &emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
-<center><img src="../assets/2-9.png" width = 200></center>
+<center><img src="../assets/2-9.png" width = 500></center>
 
 
 

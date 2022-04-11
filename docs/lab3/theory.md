@@ -6,7 +6,7 @@
 
 &emsp;&emsp;IPSec协议可以提供数据加密、数据完整性、数据源认证和放重放几个主要功能，其安全体系结构如下图所示。
 
-<center><img src="../assets/1-1.png" width = 200></center>
+<center><img src="../assets/1-1.png" width = 500></center>
 <center>图1-1 IPsec的安全体系结构</center>
 
 &emsp;&emsp;（1）	封装安全载荷（Encapsulating Security Payload,ESP）,ESP是一个安全协议头，它采用加密和认证机制，为IP数据包提供数据源认证、数据完整性、抗重播和机密性安全服务，可以在传输模式和隧道模式下使用。
@@ -31,14 +31,14 @@
 
 &emsp;&emsp;IPSec部署在两个终端上，提供端到端的安全保护。IPSec模块在IP包的IP头和数据载荷之间添加AH或ESP，不会修改IP头中的信息。传输模式对数据包的修改情况如下图所示。
 
-<center><img src="../assets/1-2.png" width = 200></center>
+<center><img src="../assets/1-2.png" width = 500></center>
 <center>图1-2 IPsec传输模式对数据包的修改</center>
 
 ### 2.2 隧道模式
 
 &emsp;&emsp;IPSec部署在两个安全网关上，即用于路由器、防火墙、VPN集中器等网络设备之间。发送端对原始IP报文整体加密，再在前面加入一个新的IP包头，用新的IP地址将数据分组路由到接收端。因此IP隧道模式的数据包包含两个IP头：内部IP头和外部IP头，内部头是数据包的源主机创建的,外部头是IPSec实体添加的。
 
-<center><img src="../assets/1-3.png" width = 200></center>
+<center><img src="../assets/1-3.png" width = 500></center>
 <center>图1-3 IPsec隧道模式对数据包的修改</center>
 
 ## 3. 安全关联SA
