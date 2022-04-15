@@ -739,8 +739,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-tlsssl-vpn" class="md-nav__link">
-    1. TLS/SSL VPN的基本原理
+  <a href="#1-tlsssl" class="md-nav__link">
+    1. TLS/SSL 虚拟专用网络的基本原理
   </a>
   
 </li>
@@ -780,8 +780,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-vpn" class="md-nav__link">
-    4. 实现一个简化的VPN
+  <a href="#4" class="md-nav__link">
+    4. 实现一个简化的虚拟专用网络
   </a>
   
 </li>
@@ -1008,8 +1008,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-tlsssl-vpn" class="md-nav__link">
-    1. TLS/SSL VPN的基本原理
+  <a href="#1-tlsssl" class="md-nav__link">
+    1. TLS/SSL 虚拟专用网络的基本原理
   </a>
   
 </li>
@@ -1049,8 +1049,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-vpn" class="md-nav__link">
-    4. 实现一个简化的VPN
+  <a href="#4" class="md-nav__link">
+    4. 实现一个简化的虚拟专用网络
   </a>
   
 </li>
@@ -1070,14 +1070,14 @@
 
 
 <h1 id="_1">实验原理</h1>
-<p>&emsp;&emsp;VPN隧道有多种方法可以实现，最具代表性的两种方法是IPsec隧道和TLS/SSL隧道。IPsec的隧道模式是将整个原始的IP数据包被封装在一个新的IP数据包内，并且添加一个新的头部，在网络层（IP层）完成。TLS/SSL是把每个属于VPN的IP数据包传递给特定的应用程序，这个应用程序把数据包放入TCP或者UDP包（一个新的数据包）内，然后把新数据包发送给应用程序在隧道的另一端的对接程序，对接程序将原始数据包从TCP或者UDP包的载荷中提取出来，发送给私有网络。</p>
-<h2 id="1-tlsssl-vpn">1. TLS/SSL VPN的基本原理</h2>
-<p>&emsp;&emsp;TLS/SSL隧道时运行在VPN客户端和服务器的应用程序之间的一条隧道。</p>
+<p>&emsp;&emsp;虚拟专用网络隧道有多种方法可以实现，最具代表性的两种方法是IPsec隧道和TLS/SSL隧道。IPsec的隧道模式是将整个原始的IP数据包被封装在一个新的IP数据包内，并且添加一个新的头部，在网络层（IP层）完成。TLS/SSL是把每个属于虚拟专用网络的IP数据包传递给特定的应用程序，这个应用程序把数据包放入TCP或者UDP包（一个新的数据包）内，然后把新数据包发送给应用程序在隧道的另一端的对接程序，对接程序将原始数据包从TCP或者UDP包的载荷中提取出来，发送给私有网络。</p>
+<h2 id="1-tlsssl">1. TLS/SSL 虚拟专用网络的基本原理</h2>
+<p>&emsp;&emsp;TLS/SSL隧道时运行在虚拟专用网络客户端和服务器的应用程序之间的一条隧道。</p>
 <p>&emsp;&emsp;在Client和Server之间建立一条安全的隧道；</p>
 <p>&emsp;&emsp;转发由隧道一段到另一端的IP数据包；</p>
 <p>&emsp;&emsp;接收到IP数据包后，把数据包发送到私有网络内。</p>
 <p><center><img src="../assets/3-1.png" width = 600></center>
-<center>图3-1 TLS/VPN的基本原理</center></p>
+<center>图3-1 TLS/虚拟专用网络的基本原理</center></p>
 <h2 id="2">2. 虚拟网络接口</h2>
 <p>&emsp;&emsp;虚拟网络接口对应一个用软件实现的虚拟网卡，可以把计算机和用户空间的程序连接起来。</p>
 <p>&emsp;&emsp;TUN接口：作用在网络层（IP层），把数据包发送到TUN接口会使得数据包（包含IP头部）被传递到用户空间的程序。</p>
@@ -1091,15 +1091,15 @@
 <p><center><img src="../assets/3-3.png" width = 600></center>
 <center>图3-3 数据包在隧道中的详细流程</center></p>
 <h3 id="22-tun">2.2 将数据包路由到TUN接口</h3>
-<p>&emsp;&emsp;需要让IP数据包流向VPN隧道应用程序所在的计算机，数据包会进入操作系统的网络协议栈，然后由网络协议栈决定要将数据包发送到哪里。也就是根据操作系统内部的路由表决定的，操作系统内部的路由表保存了一系列路由的规则。我们可以在路由表中添加一条规则，让网络协议栈把数据包转发给TUN接口。</p>
+<p>&emsp;&emsp;需要让IP数据包流向虚拟专用网络隧道应用程序所在的计算机，数据包会进入操作系统的网络协议栈，然后由网络协议栈决定要将数据包发送到哪里。也就是根据操作系统内部的路由表决定的，操作系统内部的路由表保存了一系列路由的规则。我们可以在路由表中添加一条规则，让网络协议栈把数据包转发给TUN接口。</p>
 <pre><code>方法1：os.system("ip route add 192.168.60.0/24 dev {}".format(ifname))
 方法2：sudo route add –net 192.168.60.0/24 ifname
 </code></pre>
-<h2 id="4-vpn">4. 实现一个简化的VPN</h2>
-<p>&emsp;&emsp;我们本次实验实现一个简单的VPN程序（客户端和服务器），代码简化的内容有如下几点：</p>
-<p>&emsp;&emsp;1、实际的TLS/SSL VPN的隧道应该使用基于TCP/UDP的TLS/SSL协议，而我们只建立了基于UDP的隧道，保护隧道安全的内容没有做，有兴趣的同学可以继续完善；</p>
+<h2 id="4">4. 实现一个简化的虚拟专用网络</h2>
+<p>&emsp;&emsp;我们本次实验实现一个简单的虚拟专用网络程序（客户端和服务器），代码简化的内容有如下几点：</p>
+<p>&emsp;&emsp;1、实际的TLS/SSL 虚拟专用网络的隧道应该使用基于TCP/UDP的TLS/SSL协议，而我们只建立了基于UDP的隧道，保护隧道安全的内容没有做，有兴趣的同学可以继续完善；</p>
 <p>&emsp;&emsp;2、使用系统调用时，程序应该检查返回值以查看调用是否成功，我们并没有进行错误检查的代码。</p>
-<p>&emsp;&emsp;具体流程如下，首先创建一个TUN接口，然后使用UDP的socket与另一端建立隧道；之后VNP程序监控TUN接口和socket接口，如果有数据到达TUN接口，则是需要去往另一端私有网络的数据包，应该在传送到因特网前被保护。VPN程序会加密这个数据包（本次实验未做），然后把加密消息发送给隧道的另一端。如果数据来自socket接口，则是一个来自VPN隧道另一端的UDP数据包。这个数据包的载荷中封装了加密过的IP数据包。VPN程序从UDP载荷中取出IP数据包，解密后通过TUN接口发送给内核，内核会把这个数据包路由到位于私有网络的最终目的地。</p>
+<p>&emsp;&emsp;具体流程如下，首先创建一个TUN接口，然后使用UDP的socket与另一端建立隧道；之后VNP程序监控TUN接口和socket接口，如果有数据到达TUN接口，则是需要去往另一端私有网络的数据包，应该在传送到因特网前被保护。虚拟专用网络程序会加密这个数据包（本次实验未做），然后把加密消息发送给隧道的另一端。如果数据来自socket接口，则是一个来自虚拟专用网络隧道另一端的UDP数据包。这个数据包的载荷中封装了加密过的IP数据包。虚拟专用网络程序从UDP载荷中取出IP数据包，解密后通过TUN接口发送给内核，内核会把这个数据包路由到位于私有网络的最终目的地。</p>
 <p><center><img src="../assets/3-4.png" width = 600></center>
 <center>图3-4 程序流程</center></p>
 
