@@ -113,7 +113,7 @@
             newpkt = newip/newicmp/data
          else:
             newpkt = newip/newicmp
-            
+
          os.write(tun, bytes(newpkt))
 
 ## 3. 通过Tunnel向服务端发IP数据包
@@ -135,12 +135,16 @@
         print("{}:{} --> {}:{}".format(ip, port, IP_A, PORT))
         pkt = IP(data)
         print(" Inside: {} --> {}".format(pkt.src, pkt.dst))
+        os.write(tun, data)
+
 
 
 ### 3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件
 
     SERVER_IP   = "10.9.0.11"
     SERVER_PORT = 9090
+    
+    .......
 
     # Set up routing
     os.system("ip route add 192.168.60.0/24 dev {}".format(ifname))
@@ -154,6 +158,9 @@
     if packet:
        ip = IP(packet)
        print(ip.summary())
+
+       # Send the packet via the tunnel
+       sock.sendto(packet, (SERVER_IP, SERVER_PORT))
 
 ### 3.3 通过Tunnel通道中的进行数据传输
 &emsp;&emsp;分别在服务端容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行抓包命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
@@ -178,13 +185,14 @@
                 data, (ip, port) = sock.recvfrom(2048)
                 pkt = IP(data)
                 print("From socket <==: {} --> {}".format(pkt.src, pkt.dst))
-                ... (code needs to be added by students) ...
+                os.write(tun, data)
     
             if fd is tun:
                 packet = os.read(tun, 2048)
                 pkt = IP(packet)
                 print("From tun ==>: {} --> {}".format(pkt.src, pkt.dst))
-                ... (code needs to be added by students) ...
+                sock.sendto(packet, (SERVER_IP, SERVER_PORT))  // client 用此行代码
+                sock.sendto(packet, (ip, port))   //server 用此行代码
 
 &emsp;&emsp;启动服务端和HostU客户端的tun接口后（./tun_server_select.py和./tun_client_select.py），在从HostU客户端ping HostV，就可以得到回应了，整个Tunnel就通了。
 
