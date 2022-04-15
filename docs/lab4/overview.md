@@ -1,20 +1,40 @@
 ## 实验目的
 
-&emsp;&emsp;1. 了解xx的工作原理；
+&emsp;&emsp;1. 了解TLS/SSL VPN的工作原理；
 
-&emsp;&emsp;2. 
-
-&emsp;&emsp;3. 
-
+&emsp;&emsp;2. 掌握VPN Tunnel的配置和使用方法。
 
 ## 实验内容
 
-&emsp;&emsp;
+&emsp;&emsp; 本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Networking/VPN_Tunnel/ ，我们只需要完成其中的前6个任务。通过这6个任务。第7-9个任务作为附加题，欢迎大家完成附加题。任务列表如下：
 
+### Task1 部署网络，并测试连通性
+
+### Task2 创建并配置TUN接口
+
+&emsp;&emsp;Task2.1 创建TUN接口
+
+&emsp;&emsp;Task2.2 激活TUN接口
+
+&emsp;&emsp;Task2.3 从TUN接口读取数据
+
+&emsp;&emsp;Task2.4 向TUN接口写入数据
+
+### Task3 通过Tunnel向VPN服务器发IP数据包
+
+&emsp;&emsp;3.1 设置VPN服务器
+
+&emsp;&emsp;3.2 设置VPN客户端
+
+&emsp;&emsp;3.3 通过Tunnel通道中的进行数据传输
+
+### Task4 配置Tunnel的双向通道
+
+### Task5 观察Tunnel短暂中断发生的情况
 
 ## 实验环境
 
-&emsp;&emsp;
+&emsp;&emsp;本次实验需要的主机沿用实验一搭建好的SEED实验室虚拟环境，另外我们还需要三个容器来分别模拟VPN客户端、VPN服务器和处于私有网络的主机V，因为实验一已经安装好了VM虚拟主机，本次只需要部署容器即可。
 
 ###  部署容器
 
@@ -26,7 +46,7 @@
     cd VPN_Tunnel
     unzip VPN_Labsetup.zip
 
-&emsp;&emsp;Step3：删除其中的文件docker-compose2.yml，然后再Build容器，并启动，启动后应该能够看到client，Router和另外两台计算机共4个容器
+&emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，VPN服务器和另外两台计算机共4个容器。其中的文件docker-compose2.yml用于task8，可以先不关心。
     
     cd Labsetup/
     dcbuild # Alias for: docker-compose build
