@@ -1,7 +1,5 @@
 # 实验步骤
 
-&emsp;&emsp;
-
 ## 1. 网络部署
 
 &emsp;&emsp;本次实验的网络部署如下图所示。
@@ -16,9 +14,9 @@
     af2671fc2a0e  host-192.168.60.6
     b5378add757b  host-192.168.60.5
 
-&emsp;&emsp;分别验证HostU(VPN客户端)、VPN服务器和HostV的连通性。进入容器命令为 docksh 容器id的前两个字符。
+&emsp;&emsp;分别验证HostU(VPN客户端)、服务器（VPN）和HostV的连通性。进入容器命令为 docksh 容器id的前两个字符。
 
-&emsp;&emsp;根据前面的网络部署图我们知道VPN服务器的IP地址分别为10.9.0.11和192.168.60.11，也可通过进入VPN服务器的容器中通过ip addr命令查看。
+&emsp;&emsp;根据前面的网络部署图我们知道服务器（VPN）的IP地址分别为10.9.0.11和192.168.60.11，也可通过进入服务器（VPN）的容器中通过ip addr命令查看。
 
     docksh e0
     root@e019b7e018b1:/# ip addr
@@ -35,19 +33,19 @@
         inet 192.168.60.11/24 brd 192.168.60.255 scope global eth1
            valid_lft forever preferred_lft forever
 
-&emsp;&emsp;通过下面的命令测试，可以发现HostU可以与VPN服务器的通信，但是不能与主机HostV通信
+&emsp;&emsp;通过下面的命令测试，可以发现HostU可以与服务器（VPN）的通信，但是不能与主机HostV通信
 
     docksh 19   //进入客户端容器HostU
     ping 10.9.0.11
     ping 192.168.60.5
 
-&emsp;&emsp;VPN服务器可以与HostU、HostV通信。
+&emsp;&emsp;服务器（VPN）可以与HostU、HostV通信。
     
-    docksh e0  //进入VPN服务器容器
+    docksh e0  //进入服务器（VPN）容器
     ping 10.9.0.5
     ping 192.168.60.5
 
-&emsp;&emsp;在VPN服务器上运行抓包工具，并嗅探每个网络上的流量。使用下面的命令，分别通过容器HostU和HostV发送ping命令，显示你可以捕获的数据包。
+&emsp;&emsp;在服务器（VPN）上运行抓包工具，并嗅探每个网络上的流量。使用下面的命令，分别通过容器HostU和HostV发送ping命令，显示你可以捕获的数据包。
 
     tcpdump -i eth0 -n  //捕获 10.9.0.5发送过来的ICMP数据包
     tcpdump -i eth1 -n  ////捕获 192.168.60.5发送过来的ICMP数据包
@@ -116,9 +114,9 @@
          else:
             newpkt = newip/newicmp
 
-## 3. 通过Tunnel向VPN服务器发IP数据包
+## 3. 通过Tunnel向服务器（VPN）发IP数据包
 
-### 3.1设置VPN服务器代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
+### 3.1设置服务器（VPN）代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
 
     IP_A = "0.0.0.0"
     PORT = 9090
@@ -156,7 +154,7 @@
        print(ip.summary())
 
 ### 3.3 通过Tunnel通道中的进行数据传输
-&emsp;&emsp;分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行抓包命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
+&emsp;&emsp;分别在服务器（VPN）容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行抓包命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
     
     tcpdump -i eth0
 
@@ -186,10 +184,10 @@
                 print("From tun ==>: {} --> {}".format(pkt.src, pkt.dst))
                 ... (code needs to be added by students) ...
 
-&emsp;&emsp;启动VPN服务器和HostU客户端的tun接口后（./tun_server_select.py和./tun_client_select.py），在从HostU客户端ping HostV，就可以得到回应了，整个Tunnel就通了。
+&emsp;&emsp;启动服务器（VPN）和HostU客户端的tun接口后（./tun_server_select.py和./tun_client_select.py），在从HostU客户端ping HostV，就可以得到回应了，整个Tunnel就通了。
 
 <center><img src="../assets/2-6.png" width = 600></center>
 
 ## 5. 观察Tunnel短暂中断发生的情况
 
-&emsp;&emsp;完成任务4，Tunnel两边就通了，现在我们从HostU客户端telnet HostV，用户名密码是seed/dees。完成登录后请暂停下VPN服务器和HostU客户端的连接，在HostU客户当已经telnet的界面输入一些命令，然后立即再通过./tun_server_select.py和./tun_client_select.py。启动后观察telnet的界面出现的内容，思考下为什么？
+&emsp;&emsp;完成任务4，Tunnel两边就通了，现在我们从HostU客户端telnet HostV，用户名密码是seed/dees。完成登录后请暂停下服务器（VPN）和HostU客户端的连接，在HostU客户当已经telnet的界面输入一些命令，然后立即再通过./tun_server_select.py和./tun_client_select.py。启动后观察telnet的界面出现的内容，思考下为什么？
