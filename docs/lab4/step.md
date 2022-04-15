@@ -113,6 +113,8 @@
             newpkt = newip/newicmp/data
          else:
             newpkt = newip/newicmp
+            
+         os.write(tun, bytes(newpkt))
 
 ## 3. 通过Tunnel向服务端发IP数据包
 

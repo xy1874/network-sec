@@ -1259,6 +1259,8 @@ ping 192.168.60.6
         newpkt = newip/newicmp/data
      else:
         newpkt = newip/newicmp
+
+     os.write(tun, bytes(newpkt))
 </code></pre>
 <h2 id="3-tunnelip">3. 通过Tunnel向服务端发IP数据包</h2>
 <h3 id="31tunpyservepy">3.1设置服务端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件</h3>
