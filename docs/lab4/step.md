@@ -47,7 +47,7 @@
     ping 10.9.0.5
     ping 192.168.60.5
 
-&emsp;&emsp;在VPN服务器上运行tcpdump，并嗅探每个网络上的流量。使用下面的命令，分别通过容器HostU和HostV发送ping命令，显示你可以捕获的数据包。
+&emsp;&emsp;在VPN服务器上运行抓包工具，并嗅探每个网络上的流量。使用下面的命令，分别通过容器HostU和HostV发送ping命令，显示你可以捕获的数据包。
 
     tcpdump -i eth0 -n  //捕获 10.9.0.5发送过来的ICMP数据包
     tcpdump -i eth1 -n  ////捕获 192.168.60.5发送过来的ICMP数据包
@@ -156,7 +156,9 @@
        print(ip.summary())
 
 ### 3.3 通过Tunnel通道中的进行数据传输
-&emsp;&emsp;分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行tcpdump -i eth0的命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
+&emsp;&emsp;分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行抓包命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
+    
+    tcpdump -i eth0
 
 <center><img src="../assets/2-5.png" width = 600></center>
 
