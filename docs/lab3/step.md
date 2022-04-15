@@ -4,7 +4,7 @@
 
 &emsp;&emsp;要求在深圳——哈尔滨建立VPN隧道,能够互相通信。组网方式如下图所示。
 
-<center><img src="../assets/2-1.png" width = 500></center>
+<center><img src="../assets/2-1.png" width = 600></center>
 
 &emsp;&emsp;三台路由器IP地址列表如下：
 
@@ -59,7 +59,7 @@
     R1(config)#int f0/1
     R1(config-if)#ip add 200.1.1.1 255.255.255.0
     R1(config-if)#no sh
-    R1(config-if)#eixt
+    R1(config-if)#exit
 
 ### 2.3 配置R2的信息
     Would you like to enter the initial configuration dialog? [yes/no]: no
