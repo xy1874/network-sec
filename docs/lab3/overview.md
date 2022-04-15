@@ -14,3 +14,5 @@
 ## 实验环境
 
 &emsp;&emsp;使用Cisco Packet Tracer工具配置组网环境，关于工具的使用可参考《计算机网络》的实验指导书。[Cisco Packet Tracer简介](https://hitsz-cslab.gitee.io/comp-network/appendix-c/index.html)
+
+&emsp;&emsp;实验中用到的代码可以从这个文件下载[config-ipsec.txt](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)

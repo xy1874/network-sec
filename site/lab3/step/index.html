@@ -1352,58 +1352,64 @@ set transform-set 传输模式名
 set peer 对方的公网IP
 </code></pre>
 <h3 id="34-4-">3.4 阶段4--应用安全策略映射到外网口</h3>
-<p>&emsp;&emsp; 到对应接口下映射map
-    crypto map map名</p>
+<p>&emsp;&emsp; 到对应接口下映射map</p>
+<pre><code>crypto map map名
+</code></pre>
 <h3 id="35-r0ipsec">3.5 配置R0端的IPsec信息</h3>
-<p>&emsp;&emsp;进入配置模式
-    Would you like to enter the initial configuration dialog? [yes/no]: no
-    R0&gt;enable
-    R0#configure terminal</p>
-<p>&emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R0的配置页面。
-    crypto isakmp policy 1
-    encryption aes
-    group 2
-    hash sha
-    authentication pre-share
-    exit
-    crypto isakmp key dees address 200.1.1.2
-    acc 100 permit ip 192.168.1.0 0.0.0.255 172.16.1.0 0.0.0.255
-    crypto ipsec transform-set getran esp-aes esp-sha-hmac
-    crypto map gemap 1 ipsec-isakmp
-    set peer 200.1.1.2
-    match address 100
-    set transform-set getran
-    exit
-    int f0/0
-    crypto map gemap</p>
+<p>&emsp;&emsp;进入配置模式</p>
+<pre><code>Would you like to enter the initial configuration dialog? [yes/no]: no
+R0&gt;enable
+R0#configure terminal
+</code></pre>
+<p>&emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R0的配置页面。</p>
+<pre><code>crypto isakmp policy 1
+encryption aes
+group 2
+hash sha
+authentication pre-share
+exit
+crypto isakmp key dees address 200.1.1.2
+acc 100 permit ip 192.168.1.0 0.0.0.255 172.16.1.0 0.0.0.255
+crypto ipsec transform-set getran esp-aes esp-sha-hmac
+crypto map gemap 1 ipsec-isakmp
+set peer 200.1.1.2
+match address 100
+set transform-set getran
+exit
+int f0/0
+crypto map gemap
+</code></pre>
 <p>&emsp;&emsp;可以通过命令查看当前连接未建立
 <center><img src="../assets/2-4.png" width = 500></center></p>
 <h3 id="36-r2ipsec">3.6 配置另一端R2的IPsec信息</h3>
-<p>&emsp;&emsp;配置另一端
-    R2&gt;enable
-    R2#configure terminal</p>
-<p>&emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R1的配置页面。
-    crypto isakmp policy 2
-    encryption aes
-    group 2
-    hash sha
-    authentication pre-share
-    exit
-    crypto isakmp key dees address 100.1.1.1 
-    acc 102 permit ip 172.16.1.0 0.0.0.255 192.168.1.0 0.0.0.255
-    crypto ipsec transform-set ge2tran esp-aes esp-sha-hmac<br />
-    crypto map ge2map 1 ipsec-isakmp
-    set peer 100.1.1.1
-    match address 102
-    set transform-set ge2tran
-    exit 
-    int f0/1
-    crypto map ge2map</p>
-<p>&emsp;&emsp;可以通过命令查看当前连接建立完成
-    do sh crypto isakmp sa
-<center><img src="../assets/2-5.png" width = 500></center></p>
-<p>&emsp;&emsp;查看R0的状态
-<center><img src="../assets/2-5.png" width = 500></center></p>
+<p>&emsp;&emsp;配置另一端</p>
+<pre><code>R2&gt;enable
+R2#configure terminal
+</code></pre>
+<p>&emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R2的配置页面。</p>
+<pre><code>crypto isakmp policy 2
+encryption aes
+group 2
+hash sha
+authentication pre-share
+exit
+crypto isakmp key dees address 100.1.1.1 
+acc 102 permit ip 172.16.1.0 0.0.0.255 192.168.1.0 0.0.0.255
+crypto ipsec transform-set ge2tran esp-aes esp-sha-hmac  
+crypto map ge2map 1 ipsec-isakmp
+set peer 100.1.1.1
+match address 102
+set transform-set ge2tran
+exit 
+int f0/1
+crypto map ge2map
+</code></pre>
+<p>&emsp;&emsp;可以通过命令查看当前连接建立完成</p>
+<pre><code>do sh crypto isakmp sa
+</code></pre>
+<p><center><img src="../assets/2-5.png" width = 500></center></p>
+<p>&emsp;&emsp;查看R0的状态</p>
+<p><center><img src="../assets/2-5.png" width = 500></center></p>
 <pre><code>R0(config)#do sh crypto ipsec sa
 
 interface: FastEthernet0/0
@@ -1475,10 +1481,10 @@ PERMIT, flags={origin_is_acl,}
 <h3 id="21">2.1 抓包分析</h3>
 <p>&emsp;&emsp;在Cisco Packet Tracer软件菜单栏View -&gt; Simulation Mode，在工作区的右边出现一个“Simulation Panel”，此时就进入了仿真模式。
 单击Show All/None，Event List Filters-Visible Events窗口栏中变成None。然后，再点击Edit Filters。在弹出的窗口里，选择IPv4选项卡，选择ICMP协议，本实验只需观察这个协议即可。</p>
-<p>&emsp;&emsp;配置完成后点击play键，然后再从PC1 ping PC0，观察抓包结果。
-<center><img src="../assets/2-8.png" width = 500></center></p>
-<p>&emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
-<center><img src="../assets/2-9.png" width = 500></center></p>
+<p>&emsp;&emsp;配置完成后点击play键，然后再从PC1 ping PC0，观察抓包结果。</p>
+<p><center><img src="../assets/2-8.png" width = 500></center></p>
+<p>&emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？</p>
+<p><center><img src="../assets/2-9.png" width = 500></center></p>
 
               
             </article>

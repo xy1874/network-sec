@@ -47,6 +47,7 @@
     R0(config)#ip route 0.0.0.0 0.0.0.0 100.1.1.2
 
 ### 2.2 配置R1的信息
+
     Would you like to enter the initial configuration dialog? [yes/no]: no
     Router>enable
     Router#configure terminal
@@ -106,16 +107,19 @@
 
 ### 3.4 阶段4--应用安全策略映射到外网口
 &emsp;&emsp; 到对应接口下映射map
+    
     crypto map map名
 
 ### 3.5 配置R0端的IPsec信息
 
 &emsp;&emsp;进入配置模式
+    
     Would you like to enter the initial configuration dialog? [yes/no]: no
     R0>enable
     R0#configure terminal
 
 &emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R0的配置页面。
+    
     crypto isakmp policy 1
     encryption aes
     group 2
@@ -139,10 +143,12 @@
 ### 3.6 配置另一端R2的IPsec信息
 
 &emsp;&emsp;配置另一端
+    
     R2>enable
     R2#configure terminal
 
-&emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R1的配置页面。
+&emsp;&emsp;进入配置模式后，可以手动输入如下命令，或者直接将如下代码paste到R2的配置页面。
+
     crypto isakmp policy 2
     encryption aes
     group 2
@@ -161,10 +167,13 @@
     crypto map ge2map
 
 &emsp;&emsp;可以通过命令查看当前连接建立完成
+
     do sh crypto isakmp sa
+
 <center><img src="../assets/2-5.png" width = 500></center>
 
 &emsp;&emsp;查看R0的状态
+
 <center><img src="../assets/2-5.png" width = 500></center>
 
     R0(config)#do sh crypto ipsec sa
@@ -235,6 +244,7 @@
 ## 4. 在PC端发送ICMP信息，抓包分析
 
 ### 2.1 从PC1 ping PC0，如图所示，时间响应较慢但是能够互通。
+
 <center><img src="../assets/2-7.png" width = 500></center>
 
 ### 2.1 抓包分析
@@ -243,9 +253,11 @@
 单击Show All/None，Event List Filters-Visible Events窗口栏中变成None。然后，再点击Edit Filters。在弹出的窗口里，选择IPv4选项卡，选择ICMP协议，本实验只需观察这个协议即可。
 
 &emsp;&emsp;配置完成后点击play键，然后再从PC1 ping PC0，观察抓包结果。
+
 <center><img src="../assets/2-8.png" width = 500></center>
 
 &emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
+
 <center><img src="../assets/2-9.png" width = 500></center>
 
 
