@@ -109,7 +109,7 @@
          newip.ttl = 99
          newicmp   = ICMP(type=0, id=ip[ICMP].id, seq=ip[ICMP].seq)
          if ip.haslayer(Raw):
-            data = pkt[Raw].load
+            data = ip[Raw].load
             newpkt = newip/newicmp/data
          else:
             newpkt = newip/newicmp

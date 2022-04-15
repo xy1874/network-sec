@@ -256,7 +256,7 @@
 
 <center><img src="../assets/2-8.png" width = 500></center>
 
-&emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之前的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
+&emsp;&emsp;分别观察发送的路径过程包，可以看到路由器R0,R1和R2之间的的数据包中是由IPSec包头的，其他的是没有的，想一想为什么？
 
 <center><img src="../assets/2-9.png" width = 700></center>
 
