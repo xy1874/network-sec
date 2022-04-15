@@ -751,7 +751,7 @@
         
           <li class="md-nav__item">
   <a href="#task3-tunnelvpnip" class="md-nav__link">
-    Task3 通过Tunnel向VPN服务器发IP数据包
+    Task3 通过Tunnel向服务器（VPN）发IP数据包
   </a>
   
 </li>
@@ -1059,7 +1059,7 @@
         
           <li class="md-nav__item">
   <a href="#task3-tunnelvpnip" class="md-nav__link">
-    Task3 通过Tunnel向VPN服务器发IP数据包
+    Task3 通过Tunnel向服务器（VPN）发IP数据包
   </a>
   
 </li>
@@ -1130,14 +1130,14 @@
 <p>&emsp;&emsp;Task2.2 激活TUN接口</p>
 <p>&emsp;&emsp;Task2.3 从TUN接口读取数据</p>
 <p>&emsp;&emsp;Task2.4 向TUN接口写入数据</p>
-<h3 id="task3-tunnelvpnip">Task3 通过Tunnel向VPN服务器发IP数据包</h3>
-<p>&emsp;&emsp;3.1 设置VPN服务器</p>
+<h3 id="task3-tunnelvpnip">Task3 通过Tunnel向服务器（VPN）发IP数据包</h3>
+<p>&emsp;&emsp;3.1 设置服务器（VPN）</p>
 <p>&emsp;&emsp;3.2 设置VPN客户端</p>
 <p>&emsp;&emsp;3.3 通过Tunnel通道中的进行数据传输</p>
 <h3 id="task4-tunnel">Task4 配置Tunnel的双向通道</h3>
 <h3 id="task5-tunnel">Task5 观察Tunnel短暂中断发生的情况</h3>
 <h2 id="_3">实验环境</h2>
-<p>&emsp;&emsp;本次实验需要的主机沿用实验一搭建好的SEED实验室虚拟环境，另外我们还需要三个容器来分别模拟VPN客户端、VPN服务器和处于私有网络的主机V，因为实验一已经安装好了VM虚拟主机，本次只需要部署容器即可。</p>
+<p>&emsp;&emsp;本次实验需要的主机沿用实验一搭建好的SEED实验室虚拟环境，另外我们还需要三个容器来分别模拟主机V（客户端VPN）、服务器（VPN）和处于私有网络的主机V，因为实验一已经安装好了VM虚拟主机，本次只需要部署容器即可。</p>
 <h3 id="_4">部署容器</h3>
 <p>&emsp;&emsp;Step1：下载本次实验需要的容器压缩包<a href="https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt">VPN_Labsetup.zip</a>。也可以通过<a href="https://seedsecuritylabs.org/Labs_20.04/Networking/VPN_Tunnel/">官网链接</a>。</p>
 <p>&emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/VPN_Tunnel目录下，并解压。使用命令为 unzip VPN_Labsetup.zip</p>
@@ -1145,7 +1145,7 @@
 cd VPN_Tunnel
 unzip VPN_Labsetup.zip
 </code></pre>
-<p>&emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，VPN服务器和另外两台计算机共4个容器。其中的文件docker-compose2.yml用于task8，可以先不关心。</p>
+<p>&emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，服务器（VPN）和另外两台计算机共4个容器。其中的文件docker-compose2.yml用于task8，可以先不关心。</p>
 <pre><code>cd Labsetup/
 dcbuild # Alias for: docker-compose build
 dcup # Alias for: docker-compose up
