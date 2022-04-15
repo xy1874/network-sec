@@ -6,7 +6,7 @@
 
 &emsp;&emsp;本次实验的网络部署如下图所示。
 
- <center><img src="../assets/2-1.png" width = 400></center>
+ <center><img src="../assets/2-1.png" width = 600></center>
 
 &emsp;&emsp;容器启动后就可以在后台继续运行了，我们开一个新的连接，查看容器信息。
 
@@ -52,7 +52,7 @@
     tcpdump -i eth0 -n  //捕获 10.9.0.5发送过来的ICMP数据包
     tcpdump -i eth1 -n  ////捕获 192.168.60.5发送过来的ICMP数据包
 
-<center><img src="../assets/2-2.png" width = 400></center>
+<center><img src="../assets/2-2.png" width = 600></center>
 
 ## 2. 创建和配置TUN接口
 
@@ -70,7 +70,7 @@
 
 &emsp;&emsp;从另一个终端连接启动client客户端，利用ip addr查看ip配置信息，发现多了一个接口tun0，如下图所示。
 
-<center><img src="../assets/2-3.png" width = 400></center>
+<center><img src="../assets/2-3.png" width = 600></center>
 
 ### 2.2 配置TUN接口
 
@@ -79,7 +79,7 @@
     ip addr add 192.168.53.99/24 dev tun0
     ip link set dev tun0 up
 
-<center><img src="../assets/2-4.png" width = 400></center>
+<center><img src="../assets/2-4.png" width = 600></center>
 
 ### 2.3 从TUN接口读取信息
 
@@ -158,7 +158,7 @@
 ### 3.3 通过Tunnel通道中的进行数据传输
 &emsp;&emsp;分别在VPN服务器容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行tcpdump -i eth0的命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
 
-<center><img src="../assets/2-5.png" width = 400></center>
+<center><img src="../assets/2-5.png" width = 600></center>
 
 提示：执行命令前请给server.py和client.py通过chmod a+x 文件名  加权限。
 
@@ -186,7 +186,7 @@
 
 &emsp;&emsp;启动VPN服务器和HostU客户端的tun接口后（./tun_server_select.py和./tun_client_select.py），在从HostU客户端ping HostV，就可以得到回应了，整个Tunnel就通了。
 
-<center><img src="../assets/2-6.png" width = 400></center>
+<center><img src="../assets/2-6.png" width = 600></center>
 
 ## 5. 观察Tunnel短暂中断发生的情况
 

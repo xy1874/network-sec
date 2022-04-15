@@ -51,7 +51,7 @@
     cd Labsetup/
     dcbuild # Alias for: docker-compose build
     dcup # Alias for: docker-compose up
-   <center><img src="../assets/1-1.png" width = 400></center>
+   <center><img src="../assets/1-1.png" width = 600></center>
 
 &emsp;&emsp;如果启动中遇到如下问题，直接用docker rm 容器ID，重启即可。
     

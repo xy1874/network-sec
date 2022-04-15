@@ -8,7 +8,7 @@
 
 ## 提交要求
 
-&emsp;&emsp;&emsp;&emsp;将实验报告转换为pdf格式，以“<font color=orange>**学号_姓名_网络安全_实验3.pdf**</font>”命名并提交。
+&emsp;&emsp;&emsp;&emsp;同实验3
 
 
 !!! warning "作业提交 :calendar:"
