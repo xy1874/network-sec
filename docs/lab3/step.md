@@ -166,15 +166,17 @@
     int f0/1
     crypto map ge2map
 
-&emsp;&emsp;可以通过命令查看当前连接建立完成
+&emsp;&emsp;可以通过命令查看当前连接建立完成，R0和R2路由器，每个差不多等了有10-15分钟，大家可以试试，配置完成不管它，等会看看。
 
     do sh crypto isakmp sa
 
 <center><img src="../assets/2-5.png" width = 500></center>
 
+<center><img src="../assets/2-10.png" width = 500></center>
+
 &emsp;&emsp;查看R0的状态
 
-<center><img src="../assets/2-5.png" width = 500></center>
+<center><img src="../assets/2-6.png" width = 500></center>
 
     R0(config)#do sh crypto ipsec sa
 
