@@ -130,6 +130,8 @@
 
 ## 2. 使用iptables配置无状态防火墙规则
 
+&emsp;&emsp;关于iptables的使用和介绍，可参考 https://bbs.csdn.net/topics/604460907
+
 ### 2.1 保护Router，只能ping通
 
 &emsp;&emsp;step1:启动容器，如果在已经启动了防火墙实验的容器，可忽略此步骤。
