@@ -54,7 +54,7 @@
 
 ## 2. 创建和配置TUN接口
 
-### 2.1通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
+### 2.1 在client端容器，通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
 
     root@19f26b5bdb71:/volumes# ls -l
     total 4
@@ -64,7 +64,7 @@
     Interface Name: tun0
 
 !!! info "提示 :sparkles:"
-&emsp;&emsp;执行命令前请给./tun.py通过chmod a+x 文件名  加权限。
+&emsp;&emsp;执行命令前请给tun.py通过chmod a+x 文件名  加权限。
 
 &emsp;&emsp;从另一个终端连接启动client客户端，利用ip addr查看ip配置信息，发现多了一个接口tun0，如下图所示。
 
@@ -101,7 +101,8 @@
     ping 192.168.53.88
     ping 192.168.60.6
 
-### 2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
+### 2.4 从TUN接口写入信息
+&emsp;&emsp;将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
 
       # Send out a spoof packet using the tun interface
       if ICMP in ip:
@@ -118,7 +119,7 @@
 
 ## 3. 通过Tunnel向服务端发IP数据包
 
-### 3.1设置服务端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
+### 3.1 设置服务端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成serve.py文件
 
     IP_A = "0.0.0.0"
     PORT = 9090
@@ -139,7 +140,7 @@
 
 
 
-### 3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件
+### 3.2设置HostU的客户端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成client.py文件
 
     SERVER_IP   = "10.9.0.11"
     SERVER_PORT = 9090

@@ -768,8 +768,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21tunpytun" class="md-nav__link">
-    2.1通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
+  <a href="#21-clienttunpytun" class="md-nav__link">
+    2.1 在client端容器，通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
   </a>
   
 </li>
@@ -789,8 +789,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#24-tuntunpytunpyping-1921685388" class="md-nav__link">
-    2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
+  <a href="#24-tun" class="md-nav__link">
+    2.4 从TUN接口写入信息
   </a>
   
 </li>
@@ -809,15 +809,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31tunpyservepy" class="md-nav__link">
-    3.1设置服务端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
+  <a href="#31-tunpywhileservepy" class="md-nav__link">
+    3.1 设置服务端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成serve.py文件
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#32hostutunpyclientpy" class="md-nav__link">
-    3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件
+  <a href="#32hostutunpywhileclientpy" class="md-nav__link">
+    3.2设置HostU的客户端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成client.py文件
   </a>
   
 </li>
@@ -1071,8 +1071,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21tunpytun" class="md-nav__link">
-    2.1通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
+  <a href="#21-clienttunpytun" class="md-nav__link">
+    2.1 在client端容器，通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
   </a>
   
 </li>
@@ -1092,8 +1092,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#24-tuntunpytunpyping-1921685388" class="md-nav__link">
-    2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
+  <a href="#24-tun" class="md-nav__link">
+    2.4 从TUN接口写入信息
   </a>
   
 </li>
@@ -1112,15 +1112,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31tunpyservepy" class="md-nav__link">
-    3.1设置服务端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件
+  <a href="#31-tunpywhileservepy" class="md-nav__link">
+    3.1 设置服务端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成serve.py文件
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#32hostutunpyclientpy" class="md-nav__link">
-    3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件
+  <a href="#32hostutunpywhileclientpy" class="md-nav__link">
+    3.2设置HostU的客户端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成client.py文件
   </a>
   
 </li>
@@ -1209,7 +1209,7 @@ tcpdump -i eth1 -n  ////捕获 192.168.60.5发送过来的ICMP数据包
 </code></pre>
 <p><center><img src="../assets/2-2.png" width = 600></center></p>
 <h2 id="2-tun">2. 创建和配置TUN接口</h2>
-<h3 id="21tunpytun">2.1通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令</h3>
+<h3 id="21-clienttunpytun">2.1 在client端容器，通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令</h3>
 <pre><code>root@19f26b5bdb71:/volumes# ls -l
 total 4
 -rwxr-xr-x 1 seed seed 511 Dec  5  2020 tun.py
@@ -1220,7 +1220,7 @@ Interface Name: tun0
 <div class="admonition info">
 <p class="admonition-title">提示 <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/2728.svg" title=":sparkles:" /></p>
 </div>
-<p>&emsp;&emsp;执行命令前请给./tun.py通过chmod a+x 文件名  加权限。</p>
+<p>&emsp;&emsp;执行命令前请给tun.py通过chmod a+x 文件名  加权限。</p>
 <p>&emsp;&emsp;从另一个终端连接启动client客户端，利用ip addr查看ip配置信息，发现多了一个接口tun0，如下图所示。</p>
 <p><center><img src="../assets/2-3.png" width = 600></center></p>
 <h3 id="22-tun">2.2 配置TUN接口</h3>
@@ -1248,7 +1248,8 @@ while True:
 <pre><code>ping 192.168.53.88
 ping 192.168.60.6
 </code></pre>
-<h3 id="24-tuntunpytunpyping-1921685388">2.4 从TUN接口写入信息,将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。</h3>
+<h3 id="24-tun">2.4 从TUN接口写入信息</h3>
+<p>&emsp;&emsp;将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。</p>
 <pre><code>  # Send out a spoof packet using the tun interface
   if ICMP in ip:
      newip = IP(src=ip[IP].dst, dst=ip[IP].src, ihl=ip[IP].ihl)
@@ -1263,7 +1264,7 @@ ping 192.168.60.6
      os.write(tun, bytes(newpkt))
 </code></pre>
 <h2 id="3-tunnelip">3. 通过Tunnel向服务端发IP数据包</h2>
-<h3 id="31tunpyservepy">3.1设置服务端代码，根据上面已有的tun.py文件，增加和改动如下内容，形成serve.py文件</h3>
+<h3 id="31-tunpywhileservepy">3.1 设置服务端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成serve.py文件</h3>
 <pre><code>IP_A = "0.0.0.0"
 PORT = 9090
 ......
@@ -1281,7 +1282,7 @@ while True:
     print(" Inside: {} --&gt; {}".format(pkt.src, pkt.dst))
     os.write(tun, data)
 </code></pre>
-<h3 id="32hostutunpyclientpy">3.2设置HostU的客户端代码，根据上面已有的tun.py文件，增加和改动如下内容形成client.py文件</h3>
+<h3 id="32hostutunpywhileclientpy">3.2设置HostU的客户端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成client.py文件</h3>
 <pre><code>SERVER_IP   = "10.9.0.11"
 SERVER_PORT = 9090
 

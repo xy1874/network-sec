@@ -1,4 +1,4 @@
-
+R0
 
 crypto isakmp policy 1
 encryption aes
@@ -22,6 +22,7 @@ crypto map gemap
 
 
 
+R2
 
 crypto isakmp policy 2
 encryption aes
