@@ -1244,20 +1244,22 @@
 <h2 id="4-netfilter">4 Netfilter</h2>
 <p>&emsp;&emsp;Linux内核通过Netfilter的钩子函数提供了强大的数据包处理及过滤框架。在Linux中，每个协议栈都在数据包经过的路径上定义了一些了钩子点。开发者使用内核模块间他们定义的函数“勾”到这些钩子点上，当数据包到达每个钩子点时，协议栈会调用Netfilter框架，查找是否有内核模块挂在这些钩子点，如果有，这些模块注册的函数会被调用，这时他们得以分析或处理数据包。最后，他们将返回对数据包的处理结果。</p>
 <h2 id="41">4.1 钩子点对数据包的处理结果</h2>
-<p>有5种，说明如下：
-  （1）NF_ACCEPT:允许数据包通过。
-  （2）NF_DROP:丢弃数据包，这样数据包将不会在网络协议种继续传输。
-  （3）NF_QUEUE:使用nf_queue机制将数据包传递到用户空间处理。
-  （4）NF_STOLEN:告知Netfilter框架忽略这个数据包。这个操作主要是把数据包进一步的处理工作从Netfilter转交给模块。数据包在内核内表中仍然是有效的。典型用途是把分片的数据包存储起来，以便在同一个上下文中分析它们。
-  （5）NF_REPEAT:请求Netfilter框架再次调用这个模块。</p>
+<p>有5种，说明如下：</p>
+<pre><code>（1）NF_ACCEPT:允许数据包通过。
+（2）NF_DROP:丢弃数据包，这样数据包将不会在网络协议种继续传输。
+（3）NF_QUEUE:使用nf_queue机制将数据包传递到用户空间处理。
+（4）NF_STOLEN:告知Netfilter框架忽略这个数据包。这个操作主要是把数据包进一步的处理工作从Netfilter转交给模块。数据包在内核内表中仍然是有效的。典型用途是把分片的数据包存储起来，以便在同一个上下文中分析它们。
+（5）NF_REPEAT:请求Netfilter框架再次调用这个模块。
+</code></pre>
 <h2 id="42-ipv4netfilter">4.2 IPv4中的Netfilter钩子函数</h2>
 <p>&emsp;&emsp;Netfliter为IPv4定义了5种钩子函数。数据包在网络协议栈中的传输情况（与防火墙相关）如下图所示。</p>
 <p><center><img src="../assets/1-1.png" width = 500></center></p>
-<p>（1）NF_INET_PRE_ROUTING:除了混杂模式，所有数据包都将经过这个钩子点。它上面注册的钩子函数在路由判决前被调用。
-  （2）NF_INET_LOCAL_IN:数据包要进行路由判决，以决定需要被转发还是发完本机。前一种情况下，数据包将签完转发路径；后一种情况下，数据包将通过这个钩子点，之后被发送到网络协议栈，并最终被主机接收。
-  （3）NF_INET_FORWARD:需要被转发的数据包会到达这个钩子点。这个钩子点对于实现一个防火墙是十分重要的。
-  （4）NF_INET_LOCAL_OUT:这是本机产生的数据包到达的第一个钩子点。
-  （5）NF_INET_POST_ROUTING:需要被转发或者由本机产生的数据包都会经过这个钩子点。源网络地址转换（source network translation, SNAT）就是用这个钩子点实现的。</p>
+<pre><code>（1）NF_INET_PRE_ROUTING:除了混杂模式，所有数据包都将经过这个钩子点。它上面注册的钩子函数在路由判决前被调用。
+（2）NF_INET_LOCAL_IN:数据包要进行路由判决，以决定需要被转发还是发完本机。前一种情况下，数据包将签完转发路径；后一种情况下，数据包将通过这个钩子点，之后被发送到网络协议栈，并最终被主机接收。
+（3）NF_INET_FORWARD:需要被转发的数据包会到达这个钩子点。这个钩子点对于实现一个防火墙是十分重要的。
+（4）NF_INET_LOCAL_OUT:这是本机产生的数据包到达的第一个钩子点。
+（5）NF_INET_POST_ROUTING:需要被转发或者由本机产生的数据包都会经过这个钩子点。源网络地址转换（source network translation, SNAT）就是用这个钩子点实现的。
+</code></pre>
 <h2 id="5-iptables">5 iptables 防火墙</h2>
 <p>&emsp;&emsp;Linux自带由一个功能很强大的防火墙iptables，也是基于Netfilter。严格来说，该防火墙在内核中的部分叫作xtables，而iptables是用户空间用来设置防火墙的程序。但是一般我们就把iptables作为内核部分和用户空间部分两者的统称。</p>
 <h3 id="51-iptables">5.1 iptables 防火墙的结构</h3>
