@@ -114,6 +114,8 @@
 
 &emsp;&emsp;Step5：分别输入ping 10.9.0.1 和telnet 10.9.0.1 命令，发现没有响应。注意ping命令如果5秒内没有回复即可用ctrl+c终止命令，否则时间会很长。
 
+<center><img src="../assets/1-14.png" width = 500></center>
+
 <center><img src="../assets/1-9.png" width = 500></center>
 
 <center><img src="../assets/1-8.png" width = 500></center>
