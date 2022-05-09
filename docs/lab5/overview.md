@@ -9,7 +9,7 @@
 
 ## 实验内容
 
-&emsp;&emsp;本次实验通过使用Netfilter实现一个简单的数据包过滤器，并用Linux内置的防火墙iptables搭建一个稍微复杂的防火墙，最后实现使用隧道技术绕过防火墙。
+&emsp;&emsp;本次实验通过使用Netfilter实现一个简单的数据包过滤器，并用Linux内置的防火墙iptables搭建一个稍微复杂的防火墙。
 
 ## 实验环境
 
