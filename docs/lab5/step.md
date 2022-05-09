@@ -56,6 +56,12 @@
 
 ### 1.2 使用Netfilter搭建一个简单的防火墙
 
+&emsp;&emsp;启动容器，如果在已经启动了本次防火墙实验的容器，可忽略此步骤。
+
+    cd ../..    //进入到本次实验的Labsetup目录
+    dcbuild     //build容器
+    dcup     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
+
 #### 1.2.1 阻止UDP数据包
 
 &emsp;&emsp;为做对比，先执行dig命令查看，发现有回复，如下图所示。
@@ -138,7 +144,7 @@
 
     cd ../..    //进入到本次实验的Labsetup目录
     dcbuild     //build容器
-    dcbuild     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
+    dcup     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
 
 &emsp;&emsp;step2:使用dockps命令查看HostA容器的id，并使用docksh 59（HostA容器的id前2个字符），并执行ping 10.9.0.11（Router IP）和telent 10.9.0.11（Router IP）命令，观察下是否连通。
 

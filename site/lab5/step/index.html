@@ -1167,6 +1167,11 @@ sudo rmmod hello    //把内核模块从内核中删除
 [22292.177388] Bye-bye World!.
 </code></pre>
 <h3 id="12-netfilter">1.2 使用Netfilter搭建一个简单的防火墙</h3>
+<p>&emsp;&emsp;启动容器，如果在已经启动了本次防火墙实验的容器，可忽略此步骤。</p>
+<pre><code>cd ../..    //进入到本次实验的Labsetup目录
+dcbuild     //build容器
+dcup     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
+</code></pre>
 <h4 id="121-udp">1.2.1 阻止UDP数据包</h4>
 <p>&emsp;&emsp;为做对比，先执行dig命令查看，发现有回复，如下图所示。</p>
 <pre><code>dig @8.8.8.8 www.example.com
@@ -1217,7 +1222,7 @@ lsmod | grep task2    //查看是否加载成功
 <p>&emsp;&emsp;step1:启动容器，如果在已经启动了防火墙实验的容器，可忽略此步骤。</p>
 <pre><code>cd ../..    //进入到本次实验的Labsetup目录
 dcbuild     //build容器
-dcbuild     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
+dcup     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
 </code></pre>
 <p>&emsp;&emsp;step2:使用dockps命令查看HostA容器的id，并使用docksh 59（HostA容器的id前2个字符），并执行ping 10.9.0.11（Router IP）和telent 10.9.0.11（Router IP）命令，观察下是否连通。</p>
 <p><center><img src="../assets/1-12.png" width = 500></center></p>
