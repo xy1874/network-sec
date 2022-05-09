@@ -81,7 +81,7 @@
 
 <center><img src="../assets/1-3.png" width = 500></center>
 
-&emsp;&emsp;使用dmesg命令查看内核日志信息，可以看到注册和卸载的信息，以及防火墙阻止后丢掉的数据包。
+&emsp;&emsp;使用dmesg命令查看内核日志信息，可以看到注册和卸载的信息，以及防火墙阻止后丢掉的数据包,请参考下面的图片截取内核日志信息在实验报告中。
 
 <center><img src="../assets/1-5.png" width = 500></center>
 
@@ -158,7 +158,7 @@
     iptables -P OUTPUT DROP   //Set default rule for OUTPUT
     iptables -P INPUT DROP    //Set default rule for INPUT
 
-&emsp;&emsp;step4:在HostA容器中再此执行ping 10.9.0.11（Router IP）和telent 10.9.0.11（Router IP）命令，观察下是否连通。将结果截图粘贴到实验报告中，并分析原因。
+&emsp;&emsp;step4:在HostA容器中再次执行ping 10.9.0.11（Router IP）和telent 10.9.0.11（Router IP）命令，观察下是否连通。将结果截图粘贴到实验报告中，并分析原因。
 
 &emsp;&emsp;step5:清理掉上面配置的防火墙规则，请注意，我们在实验中每次测试完毕都要清理掉配置规则，避免影响后面的实验。
 
