@@ -36,7 +36,7 @@
 
 &emsp;&emsp;基于操作模式，防火墙可分为三类：数据包过滤器、状态防火墙和应用防火墙，如下图所示：
 
-<center><img src="../assets/1-1.png" width = 500></center>
+<center><img src="../assets/2-1.png" width = 500></center>
 
 ### 2.1 数据包过滤器
 
