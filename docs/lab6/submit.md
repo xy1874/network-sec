@@ -2,7 +2,7 @@
 
 ## 实验报告要求
 
-&emsp;&emsp;实验报告参考 [实验提交模板](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)
+实验报告参考 [实验提交模板](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)
 
 
 
