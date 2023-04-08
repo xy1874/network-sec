@@ -1,204 +1,167 @@
 # 实验步骤
+&emsp;&emsp;本次实验通过6个分解的任务模拟证书签发和认证过程，并通过模拟不同策略的中间人攻击验证PKI防御中间人攻击的安全性。首先将本地主机作为一个CA,完成签发证书的过程；接着用签发的证书去配置安全的Web服务器，通过这个配置，分析验证整个证书验证的过程；最后用不同的策略模仿中间人攻击，验证PKI是如何防御攻击策略的。
 
-## 1. 网络部署
+## Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）
 
-&emsp;&emsp;本次实验的网络部署如下图所示。
+&emsp;&emsp;认证颁发机构（CA）是一个可信的、能够签发数字证书的实体。在签发证书之前，CA需要验证证书申请者的身份。CA的核心功能有如下两个：（1）验证Subject域；（2）对证书进行数字签名。
 
- <center><img src="../assets/2-1.png" width = 600></center>
+&emsp;&emsp;一些商业性的CAs被视为根类CAs，想要获得商业核证机关发出的数字证书的用户需要向这些核证机关支付费用。在实验中，我们不使用商业的CA而是将自己成为根CA，然后使用此CA为其他人（例如服务器）颁发证书。
 
-&emsp;&emsp;容器启动后就可以在后台继续运行了，我们开一个新的连接，查看容器信息。
+&emsp;&emsp;任务1中，我们将使本地主机设置成为根CA，并为此CA生成证书。根CA的证书是自签名的，通常预加载到大多数操作系统、web浏览器和其他依赖PKI的软件中。
 
-    dockps
-    19f26b5bdb71  client-10.9.0.5
-    e019b7e018b1  server-router
-    af2671fc2a0e  host-192.168.60.6
-    b5378add757b  host-192.168.60.5
+### Step1.部署CA。
 
-&emsp;&emsp;分别验证HostU(客户端)、服务端和HostV的连通性。进入容器命令为 docksh 容器id的前两个字符。
+&emsp;&emsp;签名时，openssl会使用一个默认的配置文件（/usr/lib/ssl/openssl.cnf）,该文件中已经配置了需要的文件夹和文件的名字，因为我们要修改这个配置文件，因此我们cp这个文件到自己的目录下，新cp的文件命名为myCA_openssl.cnf。Openssl.cnf文件部分配置内容如下,将unique_subject前面的注释去掉。
+<center><img src="../assets/3-1.png" width = 500></center>
+<center>图3-1 openssl.conf</center>
 
-&emsp;&emsp;根据前面的网络部署图我们知道服务端的IP地址分别为10.9.0.11和192.168.60.11，也可通过进入服务端的容器中通过ip addr命令查看。
+&emsp;&emsp;因此需要在/home/seed/PKI下创建一个demoCA的目录，并在该文件夹下创建三个文件夹certs、crl和newcerts和两个文件index.txt和serial。Seiral文件包含证书的序列号可以将任意数字反正文件中来初始化序列号，我们采用1000为例。具体命令如下
 
-    docksh e0
-    root@e019b7e018b1:/# ip addr
-    1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-        link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-        inet 127.0.0.1/8 scope host lo
-           valid_lft forever preferred_lft forever
-    73: eth0@if74: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
-        link/ether 02:42:0a:09:00:0b brd ff:ff:ff:ff:ff:ff link-netnsid 0
-        inet 10.9.0.11/24 brd 10.9.0.255 scope global eth0
-           valid_lft forever preferred_lft forever
-    75: eth1@if76: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
-        link/ether 02:42:c0:a8:3c:0b brd ff:ff:ff:ff:ff:ff link-netnsid 0
-        inet 192.168.60.11/24 brd 192.168.60.255 scope global eth1
-           valid_lft forever preferred_lft forever
+    sudo mkdir PKIlib   //在 /home/seed目录下创建本次实验的文件夹 PKIlib
+    cp /usr/lib/ssl/openssl.cnf myCA_openssl.cnf   //将openssl.cnf 拷贝一份到myCA_openssl.cnf中
+    vi myCA_openssl.cnf  //查看文件的配置内容，并把unique_subject和copy_extensions前面的注释去掉
 
-&emsp;&emsp;通过下面的命令测试，可以发现HostU可以与服务端的通信，但是不能与主机HostV通信
+    sudo mkdir demoCA   //根据myCA_openssl.cnf中的内容创建需要的文件夹和文件
+    cd demoCA
+    sudo mkdir certs crl newcerts
 
-    docksh 19   //进入客户端容器HostU
-    ping 10.9.0.11
-    ping 192.168.60.5
+    sudo touch index.txt serial
+    sudo vi serial   //最后打开serial写入1000
 
-&emsp;&emsp;服务端可以与HostU、HostV通信。
+&emsp;&emsp;设置好配置文件myCA_openssl.cnf中需要的信息之后，就可以创建和颁发证书了。具体文件路径如下：
+
+<center><img src="../assets/10-3.png" width = 500></center>
+
+### Step2.生成自签名证书ca.key (私钥证书)和 ca.crt (公钥证书)。
+
+&emsp;&emsp;在PKI或者PKIlib(自己所建目录下)，执行如下命令，具体命令如下：
+
+    sudo openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -keyout ca.key -out ca.crt -subj "/CN=www.modelCA.com/O=Model CA LTD./C=US" -passout pass:dees
+
+&emsp;&emsp;其中-subj用来设置Subject域信息，-passout是使用证书时需要的密码信息，因为每次要使用此CA为其他人签名证书时，都必须输入该密码。
+
+&emsp;&emsp;利用下面两个命令查看ca.crt和ca.key的内容，回答下面两个问题
+
+    openssl x509 -in ca.crt -text -noout 
+
+    sudo openssl rsa -in ca.key -text -noout
+
+&emsp;&emsp;问题1：证书的哪个部分表明这是CA的证书？
+
+&emsp;&emsp;问题2：证书的哪个部分表明这是自签名证书？
+
+&emsp;&emsp;可参考证书的说明如下图所示：
+<center><img src="../assets/3-2.png" width = 500></center>
+<center>图3-2 证书说明</center>
+
+
+## Task2. 为web server生成签名请求（Task2 Generating a Certificate Request for Your Web Server）
+
+&emsp;&emsp;如果银行要部署一个基于HTTPS的网络服务器（比如www.bank32.com）来保护客户与服务器之间的交互，就需要从根CA那里获取一个公钥证书。首先需要生成一个签名请求（CSR—Certificate Singing Request），CSR中包含银行的公钥与其身份细节，如机构名称、地址与域名等信息。
+
+&emsp;&emsp;生成CSR的命令如下，与Task1中生成自签名的证书类似，去掉了-x509的选项，没有这个选项就是生成了CSR，有这个选项就是生成了自签名证书。命令如下，其中bank32A和bank32B是bank32网站的别名。
+
+    sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
+
+## Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）
+根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.
+
+    sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key
     
-    docksh e0  //进入服务端容器
-    ping 10.9.0.5
-    ping 192.168.60.5
+    在接下来需要输入密码的地方输入dees
+    Using configuration from myCA_openssl.cnf
+    Enter pass phrase for ca.key:
+    Check that the request matches the signature
 
-&emsp;&emsp;在服务端上运行抓包工具，并观察每个网络上的流量。使用下面的命令，分别通过容器HostU和HostV发送ping命令，显示你可以捕获的数据包。
+<center><img src="../assets/6-2.png" width = 500></center>
 
-    tcpdump -i eth0 -n  //捕获 10.9.0.5发送过来的ICMP数据包
-    tcpdump -i eth1 -n  ////捕获 192.168.60.5发送过来的ICMP数据包
+&emsp;&emsp;下面的命令可以查看server.crt的内容，观察下与ca.crt有什么不同？
 
-<center><img src="../assets/2-2.png" width = 600></center>
+    openssl x509 -in server.crt -text -noout
 
-## 2. 创建和配置TUN接口
+## Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）
 
-### 2.1 在client端容器，通过tun.py脚本配置tun并启动，启动后在后台运行，不启动输入其他命令
+&emsp;&emsp;一旦银行收到了数字证书，它就可以在HTTPS网站中部署该证书。我们会基于Apache部署一个HTTPS web服务器。首先需要将在主机中生成的证书server.crt和私钥server.key通过volumes文件夹传递给容器（volumes这个文件夹为主机和容器共享的文件夹，主机中放入这个文件夹的文件，容器中可以直接获取到）。
 
-    root@19f26b5bdb71:/volumes# ls -l
-    total 4
-    -rwxr-xr-x 1 seed seed 511 Dec  5  2020 tun.py
-    root@19f26b5bdb71:/volumes# chmod a+x tun.py
-    root@19f26b5bdb71:/volumes# ./tun.py
-    Interface Name: tun0
+&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下，volumes路径再我们建的目录PKI或者PKIlib路径下的Labsetup路径下
 
-!!! info "提示 :sparkles:"
-&emsp;&emsp;执行命令前请给tun.py通过chmod a+x 文件名  加权限。
+    cp server.crt server.key ../volumes
 
-&emsp;&emsp;从另一个终端连接启动client客户端，利用ip addr查看ip配置信息，发现多了一个接口tun0，如下图所示。
+<center><img src="../assets/10-1.png" width = 400></center>
 
-<center><img src="../assets/2-3.png" width = 600></center>
-
-### 2.2 配置TUN接口
-
-&emsp;&emsp;使用下面两条命令给TUN接口配置ip并启动，然后再通过ip addr命令观察TUN接口的信息如下图所示，ip地址已经配置上了。
-
-    ip addr add 192.168.53.99/24 dev tun0
-    ip link set dev tun0 up
-
-<center><img src="../assets/2-4.png" width = 600></center>
-
-### 2.3 从TUN接口读取信息
-
-&emsp;&emsp;将如下两条命令和上面的配置TUN接口的两条命令一起写入tun.py
-
-    //下面这段代码放在打印接口名字后面
-    # Set up the tun interface
-    os.system("ip addr add 192.168.53.99/24 dev {}".format(ifname))
-    os.system("ip link set dev {} up".format(ifname))
-
-    //下面这段代码替换原来的循环语句
-    while True:
-    # Get a packet from the tun interface
-      packet = os.read(tun, 2048)
-      if packet:
-        ip = IP(packet)
-        print(ip.summary())
-
-&emsp;&emsp;重新运行tun.py, 并从另外一个连接进入客户端查看TUN接口的情况（ip addr）,然后分别执行如下命令，查看tun.py的运行结果，分析说明下原因。
-
-    ping 192.168.53.88
-    ping 192.168.60.6
-
-### 2.4 从TUN接口写入信息
-&emsp;&emsp;将下面的代码加入到tun.py中，重新运行./tun.py，再从客户端ping 192.168.53.88，可以看到客户端有消息回复。
-
-      # Send out a spoof packet using the tun interface
-      if ICMP in ip:
-         newip = IP(src=ip[IP].dst, dst=ip[IP].src, ihl=ip[IP].ihl)
-         newip.ttl = 99
-         newicmp   = ICMP(type=0, id=ip[ICMP].id, seq=ip[ICMP].seq)
-         if ip.haslayer(Raw):
-            data = ip[Raw].load
-            newpkt = newip/newicmp/data
-         else:
-            newpkt = newip/newicmp
-
-         os.write(tun, bytes(newpkt))
-
-## 3. 通过Tunnel向服务端发IP数据包
-
-### 3.1 设置服务端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成serve.py文件
-
-    IP_A = "0.0.0.0"
-    PORT = 9090
-    ......
-    # Set up the tun interface
-    os.system("ip addr add 192.168.53.1/24 dev {}".format(ifname))
-    os.system("ip link set dev {} up".format(ifname))
-    ......
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind((IP_A, PORT))
-
-    while True:
-        data, (ip, port) = sock.recvfrom(2048)
-        print("{}:{} --> {}:{}".format(ip, port, IP_A, PORT))
-        pkt = IP(data)
-        print(" Inside: {} --> {}".format(pkt.src, pkt.dst))
-        os.write(tun, data)
-
-
-
-### 3.2设置HostU的客户端代码，参考上面已有的tun.py文件，通过增加代码和改动while循环语句，参考如下内容形成client.py文件
-
-    SERVER_IP   = "10.9.0.11"
-    SERVER_PORT = 9090
+&emsp;&emsp;Step2 在Lapsetup路径下启动容器服务器，进入shell，dockps 命令查看容器ID，docksh id的前两个符号即可进入容器shell
     
-    .......
-
-    # Set up routing
-    os.system("ip route add 192.168.60.0/24 dev {}".format(ifname))
-
-    # Create UDP socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-    while True:
-    # Get a packet from the tun interface
-    packet = os.read(tun, 2048)
-    if packet:
-       ip = IP(packet)
-       print(ip.summary())
-
-       # Send the packet via the tunnel
-       sock.sendto(packet, (SERVER_IP, SERVER_PORT))
-
-### 3.3 通过Tunnel通道中的进行数据传输
-&emsp;&emsp;分别在服务端容器和HostU容器中执行./server.py和./client.py文件，在另外一个HostU容器的shell中，执行ping 192.168.60.5,分别观察三个终端中的信息，并在HostV中执行抓包命令进行监听，可以看到信息从Tunnel通道中已经传输了，HostV收到了信息也回应了，但是在HostU容器中却看不到回复信息。
+    dockps    
+    2e6d2c851fcd  www-10.9.0.80
+    8e37ba198b2f  mitm-proxy-10.9.0.143
+    15097d1000a3  server-10.9.0.43
     
-    tcpdump -i eth0
+    docksh 2e
 
-<center><img src="../assets/2-5.png" width = 600></center>
-
-提示：执行命令前请给server.py和client.py通过chmod a+x 文件名  加权限。
-
-
-## 4. 配置Tunnel的双向通道
-
-&emsp;&emsp;在任务3中我们可以看到，HostU可以成功地向HostV发送消息，但是却收不到HostV回复的消息，这个问题在本次任务中解决。
-
-    # We assume that sock and tun file descriptors have already been created.
-    while True:
-    # this will block until at least one interface is ready
-        ready, _, _ = select.select([sock, tun], [], [])
-        for fd in ready:
-            if fd is sock:
-                data, (ip, port) = sock.recvfrom(2048)
-                pkt = IP(data)
-                print("From socket <==: {} --> {}".format(pkt.src, pkt.dst))
-                os.write(tun, data)
+&emsp;&emsp;Step3 将主机传递过来的证书和私钥放到/certs路径下
     
-            if fd is tun:
-                packet = os.read(tun, 2048)
-                pkt = IP(packet)
-                print("From tun ==>: {} --> {}".format(pkt.src, pkt.dst))
-                sock.sendto(packet, (SERVER_IP, SERVER_PORT))  // client 用此行代码
-                sock.sendto(packet, (ip, port))   //server 用此行代码
+    cd volumes
+    cp server.crt server.key ../certs
 
-&emsp;&emsp;启动服务端和HostU客户端的tun接口后（./tun_server_select.py和./tun_client_select.py），在从HostU客户端ping HostV，就可以得到回应了，整个Tunnel就通了。
+<center><img src="../assets/10-2.png" width = 400></center>
 
-<center><img src="../assets/2-6.png" width = 600></center>
+&emsp;&emsp;Step4 进入到目录/etc/apache2/sites-available中查看文件,site-available是存放的所有可用站点信息。修改可以有两种方式，一种是直接再容器踪下载vi编辑器。命令如下：
+    apt-get update
+    apt-get install vim
 
-## 5. 观察Tunnel短暂中断发生的情况
+&emsp;&emsp;另一种是通过共享目录volumes传递文件进行修改，主机volumes路径为Lapsetup路径下，容器再跟目录下。
 
-&emsp;&emsp;完成任务4，Tunnel两边就通了，现在我们从HostU客户端telnet HostV，用户名密码是seed/dees。完成登录后请暂停下服务端和HostU客户端的连接，在HostU客户当已经telnet的界面输入一些命令，然后立即再通过./tun_server_select.py和./tun_client_select.py。启动后观察telnet的界面出现的内容，思考下为什么？
+修改文件中的配置如下bank32_apache_ssl.conf：
+<center><img src="../assets/3-3.png" width = 300></center>
+<center>图3-3 配置bank32网站信息1</center>
+
+&emsp;&emsp;Step5 重启apache
+
+    a2enmod ssl    // 使能SSL模式 
+    a2ensite bank32_apache_ssl   //使能文件中的配置信息
+    service apache2 restart //重启服务器，如果报错，根据提示修改配置文件即可
+
+&emsp;&emsp;Step6 进入主机，打开浏览器输入https://www.bank32.com的网址，不加证书的情况是报错的，加入开始生成的证书ca.crt,没加证书前，提醒你可能有风险，需要添加证书。
+<center><img src="../assets/4-1.png" width = 500></center>
+<center>图4-1 提示风险</center>
+<center><img src="../assets/4-2.png" width = 500></center>
+<center>图4-2 添加证书1</center>
+<center><img src="../assets/4-3.png" width = 500></center>
+<center>图4-3 添加证书2</center>
+<center><img src="../assets/4-4.png" width = 500></center>
+<center>图4-4 选择CA证书</center>
+<center><img src="../assets/4-5.png" width = 500></center>
+<center>图4-5 能够正常访问</center>
+
+&emsp;&emsp;请将能够正确访问www.bank32.com的截图放到实验报告中。
+
+## Task5. 抵御中间人攻击
+
+&emsp;&emsp;根据task4中配置服务器的方式，配置一个我们学校的网页，同学们可以尝试任何其他的网页。
+
+&emsp;&emsp;Step1 打开学校网站首页，按ctrl+s 保存文件的内容为index.html
+
+&emsp;&emsp;Step2 在client容器的/var/www目录下创建一个和bank32类似的目录hitsz，并将index.html通过volumes文件夹传到容器的/var/www/hitsz目录下，并拷贝一份内容一样的文件index_red.html。
+
+&emsp;&emsp;Step3 将bank32_apache_ssl.conf文件copy一份为hitsz-ssl.conf，内容修改为hitsz相关的网页信息，证书信息用www.bank32.com服务器的。
+
+&emsp;&emsp;Step4 使能SSL和hitsz-ssl的配置，并重启apache。
+
+&emsp;&emsp;Step5 在主机的/etc/hosts中添加一条信息 10.9.0.80 www.hitsz.edu.cn，这里的主机是指虚拟机，不是自己的电脑，主机是相对于容器的叫法。使用下面的命令添加一条数据。
+
+    sudo vi /etc/hosts
+
+&emsp;&emsp;Step6 打开https://www.hitsz.edu.cn，发现报错，报证书有误的信息。
+<center><img src="../assets/5-1.png" width = 500></center>
+<center>图5-1 提示有风险</center>
+<center><img src="../assets/5-2.png" width = 500></center>
+<center>图5-2 查看详细信息，证书有问题</center>
+
+## Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）
+
+&emsp;&emsp;假设hitsz也是使用我们的根CA证书，而且这个证书的私钥已经被我们劫持了，使用task1和task2来生成hitsz的证书和私钥进行攻击。完成后的结果如下图所示，攻击成功。
+<center><img src="../assets/6-1.png" width = 500></center>
+<center>图6-1 可以访问我们虚假构建的hitsz的网站了</center>
+
+
+

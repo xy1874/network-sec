@@ -1,72 +1,67 @@
 ## 实验目的
 
-&emsp;&emsp;1. 了解TLS/SSL 虚拟专用网络的工作原理；
+公钥加密是当今安全通信的基础，但是当通信的一方向另一方发送公钥时，却容易遭受到中间人攻击。根本问题在于没有一个简单的方式验证公钥所有者的身份。也就是说当收到一个公钥和它的所有者信息时，无法确定该公钥确实为这个所有者所拥有。公钥基础设施（PKI）就是解决此问题的一个方案。
 
-&emsp;&emsp;2. 掌握虚拟专用网络 Tunnel的配置和使用方法。
+本次实验涉及到PKI、CA、Apache、HTTPS和中间人攻击这几个知识点，所通过本次实验一系列的任务期望能够到达如下几个目的。
+
+1. 了解PKI的工作原理；
+
+2. 掌握如何使用PKI保护网络；
+
+3. 掌握PKI如何击败中间人攻击。
+
 
 ## 实验内容
 
-&emsp;&emsp; 本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Networking/VPN_Tunnel/ ，我们只需要完成其中的前6个任务。通过这6个任务。第7-9个任务作为附加题，欢迎大家完成附加题。任务列表如下：
+本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/，共需要完成如下6个小任务。通过这6个任务我们完成一个银行服务器bank32.com的部署、认证、攻击过程。
 
-### Task1 部署网络，并测试连通性
+Task1 成为认证颁发机构（CA）
 
-### Task2 创建并配置TUN接口
+Task2 为web server生成签名请求
 
-&emsp;&emsp;Task2.1 创建TUN接口
+Task3 为web server生成签名证书
 
-&emsp;&emsp;Task2.2 激活TUN接口
+Task4 在网络服务器中部署公钥证书
 
-&emsp;&emsp;Task2.3 从TUN接口读取数据
+Task5 抵御中间人攻击
 
-&emsp;&emsp;Task2.4 向TUN接口写入数据
+Task6 用一个已经劫持到的CA发动一次中间人攻击
 
-### Task3 通过Tunnel向服务器发IP数据包
-
-&emsp;&emsp;3.1 设置虚拟专用网络服务器
-
-&emsp;&emsp;3.2 设置虚拟专用网络客户端
-
-&emsp;&emsp;3.3 通过Tunnel通道中的进行数据传输
-
-### Task4 配置Tunnel的双向通道
-
-### Task5 观察Tunnel短暂中断发生的情况
 
 ## 实验环境
 
-&emsp;&emsp;本次实验需要的主机沿用实验一搭建好的SEED实验室虚拟环境，另外我们还需要三个容器来分别模拟主机V（客户端）、服务器和处于私有网络的主机V，因为实验一已经安装好了VM虚拟主机，本次只需要部署容器即可。
+本次实验需要一个服务器产生证书，另外我们还需要一个容器来模拟web服务器，分两步完成。
 
-###  部署容器
+### 部署容器
 
-&emsp;&emsp;Step1：下载本次实验需要的容器压缩包[VPN_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/Networking/VPN_Tunnel/)。
+Step1：下载本次实验需要的容器压缩包[SEED实验室PKI Lab](https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/)。
 
-&emsp;&emsp;Step2：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/VPN_Tunnel目录下，并解压。使用命令为 unzip VPN_Labsetup.zip
+<center><img src="../assets/1-3.png" width = 500></center>
 
-    mkdir VPN_Tunnel
-    cd VPN_Tunnel
-    unzip VPN_Labsetup.zip
+Step2：将容器压缩包上传到Seed镜像环境中，建议先新建一个文件夹PKI，让压缩包传到/home/seed/PKI路径下并解压。使用命令为 unzip Labsetup.zip
 
-&emsp;&emsp;Step3：Build容器，并启动，启动后应该能够看到client，服务器和另外两台计算机共4个容器。其中的文件docker-compose2.yml用于task8，可以先不关心。
-    
-    cd Labsetup/
-    dcbuild # Alias for: docker-compose build
-    dcup # Alias for: docker-compose up
-   <center><img src="../assets/1-1.png" width = 600></center>
+    mkdir PKI
+    cd PKI
+    unzip Labsetup.zip
 
-&emsp;&emsp;如果启动中遇到如下问题，直接用docker rm 容器ID，重启即可。
-    
-    ERROR: for VPN_Client  Cannot create container for service VPN_Client: Conflict. The container name "/client-10.9.0.5" is already in use by container "1a3dc7dce80f2c68a937090408c98875e566242579ac2cb2a5f06ab98f3fe1f2". You have to remove (or rename) that container to be able to reuse that name.
+Step3：Build容器
+       cd Labsetup/
+       docker-compose build
 
-    docker rm 1a3dc7dce80f2c68a937090408c98875e566242579ac2cb2a5f06ab98f3fe1f2
+Step4：启动  命令为 dcup
+<center><img src="../assets/1-4.png" width = 500></center>
+<center>图1-4 容器正常启动</center>
 
-&emsp;&emsp;如果启动中遇到如下warning，直接用dcup --remove-orphans 启动即可。
+Step5: 最后，在主机的/etc/hosts文件增加如下一条配置10.9.0.80       www.bank32.com ，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。
+<center><img src="../assets/1-5.png" width = 500></center>
+<center>图1-5 配置主机hosts文件</center>
 
-    WARNING: Found orphan containers (mitm-proxy-10.9.0.143, server-10.9.0.43, www-10.9.0.80) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
-    
+
 
 !!! info "说明 :sparkles:"
-&emsp;&emsp;容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
-    
-    dockps // Alias for: docker ps --format "{{.ID}} {{.Names}}"
-    docksh <id> // Alias for: docker exec -it <id> /bin/bash   id的前两个字符就行
-
+容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
+<center><img src="../assets/1-6.png" width = 500></center>
+<center>图1-6 查看正在启动的容器ID</center>
+<center><img src="../assets/1-7.png" width = 500></center>
+<center>图1-7 进入容器的shell</center>
+         

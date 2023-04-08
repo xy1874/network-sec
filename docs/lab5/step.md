@@ -1,208 +1,133 @@
 # 实验步骤
 
-&emsp;&emsp;本次的实验一共4个小任务（每个大任务有2个小任务），基于以下的组网方式实现。
+本次实验通过2个程序来看TLS是如何在程序中来保护通信安全的，并讨论TLS编程中常见的错误。一个是HTTPS客户端程序，它可以从HTTPS网络服务器获取网页；另一个是HTTPS服务器程序，它可以给浏览器返回网页。HTTPS是建立在TLS之上的应用层协议。
 
-<center><img src="../assets/1-1.png" width = 500></center>
+## 1. TLS客户端
 
-## 1. 使用Netfilter技术实现一个简单的防火墙
+### 1.1 TLS握手
 
-&emsp;&emsp;本次任务使用Netfilter技术实现一个简单的数据包过滤器。数据包过滤器只能在内核中实现，因此代码需要运行的内核中，也就是我们需要修改内核。Linux提供了两个技术使得不需要重新编译就能实现数据包过滤器，分别是Netfilter和可加载内核模块（loadable kernel modules）。
+在客户端容器中执行给出的TLS握手代码，观察执行结果，回答下面的几个问题。并通过主机的wireshark抓包工具，抓包分析TLS的握手协议。
 
-### 1.1 实现一个简单的内核模块
+查看客户端的容器id
 
-&emsp;&emsp;Step1：分析可加载内核模块代码。
+    dockps
+    285ad3691dd4  server-10.9.0.43
+    5883d206e679  mitm-proxy-10.9.0.143
+    1a3dc7dce80f  client-10.9.0.5
 
-&emsp;&emsp;每个内核模块有两个入口点分别用于载入模块和卸载模块。具体代码和makefile文件在解压后的路径Labsetup/Files/kernel_module下。
+进入容器客户端端的shell，执行如下命令，可以根据结果查看到交换的密钥和证书等信息
+    
+    docksh 1a
+    cd volumes/
+    ./handshake.py www.baidu.com
 
-    #include <linux/module.h>
-    #include <linux/kernel.h>
+进入主机，打开wireshark工具，选择我们正在使用的网卡开始抓包。然后在客户端容器中重复执行 ./handshake.py www.baidu.com  命令，可以查看分析TLS握手协议。建议大家再通过主机的浏览器访问下www.baidu.com网站，抓包分析下，可以看到握手后的应用层的协议信息。
 
-    int initialization(void)
-    {
-        printk(KERN_INFO "Hello World!\n");
-        return 0;
-    }
+<center><img src="../assets/2-1.png" width = 500></center>
+<center>图2-1 抓包网卡选择</center>
 
-    void cleanup(void)
-    {
-        printk(KERN_INFO "Bye-bye World!.\n");
-    }
+问题1：根据执行结果，客户端和服务器端使用的加密算法有哪些？
 
-    module_init(initialization);
-    module_exit(cleanup);
+问题2：简单分析打印的服务器端的证书
 
-    MODULE_LICENSE("GPL");
+问题3：抓包分析握手协议
 
-&emsp;&emsp;我们来简单分析下代码。上面的代码实现了模块加载时打印Hello World!，模块卸载时打印Bye-bye World!
 
-    module_init()指定的函数在模块载入时被调用，用来进行初始化。
-    module_exit()指定的函数在模块卸载时被调用，用来进行清理工作。
-    printk()函数用于内核中打印信息，打印内容到内核日志缓存中。
+### 1.2 TLS协议中的CA认证
 
-&emsp;&emsp;Step2：编译并安装内核模块
+将代码中的证书文件路径改成 ./client-certs,再次在客户端容器运行 ./handshake.py www.baidu.com,观察出现的结果，想想为什么？将www.baidu.com需要的证书copy到 ./client-certs下，根据下面的命令生成hash并做个软链接，再次运行./handshake.py www.baidu.com，查看出现的结果。
 
-    cd Labsetup/Files/kernel_module  //进入内核文件路径
-    make   //编译内核模块
-    sudo insmod hello.ko   //把内核模块载入内核
-    lsmod | grep hello   //查看hello模块是否已载入内核
-    sudo rmmod hello    //把内核模块从内核中删除    
+<center><img src="../assets/2-3.png" width = 400></center>
+<center>更改handshake.py代码中的证书文件路径</center>
 
-&emsp;&emsp;Step3：执行完加载和卸载我们实现的内核模块，查看内核日志缓冲区输出的信息，可以看到包含我们实现的简单内核模块hello输出的信息。
+    cp /etc/ssl/certs/GlobalSign_Root_CA.pem client-certs/    //copy百度网站的证书，如果是其他网站，请先根据下面的提示查找对应的证书
+    openssl x509 -in GlobalSign_Root_CA.pem -noout -subject_hash
+    5ad8a5d6
+    ln -s GlobalSign_Root_CA.pem 5ad8a5d6.0
 
-    dmesg  //检查内核日志缓冲区信息
-    .......
-    [22263.877120] Hello World!
-    [22292.177388] Bye-bye World!.
+问题4：请同学们将www.baidu.com网站的测试过程截图保存在报告里，也可选用其他网站做测试。
 
-### 1.2 使用Netfilter搭建一个简单的防火墙
+!!! info "提示 :sparkles:"
+如果找到网站需要的证书呢？我们可以根据第一步执行结果中的信息，查看subjec中的commonName信息，再根据代码中的证书路径/etc/ssl/certs找到对应的证书，copy到client-certs目录下。
+  'subject': ((('countryName', 'BE'),),
+              (('organizationName', 'GlobalSign nv-sa'),),
+              (('organizationalUnitName', 'Root CA'),),
+              (('commonName', 'GlobalSign Root CA'),)),
 
-&emsp;&emsp;启动容器，如果在已经启动了本次防火墙实验的容器，可忽略此步骤。
 
-    cd ../..    //进入到本次实验的Labsetup目录
-    dcbuild     //build容器
-    dcup     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
+### 1.3 TLS认证中的校验服务器的主机名
 
-#### 1.2.1 阻止UDP数据包
+因为容器中没有dig命令，所以需要再主机中用dig命令查看www.baidu.com的服务器IP地址：
 
-&emsp;&emsp;为做对比，先执行dig命令查看，发现有回复，如下图所示。
+    dig www.baidu.com
+    www.baidu.com.          0       IN      A       163.177.151.110
 
-    dig @8.8.8.8 www.example.com
+然后将一个假的主机名比如www.baidu.2022.com写入到客户端的/etc/hosts中
 
-<center><img src="../assets/1-3.png" width = 500></center>
+    echo 163.177.151.110 www.baidu2022.com >> /etc/hosts
 
-&emsp;&emsp;使用Labsetup/Files/packet_filter下的代码，阻止IP地址是8.8.8.8和端口为53的UDP数据包。运行命令如下：
+然后将代码中的主机名检测分别设置False和True的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现的问题。
 
-    cd Labsetup/Files/packet_filter //进入防火墙代码路径
-    make  //编译seedFilter
-    sudo insmod seedFilter.ko   //加入到内核
-    lsmod | grep seedFilter    //查看是否加载成功
+<center><img src="../assets/2-4.png" width = 400></center>
+<center>更改handshake.py代码中的主机名检测信息</center>
 
-&emsp;&emsp;加载成功后再执行 dig @8.8.8.8 www.example.com命令，查看结果如下图所示，已经得不到任何响应了，说明防火墙设置成功。
+    ./handshake.py www.baidu2022.com
 
-<center><img src="../assets/1-4.png" width = 500></center>
+问题5：请同学们将www.baidu.com网站的测试过程截图保存在报告里并分析执行的结果，也可选用其他网站做测试。
 
-&emsp;&emsp;卸载seedFilter模块成功后再执行 dig @8.8.8.8 www.example.com命令，又可以收到回复了。
+### 1.4 利用TLS协议传输应用数据
 
-    sudo rmmod seedFilter
+利用hankshake.py的代码，增加下面的代码内容放在client.py文件中，尝试传送应用数据，建议删除等待press。
 
-<center><img src="../assets/1-3.png" width = 500></center>
+    # Send HTTP Request to Server
+    request = b"GET / HTTP/1.0\r\nHost: " + hostname.encode('utf-8') + b"\r\n\r\n"
+    ssock.sendall(request)
+    # Read HTTP Response from Server
+    response = ssock.recv(2048)
+    while response:
+     pprint.pprint(response.split(b"\r\n"))
+     response = ssock.recv(2048)
 
-&emsp;&emsp;使用dmesg命令查看内核日志信息，可以看到注册和卸载的信息，以及防火墙阻止后丢掉的数据包,请参考下面的图片截取内核日志信息在实验报告中。
+## 2. TLS 服务器
 
-<center><img src="../assets/1-5.png" width = 500></center>
 
-#### 1.2.2 阻止TCP和PING
+### 2.1 实现一个简单的TLS服务器
 
-&emsp;&emsp;参考阻止UDP的代码，实现阻止ping 10.9.0.1 和telnet 10.9.0.1 的防火墙。
+这个任务中我们将使用实验一中生成的CA证书和www.bank32.com的证书和私钥，首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。
 
-&emsp;&emsp;Step1：首先输入ping 10.9.0.1 和telnet 10.9.0.1 命令，发现能够正常返回，telnet也能登录（seed/dees），如下图所示：
+    cp ca.crt ../TLS/Labsetup/volumes/client-certs/
+    sudo cp server.crt server.key ../TLS/Labsetup/volumes/server-certs/
 
-<center><img src="../assets/1-6.png" width = 500></center>
+在主机中，修改server.py的证书正确的路径和名称(server.crt 和server.key)，并绑定服务器的ip 10.9.0.43。
 
-<center><img src="../assets/1-7.png" width = 500></center>
+<center><img src="../assets/2-5.png" width = 400></center>
 
-&emsp;&emsp;Step2：将seedFilter.c文件copy一份为task2.c, 仿造blockUDP函数，增加两个函数blockICMP和blockTCP，并在增加两个钩子hook3，hook4,分别在registerFilter函数和removeFilter函数中注册和删除。
+在服务器容器中，启动服务器 ./server.py,输入我们实验中设置的证书密码dees
 
-&emsp;&emsp;Step3：修改Makefile，将里面的seedFilter相关的内容修改为task2的内容。
+在客户端容器中，将ca.crt做软链接，并将www.bank32.com的信息写入/etc/hosts中
 
-&emsp;&emsp;Step4：执行下面的命令
+    openssl x509 -in ca.crt -noout -subject_hash
+    dbb9c584
+    ln -s ca.crt dbb9c584.0
+    echo 10.9.0.43 www.bank32.com >> /etc/hosts
 
-    cd Labsetup/Files/packet_filter //进入防火墙代码路径，本身应该就在该目录下，这个步骤可忽略
-    make  //编译task2
-    sudo insmod task2.ko   //加入到内核
-    lsmod | grep task2    //查看是否加载成功
+更改client.py中证书的路径为 client-certs，并将端口号改为和服务器保持一致。
 
-&emsp;&emsp;Step5：分别输入ping 10.9.0.1 和telnet 10.9.0.1 命令，发现没有响应。注意ping命令如果5秒内没有回复即可用ctrl+c终止命令，否则时间会很长。
+在客户端容器中,启动客户端。
+    ./client.py www.bank32.com
 
-<center><img src="../assets/1-14.png" width = 500></center>
+再切换到服务器端可以看到有消息接收。
 
-<center><img src="../assets/1-9.png" width = 500></center>
+问题5：请分析TLS客户端编程和server.py的代码，说明下服务器程序的关键步骤。
 
-<center><img src="../assets/1-8.png" width = 500></center>
+### 2.2 利用主机浏览器测试实现的TLS服务器
 
-&emsp;&emsp;Step6：卸载task2模块成功后再执行ping 10.9.0.1 和telnet 10.9.0.1 命令，恢复正常。
+从主机的浏览器进入到https://www.bank32.com网站，查看服务器的链接情况，如果还是在第一次的实验环境中，我们已经加入了证书，如果没有加入证书，需要在firefox浏览器加入ca.crt的证书。
 
-    sudo rmmod task2
+### 2.3 测试服务器有别名的情况
 
-<center><img src="../assets/1-6.png" width = 500></center>
+因为我们在第一个PKI的实验中已经让大家添加过www.bank32.com的别名，所以证书部分我们不需要修改，只需要在客户端容器中的/etc/hosts中添加一个个别名和对应的服务器IP就可以了。
 
-<center><img src="../assets/1-7.png" width = 500></center>  
+<center><img src="../assets/2-2.png" width = 400></center>
 
-&emsp;&emsp;Step7：使用dmesg命令查看内核日志信息，发现有防火墙阻止后丢掉的数据包。
-
-<center><img src="../assets/1-10.png" width = 500></center>
-
-<center><img src="../assets/1-11.png" width = 500></center> 
-
-&emsp;&emsp;请将dmesg的日志信息参考上面的截图粘贴到实验报告中。
-
-## 2. 使用iptables配置无状态防火墙规则
-
-&emsp;&emsp;关于iptables的使用和介绍，可参考 https://bbs.csdn.net/topics/604460907
-
-### 2.1 保护Router，只能ping通
-
-&emsp;&emsp;step1:启动容器，如果在已经启动了防火墙实验的容器，可忽略此步骤。
-
-    cd ../..    //进入到本次实验的Labsetup目录
-    dcbuild     //build容器
-    dcup     //启动容器，启动后请将本Terminal保持，其他命令再启动一个新的Terminal
-
-&emsp;&emsp;step2:使用dockps命令查看HostA容器的id，并使用docksh 59（HostA容器的id前2个字符），并执行ping 10.9.0.11（Router IP）和telent 10.9.0.11（Router IP）命令，观察下是否连通。
-
-<center><img src="../assets/1-12.png" width = 500></center>
-
-&emsp;&emsp;step3:使用dockps命令查看Router容器的id，并使用docksh de（Router容器的id前2个字符），并执行如下规则
-
-<center><img src="../assets/1-12.png" width = 500></center>
-
-    iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
-    iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
-    iptables -P OUTPUT DROP   
-    iptables -P INPUT DROP    
-
-&emsp;&emsp;上面命令中，前面两行是设置Router允许icmp类型协议的应答，下面两行是其他没有设置的协议类型默认拒绝
-
-    iptables -P OUTPUT DROP   //Set default rule for OUTPUT
-    iptables -P INPUT DROP    //Set default rule for INPUT
-
-&emsp;&emsp;step4:在HostA容器中再次执行ping 10.9.0.11（Router IP）和telent 10.9.0.11（Router IP）命令，观察下是否连通。将结果截图粘贴到实验报告中，并分析原因。
-
-&emsp;&emsp;step5:清理掉上面配置的防火墙规则，请注意，我们在实验中每次测试完毕都要清理掉配置规则，避免影响后面的实验。
-
-    iptables -F
-    iptables -P OUTPUT ACCEPT
-    iptables -P INPUT ACCEPT
-
-### 2.2 保护内网
-
-&emsp;&emsp;step1:在HostA容器中执行ping 192.168.60.5（内网host1 IP）和telent 192.168.60.5（内网host1 IP）命令，观察下是否连通。
-
-&emsp;&emsp;step2:在Router容器中配置如下规则，使得满足以下四个条件：
-   
-    1、外网不能ping通内网
-    2、外网可以ping通Router
-    3、内网可以ping通外网
-    4、所以其他的内网和外网交互的数据包被阻止掉。
-
-&emsp;&emsp;配置规则如下：
-
-    iptables -A FORWARD -i eth0 -p icmp --icmp-type echo-request -j DROP
-    iptables -A FORWARD -i eth1 -p icmp --icmp-type echo-request -j ACCEPT
-    iptables -A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
-    iptables -P FORWARD DROP
-
-&emsp;&emsp;说明：请用ip addr查看网卡ip地址配置，我这里显示的eth0是外网，eth1是内网。
-
-&emsp;&emsp;step3:在HostA容器中执行ping 192.168.60.5（内网Host1 IP）和telent 192.168.60.5（内网Host1 IP）命令，观察下是否连通。将结果截图粘贴到实验报告中，并分析原因。
-
-&emsp;&emsp;step4:在Host1（192.168.60.5）中分别执行ping 192.168.60.11和ping 10.9.0.5（HostA）观察下是否连通。将结果截图粘贴到实验报告中，并分析原因。
-
-&emsp;&emsp;step5:清理掉上面配置的防火墙规则，请注意，我们在实验中每次测试完毕都要清理掉配置规则，避免影响后面的实验。
-
-    iptables -F
-    iptables -P OUTPUT ACCEPT
-    iptables -P INPUT ACCEPT
-    iptables -P FORWARD ACCEPT
-
-
+问题6：请分别用client.py和浏览器两种方式访问服务器，并记录你观察的结果（截图）。
