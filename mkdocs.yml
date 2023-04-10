@@ -59,7 +59,7 @@ nav:
     - 实验须知: index.md
     - 作业提交说明: ojguide.md
   - Seed实验环境搭建:
-    - 实验步骤: lab8/step.md 
+    - Seed实验环境: lab8/step.md 
   - 实验1：Meltdown Attack:
     - 实验概述: lab1/overview.md
     - 实验原理: lab1/theory.md

@@ -28,17 +28,17 @@ Meltdown(熔断)是2018年1月披露的CPU特性漏洞，对应漏洞编号 [CVE
 
 ## 实验环境
 
-Step1：下载seed环境的镜像
+Step1：实验室已经在虚拟机上安装好了SEED Ubuntu-20.04，如果想自行配置环境，参考[Seed实验环境搭建](https://hitsz-cslab.gitee.io/net-work-security/lab8/step/)
 
-Step2：下载本次实验需要的容器压缩包[Lab1-MeltDown_Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/)。
+Step2：下载本次实验需要的容器压缩包[Lab1-MeltDown-Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/)。
 
+ <center><img src="../assets/0-1 下载Labsetup.png" width = 200></center>
 
-Step3：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/MeltDown目录下，并解压。使用命令为 unzip Lab1-MeltDown_Labsetup.zip
+Step3：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/MeltDown目录下，并解压。
 
     mkdir MeltDown
-    cd MeltDownl
-    unzip Lab1-MeltDown_Labsetup.zip
-
+    cd MeltDown
+    unzip Labsetup.zip    //官网下载直接中此命令， 链接中下载用命令 unzip Lab1-MeltDown-Labsetup.zip   
 
 
 
