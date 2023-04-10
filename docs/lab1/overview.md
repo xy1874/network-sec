@@ -32,7 +32,7 @@ Step1：实验室已经在虚拟机上安装好了SEED Ubuntu-20.04，如果想�
 
 Step2：下载本次实验需要的容器压缩包[Lab1-MeltDown-Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/)。
 
- <center><img src="../assets/0-1 下载Labsetup.png" width = 200></center>
+ <center><img src="../assets/0-1.png" width = 200></center>
 
 Step3：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/MeltDown目录下，并解压。
 
