@@ -9,23 +9,23 @@
 
 - 选择“新建”，对虚拟机进行命名，完成后点击“下一步”
 
-<center><img src="../assets/1-1.png" width = 300></center>
+<center><img src="../assets/1-1.png" width = 400></center>
 
 - 设置内存大小，可以设置为4096MB（不改也可以），完成后点击“下一步”
 
-<center><img src="../assets/1-2.png" width = 300></center>
+<center><img src="../assets/1-2.png" width = 400></center>
 
 - **使用已有的虚拟硬盘文件**，选择目录为下载好的`SEED-Ubuntu20.04.vdi`，完成后点击“创建”
 
-<center><img src="../assets/1-3.png" width = 300></center>
+<center><img src="../assets/1-3.png" width = 400></center>
 
 - 根据下面的截图配置双网卡，完成虚拟机网络设置
 
-<center><img src="../assets/1-4.png" width = 300></center>
+<center><img src="../assets/1-4.png" width = 400></center>
 
 - 启动虚拟机，默认密码是`dees`
 
-<center><img src="../assets/1-5.png" width = 300></center>
+<center><img src="../assets/1-5.png" width = 400></center>
 
 ## 2 安装连接虚拟机的工具MobaXterm
 
@@ -35,13 +35,13 @@
 
 打开后，按照下图即可连接虚拟机。IP地址为安装完虚拟机后用ip addr命令查看到的地址。
 
-<center><img src="../assets/1-8.png" width = 300></center>
+<center><img src="../assets/1-8.png" width = 500></center>
 
-<center><img src="../assets/1-9.png" width = 300></center>
+<center><img src="../assets/1-9.png" width = 500></center>
 
 连接后的界面如下，就可以直接从主机往虚拟机拖动文件了。
 
-<center><img src="../assets/1-10.png" width = 300></center>
+<center><img src="../assets/1-10.png" width = 500></center>
 
 ## 3 下载对应实验资料
 
