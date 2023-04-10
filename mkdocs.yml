@@ -58,6 +58,8 @@ nav:
   - 首页:
     - 实验须知: index.md
     - 作业提交说明: ojguide.md
+  - Seed实验环境搭建:
+    - 实验步骤: lab8/step.md 
   - 实验1：Meltdown Attack:
     - 实验概述: lab1/overview.md
     - 实验原理: lab1/theory.md
@@ -71,11 +73,12 @@ nav:
 #  -  附加题: lab2/extra.md
     - 验收与提交: lab2/submit.md
   - 实验3：SQL注入:
-    - 实验概述: lab3/overview.md
-    - 实验原理: lab3/theory.md
-    - 实验步骤: lab3/step.md
+    - SQL注入实验: lab3/SQLlab.md
+#    - 实验概述: lab3/overview.md
+#    - 实验原理: lab3/theory.md
+#    - 实验步骤: lab3/step.md
   #  - 附加题: lab3/extra.md
-    - 验收与提交: lab3/submit.md
+#    - 验收与提交: lab3/submit.md
   - 实验4：PKI:
     - 实验概述: lab4/overview.md
     - 实验原理: lab4/theory.md
@@ -100,6 +103,3 @@ nav:
     - 实验步骤: lab7/step.md
   #  - 附加题: lab5/extra.md
     - 验收与提交: lab7/submit.md
-  - 附录1：Seed实验环境搭建:
-    - 实验步骤: lab8/step.md
- 
