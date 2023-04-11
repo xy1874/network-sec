@@ -15,26 +15,26 @@ Meltdown(熔断)是2018年1月披露的CPU特性漏洞，对应漏洞编号 [CVE
 
 ## 实验内容
 
- 本次实验来自于https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/，我们需要完成以下8个任务，通过这8个任务完成一次Meltdown攻击。 Task1&2 完成一个简单的侧信道攻击的示例；Task3-5 为Meltdown攻击做准备；Take6 完成乱序执行的示例；Task7 完成一次Meltdown攻击；Task8 给出一个更加实用的攻击效果。
+ 本次实验来自于 https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/ ，我们需要完成以下8个任务，通过这8个任务完成一次 Meltdown 攻击。 Task1&2 完成一个简单的侧信道攻击的示例；Task3-5 为Meltdown攻击做准备；Take6 完成乱序执行的示例；Task7 完成一次Meltdown攻击；Task8 给出一个更加实用的攻击效果。
 
-1. 分别测试从 Cache 读取和从内存读取数据的时间长度，对比时间差
-2. 完成利用缓存进行侧信道攻击的示例
-3. 将秘密数据加载到内核空间
-4. 从用户空间访问内核内存
-5. 处理程序异常
-6. 测试 CPU 的乱序执行
-7. 开始基本的 Meltdown 攻击
-8. 优化完成更有效的 Meltdown 攻击
+1. Task 1： 分别测试从 Cache 读取和从内存读取数据的时间长度，对比时间差
+2. Task 2： 完成利用缓存进行侧信道攻击的示例
+3. Task 3： 将秘密数据加载到内核空间
+4. Task 4： 从用户空间访问内核内存
+5. Task 5： 处理程序异常
+6. Task 6： 测试 CPU 的乱序执行
+7. Task 7： 开始基本的 Meltdown 攻击
+8. Task 8： 优化完成更有效的 Meltdown 攻击
 
 ## 实验环境
 
-Step1：实验室已经在虚拟机上安装好了SEED Ubuntu-20.04，如果想自行配置环境，参考[Seed实验环境搭建](https://hitsz-cslab.gitee.io/net-work-security/lab8/step/)
+Step1：实验室已经在虚拟机上安装好了SEED Ubuntu-20.04 和 SEED Ubuntu-16.04 ，本次实验需要使用 SEED Ubuntu-16.04 虚拟环境。 如果想自行配置环境，参考[Seed实验环境搭建](https://hitsz-cslab.gitee.io/net-work-security/lab8/step/)
 
-Step2：下载本次实验需要的容器压缩包[Lab1-MeltDown-Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/)。
+Step2：下载本次实验需要的容器压缩包[Lab1-MeltDown-Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt)。也可以通过[官网链接](https://seedsecuritylabs.org/Labs_20.04/System/Meltdown_Attack/) 直接下载，参考下图所示。
 
  <center><img src="../assets/0-1.png" width = 400></center>
 
-Step3：将容器压缩包上传到Seed镜像环境中, 建议放在新建的文件/home/seed/MeltDown目录下，并解压。
+Step3：将压缩包放到Seed镜像环境中, 建议放在新建的文件/home/seed/MeltDown目录下，并解压。
 
     mkdir MeltDown
     cd MeltDown

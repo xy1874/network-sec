@@ -1,10 +1,10 @@
-## 1 SeedLab2.0环境准备
+## 1 SeedLab环境准备
 
 如果是使用实验室的环境请忽略下面的内容，直接进入 3 连接虚拟机下载对应实验资料。
 
 使用VirtualBox-Windows版本，其下载地址 https://download.virtualbox.org/virtualbox/6.1.38/VirtualBox-6.1.38-153438-Win.exe
 
-使用SeedUbuntu20.04作为运行环境，其下载参考 https://seedsecuritylabs.org/labsetup.html ，由于下载较慢，推荐提前下载或者使用第三方镜像。
+本课程实验大部分使用 SeedUbuntu20.04 作为运行环境，但是第一个实验需要使用 SeedUbuntu16.04 作为运行环境。下面以 SeedUbuntu20.04 为例作为参考说明，16.04 环境可以参考 20.04 的内容进行配置其下载参考 https://seedsecuritylabs.org/labsetup.html ，由于下载较慢，推荐提前下载或者使用第三方镜像。
 
 <center><img src="../assets/1-0.png" width = 500></center>
 
@@ -53,4 +53,6 @@
 方式1：在虚拟机直接联网，从seed官网 https://seedsecuritylabs.org/Labs_20.04/ 下载对应资料。
 
 方式2：在PC机上下载了相关资料，再传送到虚拟机中，ssh连接工具有 MobaXterm 和 Vscode。 
+
+<center><img src="../assets/0-2.png" width = 500></center>
 
