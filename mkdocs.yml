@@ -73,12 +73,12 @@ nav:
 #  -  附加题: lab2/extra.md
     - 验收与提交: lab2/submit.md
   - 实验3：SQL注入:
-    - SQL注入实验: lab3/SQLlab.md
-#    - 实验概述: lab3/overview.md
-#    - 实验原理: lab3/theory.md
-#    - 实验步骤: lab3/step.md
+#     - SQL注入实验: lab3/SQLlab.md
+    - 实验概述: lab3/overview.md
+    - 实验原理: lab3/theory.md
+    - 实验步骤: lab3/step.md
   #  - 附加题: lab3/extra.md
-#    - 验收与提交: lab3/submit.md
+    - 验收与提交: lab3/submit.md
   - 实验4：PKI:
     - 实验概述: lab4/overview.md
     - 实验原理: lab4/theory.md
