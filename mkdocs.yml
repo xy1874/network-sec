@@ -97,9 +97,9 @@ nav:
     - 实验步骤: lab6/step.md
   #  - 附加题: lab5/extra.md
     - 验收与提交: lab6/submit.md
-  - 实验7：对抗样本攻击:
-    - 实验概述: lab7/overview.md
-    - 实验原理: lab7/theory.md
-    - 实验步骤: lab7/step.md
+ # - 实验7：对抗样本攻击:
+#    - 实验概述: lab7/overview.md
+#    - 实验原理: lab7/theory.md
+#    - 实验步骤: lab7/step.md
   #  - 附加题: lab5/extra.md
-    - 验收与提交: lab7/submit.md
+ #   - 验收与提交: lab7/submit.md
