@@ -4,7 +4,10 @@
 
 使用VirtualBox-Windows版本，其下载地址 https://download.virtualbox.org/virtualbox/6.1.38/VirtualBox-6.1.38-153438-Win.exe
 
-使用SeedUbuntu20.04作为运行环境，其下载参考 https://seedsecuritylabs.org/labsetup.html ，由于下载较慢，推荐提前下载或者使用第三方镜像.
+使用SeedUbuntu20.04作为运行环境，其下载参考 https://seedsecuritylabs.org/labsetup.html ，由于下载较慢，推荐提前下载或者使用第三方镜像。
+
+<center><img src="../assets/1-0.png" width = 500></center>
+
 打开Virtualbox，安装虚拟机
 
 - 选择“新建”，对虚拟机进行命名，完成后点击“下一步”
