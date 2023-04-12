@@ -4,7 +4,9 @@
 
 使用VirtualBox-Windows版本，其下载地址 https://download.virtualbox.org/virtualbox/6.1.38/VirtualBox-6.1.38-153438-Win.exe
 
-本课程实验大部分使用 SeedUbuntu20.04 作为运行环境，但是第一个实验需要使用 SeedUbuntu16.04 作为运行环境。下面以 SeedUbuntu20.04 为例作为参考说明，16.04 环境可以参考 20.04 的内容进行配置其下载参考 https://seedsecuritylabs.org/labsetup.html ，由于下载较慢，推荐提前下载或者使用第三方镜像。
+本课程实验大部分使用 SeedUbuntu20.04 作为运行环境，但是第一个实验需要使用 SeedUbuntu16.04 作为运行环境。下面以 SeedUbuntu20.04 为例作为参考说明，16.04 环境可以参考 20.04 的内容进行配置。
+
+其下载参考 https://seedsecuritylabs.org/labsetup.html ，由于下载较慢，推荐提前下载或者使用第三方镜像。
 
 <center><img src="../assets/1-0.png" width = 500></center>
 
@@ -21,6 +23,10 @@
 - **使用已有的虚拟硬盘文件**，选择目录为下载好的`SEED-Ubuntu20.04.vdi`，完成后点击“创建”
 
 <center><img src="../assets/1-3.png" width = 400></center>
+
+如果列表中没有可选的虚拟硬盘文件，点击注册，到对应路径下下选择文件即可，如下图所示：
+
+<center><img src="../assets/0-1.png" width = 400></center>
 
 - 根据下面的截图配置双网卡，完成虚拟机网络设置
 

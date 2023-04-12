@@ -1,7 +1,7 @@
 # 实验步骤
 &emsp;&emsp;本次实验通过6个分解的任务模拟证书签发和认证过程，并通过模拟不同策略的中间人攻击验证PKI防御中间人攻击的安全性。首先将本地主机作为一个CA,完成签发证书的过程；接着用签发的证书去配置安全的Web服务器，通过这个配置，分析验证整个证书验证的过程；最后用不同的策略模仿中间人攻击，验证PKI是如何防御攻击策略的。
 
-## Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）
+## Task1. 成为认证颁发机构（CA）
 
 &emsp;&emsp;认证颁发机构（CA）是一个可信的、能够签发数字证书的实体。在签发证书之前，CA需要验证证书申请者的身份。CA的核心功能有如下两个：（1）验证Subject域；（2）对证书进行数字签名。
 
@@ -55,7 +55,7 @@
 <center>图3-2 证书说明</center>
 
 
-## Task2. 为web server生成签名请求（Task2 Generating a Certificate Request for Your Web Server）
+## Task2. 为web server生成签名请求
 
 &emsp;&emsp;如果银行要部署一个基于HTTPS的网络服务器（比如www.bank32.com）来保护客户与服务器之间的交互，就需要从根CA那里获取一个公钥证书。首先需要生成一个签名请求（CSR—Certificate Singing Request），CSR中包含银行的公钥与其身份细节，如机构名称、地址与域名等信息。
 
@@ -63,7 +63,7 @@
 
     sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
 
-## Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）
+## Task3. 为web server生成签名证书
 根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.
 
     sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key
@@ -79,7 +79,7 @@
 
     openssl x509 -in server.crt -text -noout
 
-## Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）
+## Task4. 在网络服务器中部署公钥证书
 
 &emsp;&emsp;一旦银行收到了数字证书，它就可以在HTTPS网站中部署该证书。我们会基于Apache部署一个HTTPS web服务器。首先需要将在主机中生成的证书server.crt和私钥server.key通过volumes文件夹传递给容器（volumes这个文件夹为主机和容器共享的文件夹，主机中放入这个文件夹的文件，容器中可以直接获取到）。
 
@@ -157,7 +157,7 @@
 <center><img src="../assets/5-2.png" width = 500></center>
 <center>图5-2 查看详细信息，证书有问题</center>
 
-## Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）
+## Task6. 用一个已经劫持到的CA发动一次中间人攻击
 
 &emsp;&emsp;假设hitsz也是使用我们的根CA证书，而且这个证书的私钥已经被我们劫持了，使用task1和task2来生成hitsz的证书和私钥进行攻击。完成后的结果如下图所示，攻击成功。
 <center><img src="../assets/6-1.png" width = 500></center>

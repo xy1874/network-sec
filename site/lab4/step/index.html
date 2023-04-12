@@ -817,11 +817,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#task1-catask1-becoming-a-certificate-authority-ca" class="md-nav__link">
-    Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）
+  <a href="#task1-ca" class="md-nav__link">
+    Task1. 成为认证颁发机构（CA）
   </a>
   
-    <nav class="md-nav" aria-label="Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）">
+    <nav class="md-nav" aria-label="Task1. 成为认证颁发机构（CA）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -844,22 +844,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#task2-web-servertask2-generating-a-certificate-request-for-your-web-server" class="md-nav__link">
-    Task2. 为web server生成签名请求（Task2 Generating a Certificate Request for Your Web Server）
+  <a href="#task2-web-server" class="md-nav__link">
+    Task2. 为web server生成签名请求
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#task3-web-servertask3-generating-a-certificate-for-your-server" class="md-nav__link">
-    Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）
+  <a href="#task3-web-server" class="md-nav__link">
+    Task3. 为web server生成签名证书
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#task4-task-4-deploying-certificate-in-an-apache-based-https-website" class="md-nav__link">
-    Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）
+  <a href="#task4" class="md-nav__link">
+    Task4. 在网络服务器中部署公钥证书
   </a>
   
 </li>
@@ -872,8 +872,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#task6-catask-6-launching-a-man-in-the-middle-attack-with-a-compromised-ca" class="md-nav__link">
-    Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）
+  <a href="#task6-ca" class="md-nav__link">
+    Task6. 用一个已经劫持到的CA发动一次中间人攻击
   </a>
   
 </li>
@@ -1114,11 +1114,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#task1-catask1-becoming-a-certificate-authority-ca" class="md-nav__link">
-    Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）
+  <a href="#task1-ca" class="md-nav__link">
+    Task1. 成为认证颁发机构（CA）
   </a>
   
-    <nav class="md-nav" aria-label="Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）">
+    <nav class="md-nav" aria-label="Task1. 成为认证颁发机构（CA）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1141,22 +1141,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#task2-web-servertask2-generating-a-certificate-request-for-your-web-server" class="md-nav__link">
-    Task2. 为web server生成签名请求（Task2 Generating a Certificate Request for Your Web Server）
+  <a href="#task2-web-server" class="md-nav__link">
+    Task2. 为web server生成签名请求
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#task3-web-servertask3-generating-a-certificate-for-your-server" class="md-nav__link">
-    Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）
+  <a href="#task3-web-server" class="md-nav__link">
+    Task3. 为web server生成签名证书
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#task4-task-4-deploying-certificate-in-an-apache-based-https-website" class="md-nav__link">
-    Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）
+  <a href="#task4" class="md-nav__link">
+    Task4. 在网络服务器中部署公钥证书
   </a>
   
 </li>
@@ -1169,8 +1169,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#task6-catask-6-launching-a-man-in-the-middle-attack-with-a-compromised-ca" class="md-nav__link">
-    Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）
+  <a href="#task6-ca" class="md-nav__link">
+    Task6. 用一个已经劫持到的CA发动一次中间人攻击
   </a>
   
 </li>
@@ -1191,7 +1191,7 @@
 
 <h1 id="_1">实验步骤</h1>
 <p>&emsp;&emsp;本次实验通过6个分解的任务模拟证书签发和认证过程，并通过模拟不同策略的中间人攻击验证PKI防御中间人攻击的安全性。首先将本地主机作为一个CA,完成签发证书的过程；接着用签发的证书去配置安全的Web服务器，通过这个配置，分析验证整个证书验证的过程；最后用不同的策略模仿中间人攻击，验证PKI是如何防御攻击策略的。</p>
-<h2 id="task1-catask1-becoming-a-certificate-authority-ca">Task1. 成为认证颁发机构（CA）（Task1 Becoming a Certificate Authority (CA)）</h2>
+<h2 id="task1-ca">Task1. 成为认证颁发机构（CA）</h2>
 <p>&emsp;&emsp;认证颁发机构（CA）是一个可信的、能够签发数字证书的实体。在签发证书之前，CA需要验证证书申请者的身份。CA的核心功能有如下两个：（1）验证Subject域；（2）对证书进行数字签名。</p>
 <p>&emsp;&emsp;一些商业性的CAs被视为根类CAs，想要获得商业核证机关发出的数字证书的用户需要向这些核证机关支付费用。在实验中，我们不使用商业的CA而是将自己成为根CA，然后使用此CA为其他人（例如服务器）颁发证书。</p>
 <p>&emsp;&emsp;任务1中，我们将使本地主机设置成为根CA，并为此CA生成证书。根CA的证书是自签名的，通常预加载到大多数操作系统、web浏览器和其他依赖PKI的软件中。</p>
@@ -1228,12 +1228,12 @@ sudo openssl rsa -in ca.key -text -noout
 <p>&emsp;&emsp;可参考证书的说明如下图所示：
 <center><img src="../assets/3-2.png" width = 500></center>
 <center>图3-2 证书说明</center></p>
-<h2 id="task2-web-servertask2-generating-a-certificate-request-for-your-web-server">Task2. 为web server生成签名请求（Task2 Generating a Certificate Request for Your Web Server）</h2>
+<h2 id="task2-web-server">Task2. 为web server生成签名请求</h2>
 <p>&emsp;&emsp;如果银行要部署一个基于HTTPS的网络服务器（比如www.bank32.com）来保护客户与服务器之间的交互，就需要从根CA那里获取一个公钥证书。首先需要生成一个签名请求（CSR—Certificate Singing Request），CSR中包含银行的公钥与其身份细节，如机构名称、地址与域名等信息。</p>
 <p>&emsp;&emsp;生成CSR的命令如下，与Task1中生成自签名的证书类似，去掉了-x509的选项，没有这个选项就是生成了CSR，有这个选项就是生成了自签名证书。命令如下，其中bank32A和bank32B是bank32网站的别名。</p>
 <pre><code>sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
 </code></pre>
-<h2 id="task3-web-servertask3-generating-a-certificate-for-your-server">Task3. 为web server生成签名证书（Task3 Generating a Certificate for your server）</h2>
+<h2 id="task3-web-server">Task3. 为web server生成签名证书</h2>
 <p>根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.</p>
 <pre><code>sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key
 
@@ -1246,7 +1246,7 @@ Check that the request matches the signature
 <p>&emsp;&emsp;下面的命令可以查看server.crt的内容，观察下与ca.crt有什么不同？</p>
 <pre><code>openssl x509 -in server.crt -text -noout
 </code></pre>
-<h2 id="task4-task-4-deploying-certificate-in-an-apache-based-https-website">Task4. 在网络服务器中部署公钥证书（Task 4: Deploying Certificate in an Apache-Based HTTPS Website）</h2>
+<h2 id="task4">Task4. 在网络服务器中部署公钥证书</h2>
 <p>&emsp;&emsp;一旦银行收到了数字证书，它就可以在HTTPS网站中部署该证书。我们会基于Apache部署一个HTTPS web服务器。首先需要将在主机中生成的证书server.crt和私钥server.key通过volumes文件夹传递给容器（volumes这个文件夹为主机和容器共享的文件夹，主机中放入这个文件夹的文件，容器中可以直接获取到）。</p>
 <p>&emsp;&emsp;Step1 将证书和私钥拷贝到volumes路径下，volumes路径再我们建的目录PKI或者PKIlib路径下的Labsetup路径下</p>
 <pre><code>cp server.crt server.key ../volumes
@@ -1303,7 +1303,7 @@ service apache2 restart //重启服务器，如果报错，根据提示修改配
 <center>图5-1 提示有风险</center>
 <center><img src="../assets/5-2.png" width = 500></center>
 <center>图5-2 查看详细信息，证书有问题</center></p>
-<h2 id="task6-catask-6-launching-a-man-in-the-middle-attack-with-a-compromised-ca">Task6. 用一个已经劫持到的CA发动一次中间人攻击（Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA）</h2>
+<h2 id="task6-ca">Task6. 用一个已经劫持到的CA发动一次中间人攻击</h2>
 <p>&emsp;&emsp;假设hitsz也是使用我们的根CA证书，而且这个证书的私钥已经被我们劫持了，使用task1和task2来生成hitsz的证书和私钥进行攻击。完成后的结果如下图所示，攻击成功。
 <center><img src="../assets/6-1.png" width = 500></center>
 <center>图6-1 可以访问我们虚假构建的hitsz的网站了</center></p>
