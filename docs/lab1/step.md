@@ -99,15 +99,17 @@ Task8 给出一个更加实用的攻击效果。
 在 MeltdownKernel.c 文件所在目录下，运行指令如下（本次用到的两个文件分别是make和MeltdownKernel.c）：
 
     $ make
+	$ dmesg --clear  //因为环境有多个同学使用，可以先清除内核环缓存
     $ sudo insmod MeltdownKernel.ko   
-    $ dmesg | grep ‘secret data address’  
+    $ dmesg | grep 'secret data address'  
 
 通过上面的三个命令，找到秘密数据的地址，用于后面的task。
 
 !!! info "说明 :sparkles:"
     Linux insmod（英文全拼：install module）命令用于载入模块。Linux有许多功能是通过模块的方式，在需要时才载入kernel。如此可使kernel较为精简，进而提高效率，以及保有较大的弹性。
-    显示开机信息
+    显示开机信息。
     Linux dmesg 命令可以显示系统开机启动信息。内核会将开机启动信息存储在 ring buffer（环形缓冲区）中。您若是开机时来不及查看信息，可利用dmesg命令来查看。开机信息保存在 /var/log/dmesg 日志文件里。某些硬件设备在安装时，通常会安装驱动程序（内核模块），会打印一些信息，也可以通过dmesg命令来查看。
+	
 
 
 **任务3需提交内容** 截图获取到秘密数据的地址。
@@ -211,7 +213,7 @@ MeltdownExperiment.c 的代码如下， line➀ 将会引起异常，所以 line
 
 本次任务是把内核态的秘密数据加载到 CPU 的 Cache 中，并尝试是否能在用户空间访问该秘密数据。
 
-需要在任务 7.1 的基础上添加如下代码， 代码加在 flushSideChannel() 之后。
+需要在任务 7.1 的基础上添加如下代码。
 
 <center><img src="../assets/2-9 task7 内核加载的代码.png" width = 600></center>
 

@@ -64,6 +64,7 @@
     sudo openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US" -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32B.com" -passout pass:dees
 
 ## Task3. 为web server生成签名证书
+
 根据task2中生成的证书请求文件server.csr用如下命令生成证书文件server.crt.
 
     sudo openssl ca -config myCA_openssl.cnf -policy policy_anything  -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key

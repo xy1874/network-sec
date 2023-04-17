@@ -1360,14 +1360,15 @@ $ ./FlushReload
 <p>首先需要编译和安装内核模块。键入 make 命令编译内核模块, 使用 insmod 命令安装这个内核模块。一旦我们成功地安装了内核模块，我们可以使用 dmesg 命令从内核消息缓冲区中查找秘密值的地址。该地址在后续的任务中使用，请保存下来。</p>
 <p>在 MeltdownKernel.c 文件所在目录下，运行指令如下（本次用到的两个文件分别是make和MeltdownKernel.c）：</p>
 <pre><code>$ make
+$ dmesg --clear  //因为环境有多个同学使用，可以先清除内核环缓存
 $ sudo insmod MeltdownKernel.ko   
-$ dmesg | grep ‘secret data address’
+$ dmesg | grep 'secret data address'
 </code></pre>
 <p>通过上面的三个命令，找到秘密数据的地址，用于后面的task。</p>
 <div class="admonition info">
 <p class="admonition-title">说明 <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/2728.svg" title=":sparkles:" /></p>
 <p>Linux insmod（英文全拼：install module）命令用于载入模块。Linux有许多功能是通过模块的方式，在需要时才载入kernel。如此可使kernel较为精简，进而提高效率，以及保有较大的弹性。
-显示开机信息
+显示开机信息。
 Linux dmesg 命令可以显示系统开机启动信息。内核会将开机启动信息存储在 ring buffer（环形缓冲区）中。您若是开机时来不及查看信息，可利用dmesg命令来查看。开机信息保存在 /var/log/dmesg 日志文件里。某些硬件设备在安装时，通常会安装驱动程序（内核模块），会打印一些信息，也可以通过dmesg命令来查看。</p>
 </div>
 <p><strong>任务3需提交内容</strong> 截图获取到秘密数据的地址。</p>
@@ -1428,7 +1429,7 @@ $ ./ MeltdownExperiment
 <p><strong>任务7.1需提交内容</strong> 观察执行结果，看能否成功地访问到内核空间中的秘密数据。（大概率不成功，所以不成功的同学不要焦虑，是正常情况）</p>
 <h3 id="72">7.2 通过加载内核缓存秘密数据实施攻击</h3>
 <p>本次任务是把内核态的秘密数据加载到 CPU 的 Cache 中，并尝试是否能在用户空间访问该秘密数据。</p>
-<p>需要在任务 7.1 的基础上添加如下代码， 代码加在 flushSideChannel() 之后。</p>
+<p>需要在任务 7.1 的基础上添加如下代码。</p>
 <p><center><img src="../assets/2-9 task7 内核加载的代码.png" width = 600></center></p>
 <p><strong>任务7.2需提交内容</strong> 观察执行结果，看能否成功地访问到内核空间中的秘密数据。（大概率不成功，所以不成功的同学不要焦虑，是正常情况）</p>
 <h3 id="73-meltdown">7.3 使用汇编代码触发Meltdown攻击</h3>
