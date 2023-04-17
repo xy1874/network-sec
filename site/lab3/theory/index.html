@@ -1134,13 +1134,13 @@
 
 
 <h1 id="_1">实验原理</h1>
-<p>SQL 注入可以影响任何使用了 SQL 数据库的网站或应用程序，例如常用的数据库有 MySQL、Oracle、SQL Server 等，攻击者利用它，便能无需授权地访问你的敏感数据，比如：用户资料、个人数据、商业机密等，也可以用户修改数据库的内容，包括删除数据库表。</p>
-<p>SQL 注入是注入是最古老和最危险的Web应用程序漏洞之一。每年 OWASP（开放 Web 应用程序安全项目）都会发布十大安全漏洞。它代表了对 Web 应用程序最关键的安全风险的广泛共识，注入漏洞在2022年排第3.</p>
-<p>Sql 注入带来的威胁主要有如下几点：</p>
+<p>SQL 注入可以影响任何使用了 SQL 数据库的网站或应用程序，例如常用的数据库 MySQL、Oracle、SQL Server 等，攻击者利用它，便能无需授权地访问你的敏感数据，比如：用户资料、个人数据、商业机密等，也可以修改修改数据库的内容，包括删除数据库表。</p>
+<p>SQL 注入是注入是最古老和最危险的Web应用程序漏洞之一。每年 OWASP（开放 Web 应用程序安全项目）都会发布十大安全漏洞。它代表了对 Web 应用程序最关键的安全风险的广泛共识，注入漏洞近几年都在TOP 10 之列 <a href="https://owasp.org/www-project-top-ten/">OWASP TOP10</a> 。</p>
+<p>SQL 注入带来的威胁主要有如下几点：</p>
 <ol>
-<li>猜解后台数据库，这是利用最多的方式，盗取网站的敏感信息。</li>
-<li>绕过认证，列如绕过验证登录网站后台。</li>
-<li>注入可以借助数据库的存储过程进行提权等操作</li>
+<li>猜解后台数据库，这是利用最多的方式，盗取网站的敏感信息；</li>
+<li>绕过认证，列如绕过验证登录网站后台；</li>
+<li>注入可以借助数据库的存储过程进行提权等操作。</li>
 </ol>
 <h2 id="1-sql">1 SQL 注入对数据安全的影响</h2>
 <ol>
@@ -1158,28 +1158,41 @@
 <li>数字型注入点</li>
 </ol>
 <p>​在 Web 端大概是 <a href="http://xxx.com/news.php?id=1">http://xxx.com/news.php?id=1</a> 这种形式，其注入点 id 类型为数字，所以叫数字型注入点。这一类的 SQL 语句原型大概为：</p>
-<div class="highlight"><pre><span></span><code>select * from 表名 where id=1。组合出来的sql注入语句为：select * from news where id=1 and 1=1
+<div class="highlight"><pre><span></span><code>select * from 表名 where id=1
+</code></pre></div>
+<p>组合出来的sql注入语句如下，就：</p>
+<div class="highlight"><pre><span></span><code>select * from news where id=1 and 1=1
 </code></pre></div>
 <ol>
 <li>字符型注入点</li>
 </ol>
 <p>在 Web 端大概是 <a href="http://xxx.com/news.php?name=admin">http://xxx.com/news.php?name=admin</a> 这种形式，其注入点 name 类型为字符类型，所以叫字符型注入点。这一类的 SQL 语句原型大概为</p>
-<p><div class="highlight"><pre><span></span><code>select * from 表名 where name=&#39;admin&#39;注意多了引号。组合出来的sql注入语句为：select * from news where chr=&#39;admin&#39; and 1=1 &#39; &#39;
+<div class="highlight"><pre><span></span><code>select * from 表名 where name=&#39;admin&#39;   注意多了引号
 </code></pre></div>
-3. 搜索型注入点</p>
+<p>组合出来的sql注入语句为：</p>
+<div class="highlight"><pre><span></span><code>select * from news where name=&#39;admin&#39; and 1=1 &#39; &#39;
+</code></pre></div>
+<ol>
+<li>搜索型注入点</li>
+</ol>
 <p>这类注入主要是指在进行数据搜索时没过滤搜索参数，一般在链接地址中有“keyword=关键字”，有的不显示在的链接地址里面，而是直接通过搜索框表单提交。此类注入点提交的 SQL 语句，其原形大致为：</p>
-<div class="highlight"><pre><span></span><code>select * from 表名 where 字段 like &#39;%关键字%&#39;`。
-
-组合出来的sql注入语句为：
-select * from news where search like &#39;%测试 %&#39; and &#39;%1%&#39;=&#39;%1%&#39;
+<div class="highlight"><pre><span></span><code>select * from 表名 where 字段 like &#39;%关键字%&#39;`
+</code></pre></div>
+<p>组合出来的sql注入语句为：</p>
+<div class="highlight"><pre><span></span><code>select * from news where search like &#39;%测试 %&#39; and &#39;%1%&#39;=&#39;%1%&#39;
 
 测试%&#39; union select 1,2,3,4 and &#39;%&#39;=&#39;
 </code></pre></div>
 <h2 id="3-sql">3 防御 SQL 注入漏洞</h2>
 <ol>
 <li>使用特定语言的库函数来代替shell命令和系统调用；</li>
-<li>对用户输入的信息进行严格检查和过滤： 数据类型（字符串、整数等）正确吗？ 使用的是允许的字符集？ 输入满足格式要求吗？ </li>
-<li>使用“最小权限”限制数据库用户的权限</li>
+<li>对用户输入的信息进行严格检查和过滤： </li>
+</ol>
+<p>数据类型（字符串、整数等）正确吗？ </p>
+<p>使用的是允许的字符集？ </p>
+<p>输入满足格式要求吗？ </p>
+<ol>
+<li>使用“最小权限”限制数据库用户的权限。</li>
 </ol>
 
               
