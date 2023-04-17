@@ -1360,7 +1360,7 @@ $ ./FlushReload
 <p>首先需要编译和安装内核模块。键入 make 命令编译内核模块, 使用 insmod 命令安装这个内核模块。一旦我们成功地安装了内核模块，我们可以使用 dmesg 命令从内核消息缓冲区中查找秘密值的地址。该地址在后续的任务中使用，请保存下来。</p>
 <p>在 MeltdownKernel.c 文件所在目录下，运行指令如下（本次用到的两个文件分别是make和MeltdownKernel.c）：</p>
 <pre><code>$ make
-$ dmesg --clear  //因为环境有多个同学使用，可以先清除内核环缓存
+$ sudo dmesg --clear  //因为环境有多个同学使用，可以先清除内核环缓存
 $ sudo insmod MeltdownKernel.ko   
 $ dmesg | grep 'secret data address'
 </code></pre>
@@ -1423,7 +1423,7 @@ $ ./MeltdownExperiment
 <p><center><img src="../assets/7-1.png" width = 600></center></p>
 <p>修改完 MeltdownExperiment.c 保存后，继续执行下面的命令：</p>
 <pre><code>$ gcc -march=native  MeltdownExperiment.c -o  MeltdownExperiment
-$ ./ MeltdownExperiment
+$ ./MeltdownExperiment
 </code></pre>
 <p>发现应该基本不会成功的获取到内核数据的值。原因是在 CPU 乱序执行到 array[kernel_data * 4096 + DELTA] += 1 的时候，需要加载数据到寄存器里面；同步地会执行对 kernel_data 访问的 check 。如果数据加载的执行慢于 check 的话，一旦 check 完成，发现没有权限访问，所以直接丢出 exception ，乱序执行就此中断，此过程中并未完成 array[kernel_data * 4096 + DELTA] += 1 语句的执行。</p>
 <p><strong>任务7.1需提交内容</strong> 观察执行结果，看能否成功地访问到内核空间中的秘密数据。（大概率不成功，所以不成功的同学不要焦虑，是正常情况）</p>

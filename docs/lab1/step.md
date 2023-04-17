@@ -99,7 +99,7 @@ Task8 给出一个更加实用的攻击效果。
 在 MeltdownKernel.c 文件所在目录下，运行指令如下（本次用到的两个文件分别是make和MeltdownKernel.c）：
 
     $ make
-	$ dmesg --clear  //因为环境有多个同学使用，可以先清除内核环缓存
+	$ sudo dmesg --clear  //因为环境有多个同学使用，可以先清除内核环缓存
     $ sudo insmod MeltdownKernel.ko   
     $ dmesg | grep 'secret data address'  
 
@@ -203,7 +203,7 @@ MeltdownExperiment.c 的代码如下， line➀ 将会引起异常，所以 line
 修改完 MeltdownExperiment.c 保存后，继续执行下面的命令：
 
     $ gcc -march=native  MeltdownExperiment.c -o  MeltdownExperiment
-	$ ./ MeltdownExperiment
+	$ ./MeltdownExperiment
 
 发现应该基本不会成功的获取到内核数据的值。原因是在 CPU 乱序执行到 array[kernel_data * 4096 + DELTA] += 1 的时候，需要加载数据到寄存器里面；同步地会执行对 kernel_data 访问的 check 。如果数据加载的执行慢于 check 的话，一旦 check 完成，发现没有权限访问，所以直接丢出 exception ，乱序执行就此中断，此过程中并未完成 array[kernel_data * 4096 + DELTA] += 1 语句的执行。
 
