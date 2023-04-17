@@ -108,6 +108,8 @@ Task8 给出一个更加实用的攻击效果。
 !!! info "说明 :sparkles:"
     Linux insmod（英文全拼：install module）命令用于载入模块。Linux有许多功能是通过模块的方式，在需要时才载入kernel。如此可使kernel较为精简，进而提高效率，以及保有较大的弹性。
     显示开机信息。
+
+!!! info "说明 :sparkles:"
     Linux dmesg 命令可以显示系统开机启动信息。内核会将开机启动信息存储在 ring buffer（环形缓冲区）中。您若是开机时来不及查看信息，可利用dmesg命令来查看。开机信息保存在 /var/log/dmesg 日志文件里。某些硬件设备在安装时，通常会安装驱动程序（内核模块），会打印一些信息，也可以通过dmesg命令来查看。
 	
 
