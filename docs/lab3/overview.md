@@ -30,7 +30,7 @@ http://www.seed-server.com
 
 ## 2.1 Container Setup and Commands
 
-请从实验室网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/) 文件到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。这个文件的内容和所有涉及的`Dockerfile`的详细说明可以在 [用户手册](https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md) 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。
+请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/) 文件到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。这个文件的内容和所有涉及的`Dockerfile`的详细说明可以在 [用户手册](https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md) 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。
 
 下面，我们将列出一些与Docker和Compose相关的常用命令。因为我们将非常频繁地使用这些命令，所以我们在.bashrc文件中为它们创建了别名。
 

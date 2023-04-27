@@ -727,8 +727,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    0 环境准备
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-1mysql" class="md-nav__link">
-    1 任务1：熟悉mysql语句
+    1 任务1：熟悉MySQL语句
   </a>
   
 </li>
@@ -1086,8 +1093,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    0 环境准备
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-1mysql" class="md-nav__link">
-    1 任务1：熟悉mysql语句
+    1 任务1：熟悉MySQL语句
   </a>
   
 </li>
@@ -1134,14 +1148,41 @@
 
 
 <h1 id="_1">实验步骤</h1>
-<h2 id="1-1mysql">1 任务1：熟悉mysql语句</h2>
-<p>本任务的目标是通过使用提供的数据库来熟悉SQL命令。我们的web应用程序使用的数据存储在MySQL数据库中，该数据库托管在我们的MySQL容器上。</p>
-<p>我们已经创建了一个名为<code>sqllab users</code>的数据库，其中包含一个名为<code>credential</code>的表。该表存储每个员工的个人信息(例如<code>eid</code>、密码、工资、ssn等)。在这个任务中，你需要使用数据库来熟悉SQL查询。</p>
-<p>请在MySQL容器上获取一个shell(参见容器手册中的说明)。然后使用<code>mysql</code>客户端程序与数据库进行交互。用户名为<code>root</code>，密码为<code>dees</code>。</p>
+<h2 id="0">0 环境准备</h2>
+<p>请从SEED网站下载 <a href="https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/">Labsetup.zip</a> 文件到你的虚拟机，解压缩，进入<code>Labsetup</code>文件夹，使用<code>docker-compose.yml</code>文件来设置实验环境。</p>
+<p><strong>创建容器</strong></p>
+<p>在 /etc/docker/daemon.json 文件中添加 docker 国内镜像源（目的是速度更快），然后使用命令 dcbuild 创建容器</p>
+<div class="highlight"><pre><span></span><code>{
+        &quot;registry-mirrors&quot;: [
+                &quot;https://hub-mirror.c.163.com&quot;,
+                &quot;https://mirror.baidubce.com&quot;,
+                &quot;https://docker.mirrors.sjtug.sjtu.edu.cn&quot;
+        ]       
+} 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ dcbuild
+</code></pre></div>
+<p><strong>启动容器</strong></p>
+<p>容器创建成功后，才能启动容器</p>
+<div class="highlight"><pre><span></span><code>$ dcbuild
+</code></pre></div>
+<p><strong>查看容器信息</strong></p>
+<p>本次实验中用到的两个容器一个是web应用程序，一个是MySQL数据库</p>
+<div class="highlight"><pre><span></span><code>$ dockps
+20c3333a8cd5  www-10.9.0.5
+4a101760d086  mysql-10.9.0.6
+</code></pre></div>
+<h2 id="1-1mysql">1 任务1：熟悉MySQL语句</h2>
+<p>本任务的目标是通过使用提供的数据库来熟悉SQL命令。web应用程序使用的数据存储在MySQL数据库中，该数据库托管在MySQL容器上。</p>
+<p>我们已经创建了一个名为<code>sqllab_users</code>的数据库，其中包含一个名为<code>credential</code>的表。该表存储每个员工的个人信息(例如<code>eid</code>、密码、工资、ssn等)。在这个任务中，你需要使用数据库来熟悉SQL查询。</p>
+<p>请在MySQL容器上获取一个shell(参见容器手册中的说明)。</p>
+<p><div class="highlight"><pre><span></span><code>$ docksh 4a
+</code></pre></div>
+然后使用<code>mysql</code>客户端程序与数据库进行交互。用户名为<code>root</code>，密码为<code>dees</code>。</p>
 <div class="highlight"><pre><span></span><code>// Inside the MySQL container
 # mysql -u root -pdees
 </code></pre></div>
-<p>登录后，可以创建新的数据库，也可以加载已有的数据库。由于我们已经为您创建了<code>sqllab users</code>数据库，您只需要使用<code>use</code>命令加载这个现有的数据库。要显示<code>sqllab users</code>数据库中有哪些表，可以使用<code>show tables</code>命令打印所选数据库的所有表。</p>
+<p>登录后，可以创建新的数据库，也可以加载已有的数据库。由于我们已经为你创建了<code>sqllab_users</code>数据库，你只需要使用<code>use</code>命令加载这个现有的数据库。要显示<code>sqllab_users</code>数据库中有哪些表，可以使用<code>show tables</code>命令打印所选数据库的所有表。</p>
 <div class="highlight"><pre><span></span><code>mysql&gt; use sqllab_users;
 Database changed
 mysql&gt; show tables;
@@ -1153,11 +1194,11 @@ mysql&gt; show tables;
 </code></pre></div>
 <p>运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。</p>
 <h2 id="2-2select">2 任务2：Select语句下的注入攻击</h2>
-<p>SQL注入基本上是一种技术，通过这种技术，攻击者可以执行他们自己的恶意SQL语句，通常称为<code>payload</code>。通过恶意SQL语句，攻击者可以从受害数据库中窃取信息;更糟糕的是，他们可能会对数据库进行更改。我们的员工管理web应用程序有SQL注入漏洞，这模仿了开发人员经常犯的错误。</p>
+<p>SQL注入基本上是一种技术，通过这种技术，攻击者可以执行他们自己的恶意SQL语句，通常称为<code>payload</code>。通过恶意SQL语句，攻击者可以从受害数据库中窃取信息;更糟糕的是，他们可能会对数据库进行更改。我们的员工管理web应用程序有SQL注入漏洞，这里模仿了开发人员经常犯的错误。</p>
 <p>我们将使用www.seed-server.com的登录页面来完成这项任务。登录界面如图1所示。它要求用户提供用户名和密码。web应用程序基于这两段数据验证用户身份，因此只有知道密码的员工才能登录。作为攻击者，你的工作是在不知道任何员工的凭证的情况下登录到web应用程序。</p>
 <p><center><img src="../assets/image-20230409152607019.png" width = 600></center></p>
-<p>为了帮助您开始这项任务，我们将解释如何在web应用程序中实现身份验证。</p>
-<p>PHP代码不安全<code>home.php</code>位于<code>/var/www/SQL_Injection</code>目录下，用于执行用户身份验证。下面的代码片段显示了如何验证用户。</p>
+<p>为了帮助你完成这项任务，我们将解释如何在web应用程序中实现身份验证。</p>
+<p>不安全的PHP代码<code>home.php</code>位于<code>/var/www/SQL_Injection</code>目录下，用于执行用户身份验证。下面的代码片段显示了如何验证用户。</p>
 <div class="highlight"><pre><span></span><code><span class="x">$input_uname = $_GET[’username’];</span>
 <span class="x">$input_pwd = $_GET[’Password’];</span>
 <span class="x">$hashed_pwd = sha1($input_pwd);</span>
@@ -1178,17 +1219,17 @@ mysql&gt; show tables;
 <span class="x">Authentication Fails;</span>
 <span class="x">}</span>
 </code></pre></div>
-<p>上面的SQL语句从凭据表中选择员工个人信息，如id、姓名、工资、ssn等。SQL语句使用输入uname和散列pwd两个变量，其中输入uname保存用户在登录页面的用户名字段中键入的字符串，而散列pwd保存用户键入的密码的sha1散列.程序检查是否有记录与提供的用户名和密码匹配;如果匹配，则成功验证用户，并提供相应的员工信息。如果没有匹配项，则认证失败。</p>
-<p><strong>任务2.1</strong>:网页SQL注入攻击。您的任务是作为管理员从登录页面登录到web应用程序，这样您就可以看到所有员工的信息。我们假设您知道管理员的帐户名admin，但不知道密码。您需要决定在“用户名”和“密码”字段中键入什么才能成功进行攻击。</p>
-<p><strong>任务2.2</strong>:命令行SQL注入攻击。你的任务是重复任务2.1，但你需要在不使用网页的情况下完成。您可以使用命令行工具，例如curl，它们可以发送HTTP请求。值得一提的是，如果你想在HTTP请求中包含多个参数，你需要将URL和参数放在一对单引号之间;否则，用于分隔参数的特殊字符(如&amp;)将被shell程序解释，从而改变命令的含义。下面的例子展示了如何发送一个<code>HTTP GET</code>请求</p>
+<p>上面的SQL语句从凭据表中选择员工个人信息，如id、姓名、工资、ssn等。SQL语句使用输入uname和散列pwd两个变量，其中输入uname保存用户在登录页面的用户名字段中键入的字符串，而散列pwd保存用户键入的密码的sha1散列。程序检查是否有记录与提供的用户名和密码匹配;如果匹配，则成功验证用户，并提供相应的员工信息。如果没有匹配项，则认证失败。</p>
+<p><strong>任务2.1</strong>:网页SQL注入攻击。你的任务是作为管理员从登录页面登录到web应用程序，这样你就可以看到所有员工的信息。我们假设你知道管理员的帐户名admin，但不知道密码。你需要决定在“用户名”和“密码”字段中键入什么才能成功进行攻击。</p>
+<p><strong>任务2.2</strong>:命令行SQL注入攻击。你的任务是重复任务2.1，但你需要在不使用网页的情况下完成。你可以使用命令行工具，例如curl，它们可以发送HTTP请求。值得一提的是，如果你想在HTTP请求中包含多个参数，你需要将URL和参数放在一对单引号之间;否则，用于分隔参数的特殊字符(如&amp;)将被shell程序解释，从而改变命令的含义。下面的例子展示了如何发送一个<code>HTTP GET</code>请求</p>
 <div class="highlight"><pre><span></span><code>$ curl ’www.seed-server.com/unsafe_home.php?username=alice&amp;Password=11’
 </code></pre></div>
-<p>如果需要在<code>username``或password中包含特殊字符</code>，则需要对它们进行适当的编码，否则它们可能会改变请求的含义。如果你想在这些字段中包含单引号，你应该使用%27代替;如果你想包含空白，你应该使用%20。在这个任务中，您需要在使用curl发送请求时处理HTTP编码。(url编码)</p>
+<p>如果需要在<code>username或password中包含特殊字符</code>，则需要对它们进行适当的编码，否则它们可能会改变请求的含义。如果你想在这些字段中包含单引号，你应该使用%27代替;如果你想包含空白，你应该使用%20。在这个任务中，你需要在使用curl发送请求时处理HTTP编码。(url编码)</p>
 <p><strong>任务2.3</strong>:追加一条新的SQL语句。在以上两种攻击中，我们只能从数据库中窃取信息。如果我们可以在登录页面中使用相同的漏洞修改数据库就更好了。</p>
 <p>一种想法是使用SQL注入攻击将一条SQL语句转换为两条SQL语句，第二条SQL语句是更新或删除语句。在SQL中，分号(;)用于分隔两条SQL语句。请尝试通过登录页面运行两条SQL语句。</p>
 <h2 id="3-3select">3 任务3：Select语句下的注入攻击</h2>
 <p>如果<code>UPDATE</code>语句出现SQL注入漏洞，则损害会更严重，因为攻击者可以利用该漏洞修改数据库。在我们的<code>Employee Management</code>应用程序中，有一个<code>Edit Profile</code>页面(图2)，允许员工更新他们的概要信息，包括昵称、电子邮件、地址、电话号码和密码。员工需要先登录才能进入该页面。</p>
-<p>当员工通过Edit Profile页面更新他们的信息时，下面的SQL语句会更新。查询将被执行。在<code>unsafe_edit_backend.php</code>文件中实现的PHP代码用于更新日期员工的个人资料信息。PHP文件位于/<code>var/www/SQLInjection</code>目录中。</p>
+<p>当员工通过Edit Profile页面更新他们的信息时，下面的SQL语句会更新。查询将被执行。在<code>unsafe_edit_backend.php</code>文件中实现的PHP代码用于更新员工的个人资料信息。PHP文件位于/<code>var/www/SQLInjection</code>目录中。</p>
 <div class="highlight"><pre><span></span><code>$hashed_pwd = sha1($input_pwd);
     $sql = &quot;UPDATE credential SET
     nickname=’$input_nickname’,
@@ -1200,17 +1241,16 @@ mysql&gt; show tables;
 $conn-&gt;query($sql);
 </code></pre></div>
 <p><center><img src="../assets/image-20230409153952703.png" width = 600></center></p>
-<p><strong>任务3.1</strong>:修改自己的工资。如“编辑个人资料”页面所示，员工只能更新自己的昵称、电子邮件、地址、电话号码和密码;他们无权改变工资。假设你(Alice)是一名心怀不满的员工，你的老板Boby今年没有给你加薪。中的SQL注入漏洞来增加自己的薪水</p>
-<p>编辑按钮页面。请演示一下你是如何做到的。我们假设您知道工资存储在名为salary的列中。</p>
+<p><strong>任务3.1</strong>:修改自己的工资。如“编辑个人资料”页面所示，员工只能更新自己的昵称、电子邮件、地址、电话号码和密码;他们无权改变工资。假设你(Alice)是一名心怀不满的员工，你的老板Boby今年没有给你加薪。通过编辑个人资料页面中的SQL注入漏洞来增加自己的薪水。请演示一下你是如何做到的。我们假设你知道工资存储在名为salary的列中。</p>
 <p><center><img src="../assets/image-20230409154132011.png" width = 600></center></p>
 <p><strong>任务3.2</strong>:修改其他人的工资。在给自己加薪之后，你决定惩罚一下你的老板。你想把他的工资减到1美元。请演示一下你是如何做到的。</p>
-<p><strong>任务3.3</strong>:修改他人密码。在修改了老板的薪水后，你仍然很不满，所以你想把老板的密码改成你知道的密码，然后你就可以登录他的账户，进行进一步的破坏。请演示一下你是如何做到的。您需要证明您可以使用新密码成功登录到老板的帐户。这里值得一提的一点是，数据库存储的是密码的哈希值，而不是明文密码字符串。您可以再次查看不安全的<code>edit backend.php</code>代码，以查看密码是如何存储的。</p>
+<p><strong>任务3.3</strong>:修改他人密码。在修改了老板的薪水后，你仍然很不满，所以你想把老板的密码改成你知道的密码，然后你就可以登录他的账户，进行进一步的破坏。请演示一下你是如何做到的。你需要证明你可以使用新密码成功登录到老板的帐户。这里值得一提的一点是，数据库存储的是密码的哈希值，而不是明文密码字符串。你可以再次查看不安全的<code>unsafe_edit_backend.php</code>代码，以查看密码是如何存储的，它是使用SHA1这个hash函数产生密码的hash值。</p>
 <h3 id="4-4">4 任务4:对策—预处理</h3>
-<p>SQL注入漏洞的根本问题是无法将代码与数据分离。在构造SQL语句时，程序(如PHP程序)知道哪一部分是数据，哪一部分是代码。不幸的是，当SQL语句被发送到数据库时，边界消失了;SQL解释器看到的边界可能与开发人员设置的原始边界不同。要解决这个问题，重要的是要确保服务器端代码和数据库中的边界视图是一致的。最安全的方法是使用预处理语句。</p>
+<p>SQL注入漏洞的根本问题是无法将代码与数据分离。在构造SQL语句时，程序(如PHP程序)知道哪一部分是数据，哪一部分是代码。不幸的是，当SQL语句被发送到数据库时，数据和代码的边界消失了;SQL解释器看到的边界可能与开发人员设置的原始边界不同。要解决这个问题，重要的是要确保服务器端代码和数据库中的边界视图是一致的。最安全的方法是使用预处理语句。</p>
 <p>为了理解预处理语句是如何防止SQL注入的，我们需要理解当SQL服务器接收到一个查询时会发生什么。查询如何执行的高级工作流显示在图3。在编译步骤中，查询首先经过解析和规范化阶段，其中根据语法和语义检查查询。下一个阶段是编译阶段，其中关键字(例如;SELECT, FROM, UPDATE等)被转换成机器可以理解的格式。</p>
-<p><center><img src="../assets/image-20230409154132011.png" width = 600></center></p>
-<p>基本上，在这个阶段，查询是解释的。在查询优化阶段，考虑执行查询的不同计划的数量，从中选择最优的优化计划。所选择的计划存储在缓存中，因此无论何时进入下一个查询，都将根据缓存中的内容进行检查如果它已经存在在缓存中，解析，编译和查询优化阶段将被跳过。然后将编译后的查询传递到实际执行阶段。</p>
+<p>基本上，在这个阶段，查询是解释的。在查询优化阶段，考虑执行查询不同方案的数量，从中选择最优的优化方案。所选择的方案存储在缓存中，因此无论何时进入下一个查询，都将根据缓存中的内容进行检查，如果它已经存在在缓存中，解析，编译和查询优化阶段将被跳过。然后将编译后的查询传递到实际执行阶段。</p>
 <p>预处理语句出现在编译之后、执行步骤之前。准备好的语句将经过编译步骤，并转换为预编译的查询，其中数据占位符为空。要运行这个预编译的查询，需要提供数据，但这些数据不会经过编译步骤;相反，它们被直接插入预编译的查询，并被发送到执行引擎。因此，即使数据中有SQL代码，如果不经过编译步骤，代码将被简单地视为数据的一部分。这就是预处理语句防止SQL注入攻击的方法。</p>
+<p><center><img src="../assets/image-20230409154132011.png" width = 600></center></p>
 <p>下面是一个如何用PHP编写预处理语句的示例。我们在下面的例子中使用SELECT语句。我们将展示如何使用预处理语句重写易受SQL注入攻击的代码。</p>
 <div class="highlight"><pre><span></span><code><span class="err">$</span><span class="k">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;SELECT name, local, gender</span>
 <span class="ss">        FROM USER_TABLE</span>
@@ -1227,21 +1267,21 @@ $conn-&gt;query($sql);
 <span class="err">$</span><span class="n">stmt</span><span class="o">-&gt;</span><span class="n">bind_result</span><span class="p">(</span><span class="err">$</span><span class="n">bind_name</span><span class="p">,</span><span class="w"> </span><span class="err">$</span><span class="n">bind_local</span><span class="p">,</span><span class="w"> </span><span class="err">$</span><span class="n">bind_gender</span><span class="p">);</span><span class="w"></span>
 <span class="err">$</span><span class="n">stmt</span><span class="o">-&gt;</span><span class="k">fetch</span><span class="p">();</span><span class="w"></span>
 </code></pre></div>
-<p>使用准备语句机制，我们将向数据库发送SQL语句的过程分为两个步骤。第一步是只发送代码部分，即没有实际数据的SQL语句。这是准备步骤。从上面的代码片段中可以看到，实际数据被问号(?)取代。在这一步之后，我们使用<code>bind_param()</code>将数据发送到数据库。数据库将在此步骤中仅将发送的所有内容视为数据，而不再将其视为代码。它将数据绑定到预处理语句的对应问号。在<code>bind_param()</code>方法中，第一个参数“is”表示参数类型:“i”表示id中的数据为整数类型，“s”表示pwd中的数据为字符串类型.</p>
+<p>使用准备语句机制，我们将向数据库发送SQL语句的过程分为两个步骤。第一步是只发送代码部分，即没有实际数据的SQL语句。这是准备步骤。从上面的代码片段中可以看到，实际数据被问号(?)取代。在这一步之后，我们使用<code>bind_param()</code>将数据发送到数据库。数据库将在此步骤中仅将发送的所有内容视为数据，而不再将其视为代码。它将数据绑定到预处理语句的对应问号。在<code>bind_param()</code>方法中，第一个参数“is”表示参数类型:“i”表示id中的数据为整数类型，“s”表示pwd中的数据为字符串类型。</p>
 <p><strong>任务</strong>：在这个任务中，我们将使用预处理语句机制来修复SQL注入漏洞。</p>
-<p>为了简单起见，我们在防御文件夹中创建了一个简化的程序。我们将对这个文件夹中的文件进行更改。如果您将浏览器指向以下URL，您将看到一个类似于web应用程序的登录页面的页面。通过该页面可以查询员工信息，但需要提供正确的用户名和密码。</p>
+<p>为了简单起见，我们在防御文件夹中创建了一个简化的程序。我们将对这个文件夹中的文件进行更改。如果你将浏览器指向以下URL，你将看到一个类似于web应用程序的登录页面的页面。通过该页面可以查询员工信息，但需要提供正确的用户名和密码。</p>
 <div class="highlight"><pre><span></span><code>URL: http://www.seed-server.com/defense/
 </code></pre></div>
-<p>在这个页面中输入的数据将被发送到服务器程序<code>getinfo.php</code>，该程序调用一个名为<code>unsafe.php</code>的程序。这个PHP程序中的SQL查询容易受到SQL注入攻击。您的任务是使用准备好的语句修改<code>unsafe.php</code>中的SQL查询，这样程序就可以击败SQL注入攻击。在实验室安装文件夹中，<code>unsafe.php</code>程序在<code>image_www/Code/ defense</code>文件夹中。你可以直接在那里修改程序。在你完成之后，你需要重建并重新启动容器，否则更改将不生效。</p>
-<p>您还可以在容器运行时修改该文件。在运行的容器中，<code>unsafe.php</code>程序位于<code>/var/www/ sql_injection /defense</code>内部。这种方法的缺点是，为了保持docker较小，我们只在容器中安装了一个非常简单的文本编辑器<code>nano</code>。它应该足以进行简单的编辑。如果你不喜欢这个编辑器，你可以随时使用<code>“apt install”</code>在容器中安装您最喜欢的命令行编辑器。例如，对于喜欢vim的人，您可以执行以下操作:</p>
+<p>在这个页面中输入的数据将被发送到服务器程序<code>getinfo.php</code>，该程序调用一个名为<code>unsafe.php</code>的程序。这个PHP程序中的SQL查询容易受到SQL注入攻击。你的任务是使用准备好的语句修改<code>unsafe.php</code>中的SQL查询，这样程序就可以击败SQL注入攻击。在Labsetup文件夹中，<code>unsafe.php</code>程序在<code>image_www/Code/ defense</code>文件夹中。你可以直接在那里修改程序。在你完成之后，你需要重建并重新启动容器，否则更改将不生效。</p>
+<p>你还可以在容器运行时修改该文件。在运行的容器中，<code>unsafe.php</code>程序位于<code>/var/www/ sql_injection /defense</code>内部。这种方法的缺点是，为了保持docker较小，我们只在容器中安装了一个非常简单的文本编辑器<code>nano</code>。它应该足以进行简单的编辑。如果你不喜欢这个编辑器，你可以随时使用<code>“apt install”</code>在容器中安装你最喜欢的命令行编辑器。例如，对于喜欢vim的人，你可以执行以下操作:</p>
 <div class="highlight"><pre><span></span><code># apt install -y vim
 </code></pre></div>
 <h1 id="4-guidelines">4. Guidelines</h1>
-<p>测试SQL注入字符串。在实际应用程序中，可能很难检查SQL注入攻击是否包含语法错误，因为服务器通常不会返回这类错误消息。为了进行调查，可以将SQL语句从php源代码复制到MySQL控制台。假设您有以下SQL语句，并且注入字符串是'或1=1;#</p>
+<p>测试SQL注入字符串。在实际应用程序中，可能很难检查SQL注入攻击是否包含语法错误，因为服务器通常不会返回这类错误消息。为了进行调查，可以将SQL语句从php源代码复制到MySQL控制台。假设你有以下SQL语句，并且注入字符串是 <code>' or 1=1;#</code>  。</p>
 <div class="highlight"><pre><span></span><code>SELECT * from credential
 WHERE name=’$name’ and password=’$pwd’;
 </code></pre></div>
-<p>可以用注入字符串替换$name的值，并使用MySQL控制台测试它。这种方法可以帮助您在发起真正的攻击之前构建一个没有语法错误的注入字符串。</p>
+<p>可以用注入字符串替换$name的值，并使用MySQL控制台测试它。这种方法可以帮助你在发起真正的攻击之前构建一个没有语法错误的注入字符串。</p>
 
               
             </article>
