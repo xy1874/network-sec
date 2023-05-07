@@ -1053,12 +1053,12 @@
 <p>请从SEED网站下载 <a href="https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/">Labsetup.zip</a> 文件到你的虚拟机，解压缩，进入<code>Labsetup</code>文件夹，使用<code>docker-compose.yml</code>文件来设置实验环境。这个文件的内容和所有涉及的<code>Dockerfile</code>的详细说明可以在 <a href="https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md">用户手册</a> 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。</p>
 <p>下面，我们将列出一些与Docker和Compose相关的常用命令。因为我们将非常频繁地使用这些命令，所以我们在.bashrc文件中为它们创建了别名。</p>
 <div class="highlight"><pre><span></span><code>$ docker-compose build # 创建容器
-$ docker-compose up # 打开容器
+$ docker-compose up # 启动容器
 $ docker-compose down # 关闭容器
 // 下面的对应上面的简写
-$ dcbuild # 
-$ dcup # 
-$ dcdown # 
+$ dcbuild # 创建容器
+$ dcup # 启动容器
+$ dcdown # 关闭容器
 </code></pre></div>
 <p>所有容器都将在后台运行。要在容器上运行命令，我们通常需要在该容器上获取shell。我们首先需要使用<code>“docker ps”</code>命令找出容器的ID，然后使用<code>“docker exec”</code>在该容器上启动一个shell。我们在<code>.bashrc</code>文件中为它们创建了别名。</p>
 <div class="highlight"><pre><span></span><code>$ dockps // docker ps 别名

