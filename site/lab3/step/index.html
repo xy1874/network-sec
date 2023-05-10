@@ -1177,6 +1177,13 @@
 创建容器</p>
 <div class="highlight"><pre><span></span><code>$ dcbuild
 </code></pre></div>
+<p><strong>主机名映射</strong></p>
+<p>本次实验用到一个web应用程序，我们使用Docker来设置这个web应用程序。在实验设置中有两个Docker，一个用于托管web应用程序，另一个用于托管web应用程序的数据库。web应用容器的IP地址为10.9.0.5,web应用程序的URL如下</p>
+<div class="highlight"><pre><span></span><code>http://www.seed-server.com
+</code></pre></div>
+<p>我们需要将主机名映射到Docker的IP地址。请将以下条目添加到<code>/etc/hosts</code>文件。您需要使用根权限来更改此文件(使用<code>sudo</code>)。值得注意的是,由于其他一些实验可能重名如果它被映射到不同的IP地址， 旧的必须删除。</p>
+<div class="highlight"><pre><span></span><code>10.9.0.5 www.seed-server.com
+</code></pre></div>
 <p><strong>启动容器</strong></p>
 <p>容器创建成功后，才能启动容器</p>
 <div class="highlight"><pre><span></span><code>$ dcup
