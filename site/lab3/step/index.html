@@ -1207,7 +1207,7 @@ mysql&gt; show tables;
 | credential             |
 +------------------------+
 </code></pre></div>
-<p><strong>任务1.2</strong> 运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。</p>
+<p><strong>任务1.1</strong> 运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。</p>
 <h2 id="1-12sqlmap">1 任务1.2：sqlmap工具的使用</h2>
 <p>sqlmap是一个使用python语言开发的开源的渗透测试工具，可以用来进行自动化检测，利用 SQL 注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎，可以针对各种不同类型数据库的进行渗透测试，包括获取数据库中存储的数据，访问操作系统文件等。</p>
 <p>实验室环境中已经安装，如果自行安装，请用下面的命令安装</p>
@@ -1309,8 +1309,8 @@ $conn-&gt;query($sql);
 </code></pre></div>
 <p>上述代码容易受到SQL注入攻击。可以改写为</p>
 <div class="highlight"><pre><span></span><code><span class="err">$</span><span class="n">stmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="n">conn</span><span class="o">-&gt;</span><span class="k">prepare</span><span class="p">(</span><span class="ss">&quot;SELECT name, local, gender</span>
-<span class="ss">                        FROM USER_TABLE</span>
-<span class="ss">                        WHERE id = ? and password = ? &quot;</span><span class="p">);</span><span class="w"></span>
+<span class="ss">            FROM USER_TABLE</span>
+<span class="ss">            WHERE id = ? and password = ? &quot;</span><span class="p">);</span><span class="w"></span>
 <span class="o">//</span><span class="w"> </span><span class="n">Bind</span><span class="w"> </span><span class="k">parameters</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">query</span><span class="w"></span>
 <span class="err">$</span><span class="n">stmt</span><span class="o">-&gt;</span><span class="n">bind_param</span><span class="p">(</span><span class="ss">&quot;is&quot;</span><span class="p">,</span><span class="w"> </span><span class="err">$</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="err">$</span><span class="n">pwd</span><span class="p">);</span><span class="w"></span>
 <span class="err">$</span><span class="n">stmt</span><span class="o">-&gt;</span><span class="k">execute</span><span class="p">();</span><span class="w"></span>

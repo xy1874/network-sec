@@ -72,7 +72,7 @@ mysql> show tables;
 +------------------------+
 ```
 
-**任务1.2** 运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。
+**任务1.1** 运行上述命令后，需要使用SQL命令打印员工Alice的所有概要信息。请提供你的结果截图。
 
 ## 1 任务1.2：sqlmap工具的使用
 
@@ -225,8 +225,8 @@ $result = $conn->query($sql)
 
 ```sql
 $stmt = $conn->prepare("SELECT name, local, gender
-						FROM USER_TABLE
-						WHERE id = ? and password = ? ");
+			FROM USER_TABLE
+			WHERE id = ? and password = ? ");
 // Bind parameters to the query
 $stmt->bind_param("is", $id, $pwd);
 $stmt->execute();
