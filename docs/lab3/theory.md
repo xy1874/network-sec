@@ -53,6 +53,20 @@ select * from 表名 where name='admin'   注意多了引号
 select * from news where name='admin' and 1=1 ' '
 ```
 
+如果有组合条件
+
+```
+select * from 表名 where name='admin' and passwd='!QAZ2wsx'  注意多了引号
+```
+
+组合出来的sql注入语句为：
+
+```
+select * from news where name='admin' # and passwd='  // 如果用admin只需要在对话框输入 admin' #
+
+select * from news where name='admin' # and passwd='  // 只需要在对话框输入 ' or 1=1 #
+```
+
 3. 搜索型注入点
 
 这类注入主要是指在进行数据搜索时没过滤搜索参数，一般在链接地址中有“keyword=关键字”，有的不显示在的链接地址里面，而是直接通过搜索框表单提交。此类注入点提交的 SQL 语句，其原形大致为：

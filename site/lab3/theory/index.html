@@ -1172,6 +1172,14 @@
 <p>组合出来的sql注入语句为：</p>
 <div class="highlight"><pre><span></span><code>select * from news where name=&#39;admin&#39; and 1=1 &#39; &#39;
 </code></pre></div>
+<p>如果有组合条件</p>
+<div class="highlight"><pre><span></span><code>select * from 表名 where name=&#39;admin&#39; and passwd=&#39;!QAZ2wsx&#39;  注意多了引号
+</code></pre></div>
+<p>组合出来的sql注入语句为：</p>
+<div class="highlight"><pre><span></span><code>select * from news where name=&#39;admin&#39; # and passwd=&#39;  // 如果用admin只需要在对话框输入 admin&#39; #
+
+select * from news where name=&#39;admin&#39; # and passwd=&#39;  // 只需要在对话框输入 &#39; or 1=1 #
+</code></pre></div>
 <ol>
 <li>搜索型注入点</li>
 </ol>
