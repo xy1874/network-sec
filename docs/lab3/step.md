@@ -169,7 +169,7 @@ Authentication Fails;
 **任务2.2**:命令行SQL注入攻击。你的任务是重复任务2.1，但你需要在不使用网页的情况下完成。你可以使用命令行工具，例如curl，它们可以发送HTTP请求。值得一提的是，如果你想在HTTP请求中包含多个参数，你需要将URL和参数放在一对单引号之间;否则，用于分隔参数的特殊字符(如&)将被shell程序解释，从而改变命令的含义。下面的例子展示了如何发送一个`HTTP GET`请求
 
 ```
-$ curl ’www.seed-server.com/unsafe_home.php?username=alice&Password=11’
+$ curl www.seed-server.com/unsafe_home.php?username=alice&Password=11
 ```
 
 如果需要在`username或password中包含特殊字符`，则需要对它们进行适当的编码，否则它们可能会改变请求的含义。如果你想在这些字段中包含单引号，你应该使用%27代替;如果你想包含空白，你应该使用%20。在这个任务中，你需要在使用curl发送请求时处理HTTP编码。(url编码)

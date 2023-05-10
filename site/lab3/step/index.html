@@ -1271,7 +1271,7 @@ sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Pa
 </div>
 <p><strong>任务2.1</strong>:网页SQL注入攻击。你的任务是作为管理员从登录页面登录到web应用程序，这样你就可以看到所有员工的信息。我们假设你知道管理员的帐户名admin，但不知道密码。你需要决定在“用户名”和“密码”字段中键入什么才能成功进行攻击。</p>
 <p><strong>任务2.2</strong>:命令行SQL注入攻击。你的任务是重复任务2.1，但你需要在不使用网页的情况下完成。你可以使用命令行工具，例如curl，它们可以发送HTTP请求。值得一提的是，如果你想在HTTP请求中包含多个参数，你需要将URL和参数放在一对单引号之间;否则，用于分隔参数的特殊字符(如&amp;)将被shell程序解释，从而改变命令的含义。下面的例子展示了如何发送一个<code>HTTP GET</code>请求</p>
-<div class="highlight"><pre><span></span><code>$ curl ’www.seed-server.com/unsafe_home.php?username=alice&amp;Password=11’
+<div class="highlight"><pre><span></span><code>$ curl www.seed-server.com/unsafe_home.php?username=alice&amp;Password=11
 </code></pre></div>
 <p>如果需要在<code>username或password中包含特殊字符</code>，则需要对它们进行适当的编码，否则它们可能会改变请求的含义。如果你想在这些字段中包含单引号，你应该使用%27代替;如果你想包含空白，你应该使用%20。在这个任务中，你需要在使用curl发送请求时处理HTTP编码。(url编码)</p>
 <div class="admonition info">
