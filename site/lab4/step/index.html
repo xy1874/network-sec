@@ -1208,21 +1208,21 @@
 <h2 id="task0">Task0. 部署容器</h2>
 <p>Step1：下载本次实验需要的容器压缩包<a href="https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/">SEED实验室PKI Lab</a>。</p>
 <p><center><img src="../assets/1-3.png" width = 500></center></p>
-<p>Step2：将容器压缩包上传到Seed镜像环境中，建议先新建一个文件夹PKI，让压缩包传到/home/seed/PKI路径下并解压。使用命令为 unzip Labsetup.zip</p>
+<p><strong>Step2</strong>：将容器压缩包上传到Seed镜像环境中，建议先新建一个文件夹PKI，让压缩包传到/home/seed/PKI路径下并解压。使用命令为 unzip Labsetup.zip</p>
 <pre><code>mkdir PKI  //在/home/seed目录下，我们用seed用户登录，这个默认的路径
 cd PKI
 unzip Labsetup.zip
 </code></pre>
-<p>Step3：Build容器</p>
+<p><strong>Step3</strong>：Build容器</p>
 <pre><code>cd Labsetup   //在上面已解压的路径 /home/seed/PKI路径下执行该命令
 dcbuild   // docker-compose build 也可以
 </code></pre>
-<p>Step4：启动  </p>
+<p><strong>Step4</strong>：启动  </p>
 <pre><code>dcup   //命令启动后如下图所示，不是挂住了，而是正常现象，可以重新打开另外的终端继续操作
 </code></pre>
 <p><center><img src="../assets/1-4.png" width = 500></center>
 <center>图1-4 容器正常启动</center></p>
-<p>Step5: 最后，在主机的/etc/hosts文件增加如下一条配置，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。</p>
+<p><strong>Step5</strong>: 最后，在主机的/etc/hosts文件增加如下一条配置，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。</p>
 <pre><code>10.9.0.80       www.bank32.com
 </code></pre>
 <p><center><img src="../assets/1-5.png" width = 500></center>
