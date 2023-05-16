@@ -1276,7 +1276,10 @@ sqlmap -u &quot;http://www.seed-server.com/unsafe_home.php?username=admin&amp;Pa
 <p>如果需要在<code>username或password中包含特殊字符</code>，则需要对它们进行适当的编码，否则它们可能会改变请求的含义。如果你想在这些字段中包含单引号，你应该使用%27代替;如果你想包含空白，你应该使用%20。在这个任务中，你需要在使用curl发送请求时处理HTTP编码。(url编码)</p>
 <div class="admonition info">
 <p class="admonition-title">提示 <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/2728.svg" title=":sparkles:" /></p>
-<p>转义符号：撇号（'）:%27     空格：20%    井号（#）:23%</p>
+<p>转义符号：
+单引号号（'）:%27
+空格：20%
+井号（#）:23%</p>
 </div>
 <p><strong>任务2.3</strong>:追加一条新的SQL语句。在以上两种攻击中，我们只能从数据库中窃取信息。如果我们可以在登录页面中使用相同的漏洞修改数据库就更好了。</p>
 <p>一种想法是使用SQL注入攻击将一条SQL语句转换为两条SQL语句，第二条SQL语句是更新或删除语句。在SQL中，分号(;)用于分隔两条SQL语句。请尝试通过登录页面运行两条SQL语句,并说明是否能够获取到信息。</p>

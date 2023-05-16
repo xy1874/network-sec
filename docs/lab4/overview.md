@@ -13,7 +13,7 @@
 
 ## 实验内容
 
-本次实验来自于https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/，共需要完成如下6个小任务。通过这6个任务我们完成一个银行服务器bank32.com的部署、认证、攻击过程。
+本次实验来自于[PKI lab](https://seedsecuritylabs.org/Labs_20.04/Crypto/Crypto_PKI/)，共需要完成如下6个小任务。通过这6个任务我们完成一个银行服务器bank32.com的部署、认证、攻击过程。
 
 Task1 成为认证颁发机构（CA）
 
@@ -40,19 +40,26 @@ Step1：下载本次实验需要的容器压缩包[SEED实验室PKI Lab](https:/
 
 Step2：将容器压缩包上传到Seed镜像环境中，建议先新建一个文件夹PKI，让压缩包传到/home/seed/PKI路径下并解压。使用命令为 unzip Labsetup.zip
 
-    mkdir PKI
+    mkdir PKI  //在/home/seed目录下，我们用seed用户登录，这个默认的路径
     cd PKI
     unzip Labsetup.zip
 
 Step3：Build容器
-       cd Labsetup/
-       docker-compose build
 
-Step4：启动  命令为 dcup
+    cd Labsetup   //在上面已解压的路径 /home/seed/PKI路径下执行该命令
+    dcbuild   // docker-compose build 也可以
+
+Step4：启动  
+
+    dcup   //命令启动后如下图所示，不是挂住了，而是正常现象，可以重新打开另外的终端继续操作
+
 <center><img src="../assets/1-4.png" width = 500></center>
 <center>图1-4 容器正常启动</center>
 
-Step5: 最后，在主机的/etc/hosts文件增加如下一条配置10.9.0.80       www.bank32.com ，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。
+Step5: 最后，在主机的/etc/hosts文件增加如下一条配置，其中10.9.0.80是容器的IP地址中。待web服务器配置完成后就可以通过主机访问了。
+
+    10.9.0.80       www.bank32.com 
+
 <center><img src="../assets/1-5.png" width = 500></center>
 <center>图1-5 配置主机hosts文件</center>
 
@@ -60,6 +67,11 @@ Step5: 最后，在主机的/etc/hosts文件增加如下一条配置10.9.0.80   
 
 !!! info "说明 :sparkles:"
 容器启动后如果要进入容器的shell，需要通过如下两个命令；在主机终端中输入 dockps 命令，查看刚启动的容器ID；输入命令 docksh ID的前两个字符
+
+    dockps    //查看启动容器的ID
+    docksh 4c //进入开头是4c的容器
+    exit      //退出容器
+    
 <center><img src="../assets/1-6.png" width = 500></center>
 <center>图1-6 查看正在启动的容器ID</center>
 <center><img src="../assets/1-7.png" width = 500></center>
