@@ -91,7 +91,7 @@ Step1：下载本次实验需要的容器压缩包[SEED实验室PKI Lab](https:/
 
     openssl rsa -in ca.key -text -noout
 
-问题1：证书的哪个部分表明这是CA的证书？
+问题1：证书的哪部分内容表明这是证书的持有方？
 
 问题2：证书的哪个部分表明这是自签名证书？
 
