@@ -65,22 +65,22 @@
 !!! info "提示 :sparkles:"
     dig命令的全称是“domain information groper”，它是一个用来灵活查询DNS的工具，它会打印出DNS域名服务器的回应，dig命令主要用来从DNS域名服务器查询主机地址信息。详细命令信息可参考：https://linux265.com/course/linux-command-dig.html
  
-然后将一个假的主机名比如www.baidu.2022.com写入到客户端的/etc/hosts中
+然后将一个假的主机名比如www.baidu1.com写入到客户端的/etc/hosts中(用 sudo vi /etc/hosts)
 
-    echo 163.177.151.110 www.baidu2022.com >> /etc/hosts
+    163.177.151.110 www.baidu1.com
 
-然后将代码中的主机名检测分别设置False和True的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现什么问题。
+然后将代码中的主机名检测分别设置 False 和 True 的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现什么问题。
 
 <center><img src="../assets/2-4.png" width = 400></center>
 <center>更改handshake.py代码中的主机名检测信息</center>
 
-    ./handshake.py www.baidu2022.com
+    ./handshake.py www.baidu1.com
 
-问题5：请同学们将www.baidu.com网站的测试过程截图保存在报告里并分析执行的结果，也可选用其他网站做测试。
+问题5：请同学们将修改 www.baidu.com 网站主机名的测试过程截图保存在报告里并分析执行的结果，也可选用其他网站做测试。
 
 ### **1.4 利用TLS协议传输应用数据**
 
-利用hankshake.py的代码，增加下面的代码内容放在client.py文件中，尝试传送应用数据，建议删除等待键盘输入（Press any key to continue ...）。
+利用hankshake.py的代码，增加下面的代码内容放在 client.py 文件中，尝试传送应用数据，建议删除等待键盘输入（Press any key to continue ...）。
 
     # Send HTTP Request to Server
     request = b"GET / HTTP/1.0\r\nHost: " + hostname.encode('utf-8') + b"\r\n\r\n"
@@ -91,15 +91,18 @@
      pprint.pprint(response.split(b"\r\n"))
      response = ssock.recv(2048)
 
+!!! info "提示 :sparkles:"
+    后面客户端容器所用的 client.py 文件即为本次任务编辑保存后的 client.py 文件。
+
 ## 2. **TLS 服务器**
 
 
 ### **2.1 实现一个简单的TLS服务器**
 
-这个任务中我们将使用实验一中生成的CA证书和www.bank32.com的证书和私钥，首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。
+这个任务中我们将使用上次实验中生成的CA证书和www.bank32.com的证书和私钥（可以到上次实验的指导书中执行task1-task3），首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。
 
     cp ca.crt ../TLS/Labsetup/volumes/client-certs/
-    sudo cp server.crt server.key ../TLS/Labsetup/volumes/server-certs/
+    cp server.crt server.key ../TLS/Labsetup/volumes/server-certs/
 
 在主机中，修改server.py的证书正确的路径和名称(server.crt 和server.key)，并绑定服务器的ip 10.9.0.43。
 
@@ -107,16 +110,20 @@
 
 在服务器容器中，启动服务器 ./server.py,输入我们实验中设置的证书密码dees
 
-在客户端容器中，将ca.crt做软链接，并将 www.bank32.co 的信息写入/etc/hosts中（如果用直接编辑文件的形式注意用sudo vi /etc/hosts）
+在客户端容器中，将ca.crt做软链接，并将 www.bank32.com 的信息写入/etc/hosts中
 
+    cd /volumes/clien-certs //在容器的client-certs路径下（也就是ca.crt所在的目录）
     openssl x509 -in ca.crt -noout -subject_hash
     dbb9c584
     ln -s ca.crt dbb9c584.0
+    
     echo 10.9.0.43 www.bank32.com >> /etc/hosts
 
 更改client.py中证书的路径为 client-certs，并将端口号改为和服务器保持一致。
 
 在客户端容器中,启动客户端。
+
+    cd volumes  //在容器的volumes路径下
     ./client.py www.bank32.com
 
 再切换到服务器端可以看到有消息接收。
@@ -125,11 +132,11 @@
 
 ### **2.2 利用主机浏览器测试实现的TLS服务器**
 
-从主机的浏览器进入到https://www.bank32.com网站，查看服务器的链接情况，如果还是在第一次的实验环境中，我们已经加入了证书，如果没有加入证书，需要在firefox浏览器加入ca.crt的证书。
+从主机的浏览器进入到 https://www.bank32.com 网站，查看服务器的链接情况，如果上一次的实验环境中没有清除证书，我们已经加入了证书，如果没有加入证书，需要在Firefox浏览器加入ca.crt的证书。
 
 ### **2.3 测试服务器有别名的情况**
 
-因为我们在第一个PKI的实验中已经让大家添加过www.bank32.com的别名，所以证书部分我们不需要修改，只需要在客户端容器中的/etc/hosts中添加一个个别名和对应的服务器IP就可以了。
+因为我们在上一个PKI的实验中已经让大家添加过 www.bank32.com 的别名，所以证书部分我们不需要修改，只需要在客户端容器中的 /etc/hosts 中添加一个别名和对应的服务器IP就可以了。
 
 <center><img src="../assets/2-2.png" width = 400></center>
 

@@ -1264,17 +1264,17 @@ www.baidu.com.          0       IN      A       163.177.151.110
 <p class="admonition-title">提示 <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/2728.svg" title=":sparkles:" /></p>
 <p>dig命令的全称是“domain information groper”，它是一个用来灵活查询DNS的工具，它会打印出DNS域名服务器的回应，dig命令主要用来从DNS域名服务器查询主机地址信息。详细命令信息可参考：<a href="https://linux265.com/course/linux-command-dig.html">https://linux265.com/course/linux-command-dig.html</a></p>
 </div>
-<p>然后将一个假的主机名比如www.baidu.2022.com写入到客户端的/etc/hosts中</p>
-<pre><code>echo 163.177.151.110 www.baidu2022.com &gt;&gt; /etc/hosts
+<p>然后将一个假的主机名比如www.baidu1.com写入到客户端的/etc/hosts中(用 sudo vi /etc/hosts)</p>
+<pre><code>163.177.151.110 www.baidu1.com
 </code></pre>
-<p>然后将代码中的主机名检测分别设置False和True的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现什么问题。</p>
+<p>然后将代码中的主机名检测分别设置 False 和 True 的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现什么问题。</p>
 <p><center><img src="../assets/2-4.png" width = 400></center>
 <center>更改handshake.py代码中的主机名检测信息</center></p>
-<pre><code>./handshake.py www.baidu2022.com
+<pre><code>./handshake.py www.baidu1.com
 </code></pre>
-<p>问题5：请同学们将www.baidu.com网站的测试过程截图保存在报告里并分析执行的结果，也可选用其他网站做测试。</p>
+<p>问题5：请同学们将修改 <a href="http://www.baidu.com">www.baidu.com</a> 网站主机名的测试过程截图保存在报告里并分析执行的结果，也可选用其他网站做测试。</p>
 <h3 id="14-tls"><strong>1.4 利用TLS协议传输应用数据</strong></h3>
-<p>利用hankshake.py的代码，增加下面的代码内容放在client.py文件中，尝试传送应用数据，建议删除等待键盘输入（Press any key to continue ...）。</p>
+<p>利用hankshake.py的代码，增加下面的代码内容放在 client.py 文件中，尝试传送应用数据，建议删除等待键盘输入（Press any key to continue ...）。</p>
 <pre><code># Send HTTP Request to Server
 request = b"GET / HTTP/1.0\r\nHost: " + hostname.encode('utf-8') + b"\r\n\r\n"
 ssock.sendall(request)
@@ -1284,30 +1284,38 @@ while response:
  pprint.pprint(response.split(b"\r\n"))
  response = ssock.recv(2048)
 </code></pre>
+<div class="admonition info">
+<p class="admonition-title">提示 <img alt="✨" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/2728.svg" title=":sparkles:" /></p>
+<p>后面客户端容器所用的 client.py 文件即为本次任务编辑保存后的 client.py 文件。</p>
+</div>
 <h2 id="2-tls">2. <strong>TLS 服务器</strong></h2>
 <h3 id="21-tls"><strong>2.1 实现一个简单的TLS服务器</strong></h3>
-<p>这个任务中我们将使用实验一中生成的CA证书和www.bank32.com的证书和私钥，首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。</p>
+<p>这个任务中我们将使用上次实验中生成的CA证书和www.bank32.com的证书和私钥（可以到上次实验的指导书中执行task1-task3），首先将CA证书copy到客户端的client-certs目录下并进行软链接，然后将bank32服务器的证书和私钥拷贝到到server-certs目录下。</p>
 <pre><code>cp ca.crt ../TLS/Labsetup/volumes/client-certs/
-sudo cp server.crt server.key ../TLS/Labsetup/volumes/server-certs/
+cp server.crt server.key ../TLS/Labsetup/volumes/server-certs/
 </code></pre>
 <p>在主机中，修改server.py的证书正确的路径和名称(server.crt 和server.key)，并绑定服务器的ip 10.9.0.43。</p>
 <p><center><img src="../assets/2-5.png" width = 400></center></p>
 <p>在服务器容器中，启动服务器 ./server.py,输入我们实验中设置的证书密码dees</p>
-<p>在客户端容器中，将ca.crt做软链接，并将 <a href="http://www.bank32.co">www.bank32.co</a> 的信息写入/etc/hosts中（如果用直接编辑文件的形式注意用sudo vi /etc/hosts）</p>
-<pre><code>openssl x509 -in ca.crt -noout -subject_hash
+<p>在客户端容器中，将ca.crt做软链接，并将 <a href="http://www.bank32.com">www.bank32.com</a> 的信息写入/etc/hosts中</p>
+<pre><code>cd /volumes/clien-certs //在容器的client-certs路径下（也就是ca.crt所在的目录）
+openssl x509 -in ca.crt -noout -subject_hash
 dbb9c584
 ln -s ca.crt dbb9c584.0
+
 echo 10.9.0.43 www.bank32.com &gt;&gt; /etc/hosts
 </code></pre>
 <p>更改client.py中证书的路径为 client-certs，并将端口号改为和服务器保持一致。</p>
-<p>在客户端容器中,启动客户端。
-    ./client.py <a href="http://www.bank32.com">www.bank32.com</a></p>
+<p>在客户端容器中,启动客户端。</p>
+<pre><code>cd volumes  //在容器的volumes路径下
+./client.py www.bank32.com
+</code></pre>
 <p>再切换到服务器端可以看到有消息接收。</p>
 <p>问题5：请分析TLS客户端编程和server.py的代码，说明下服务器程序的关键步骤。</p>
 <h3 id="22-tls"><strong>2.2 利用主机浏览器测试实现的TLS服务器</strong></h3>
-<p>从主机的浏览器进入到https://<a href="http://www.bank32.com网站">www.bank32.com网站</a>，查看服务器的链接情况，如果还是在第一次的实验环境中，我们已经加入了证书，如果没有加入证书，需要在firefox浏览器加入ca.crt的证书。</p>
+<p>从主机的浏览器进入到 <a href="https://www.bank32.com">https://www.bank32.com</a> 网站，查看服务器的链接情况，如果上一次的实验环境中没有清除证书，我们已经加入了证书，如果没有加入证书，需要在Firefox浏览器加入ca.crt的证书。</p>
 <h3 id="23"><strong>2.3 测试服务器有别名的情况</strong></h3>
-<p>因为我们在第一个PKI的实验中已经让大家添加过www.bank32.com的别名，所以证书部分我们不需要修改，只需要在客户端容器中的/etc/hosts中添加一个个别名和对应的服务器IP就可以了。</p>
+<p>因为我们在上一个PKI的实验中已经让大家添加过 <a href="http://www.bank32.com">www.bank32.com</a> 的别名，所以证书部分我们不需要修改，只需要在客户端容器中的 /etc/hosts 中添加一个别名和对应的服务器IP就可以了。</p>
 <p><center><img src="../assets/2-2.png" width = 400></center></p>
 <p>问题6：请分别用client.py和浏览器两种方式访问服务器，并记录你观察的结果（截图）。</p>
 
