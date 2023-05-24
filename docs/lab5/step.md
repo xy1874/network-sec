@@ -65,9 +65,9 @@
 !!! info "提示 :sparkles:"
     dig命令的全称是“domain information groper”，它是一个用来灵活查询DNS的工具，它会打印出DNS域名服务器的回应，dig命令主要用来从DNS域名服务器查询主机地址信息。详细命令信息可参考：https://linux265.com/course/linux-command-dig.html
  
-然后将一个假的主机名比如www.baidu1.com写入到客户端的/etc/hosts中(用 sudo vi /etc/hosts)
+然后将一个假的主机名比如www.baidu1.com写入到客户端的/etc/hosts中(用 echo命令)
 
-    163.177.151.110 www.baidu1.com
+    echo 163.177.151.110 www.baidu1.com >> /etc/hosts
 
 然后将代码中的主机名检测分别设置 False 和 True 的情况，执行下面的命令，查看执行的结果并分析，如果不做主机名校验会出现什么问题。
 
