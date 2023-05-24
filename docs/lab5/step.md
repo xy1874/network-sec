@@ -21,7 +21,7 @@
     cd volumes/
     ./handshake.py www.baidu.com
 
-进入主机，打开wireshark工具，选择我们正在使用的网卡开始抓包。然后在客户端容器中重复执行 ./handshake.py www.baidu.com  命令，可以查看分析TLS握手协议。建议大家再通过主机的浏览器访问下www.baidu.com网站，抓包分析下，可以看到握手后的应用层的协议信息。
+进入主机，打开wireshark工具，选择我们正在使用的网卡开始抓包。然后在客户端容器中重复执行 ./handshake.py www.baidu.com  命令，可以查看分析TLS握手协议。建议大家再通过主机的浏览器访问下 www.baidu.com 网站，抓包分析下，可以看到握手后的应用层的协议信息。
 
 <center><img src="../assets/2-1.png" width = 600></center>
 <center>图2-1 抓包网卡选择</center>
@@ -35,7 +35,7 @@
 
 ### **1.2 TLS协议中的CA认证**
 
-将代码中的证书文件路径改成 ./client-certs,再次在客户端容器运行 ./handshake.py www.baidu.com,观察出现的结果，想想为什么？将www.baidu.com需要的证书copy到 ./client-certs下，根据下面的命令生成hash并做个软链接，再次运行./handshake.py www.baidu.com，查看出现的结果。
+将代码中的证书文件路径改成 ./client-certs,再次在客户端容器运行 ./handshake.py www.baidu.com,观察出现的结果，想想为什么？将 www.baidu.com 需要的证书 copy到 ./client-certs下，根据下面的命令生成hash并做个软链接，再次运行./handshake.py www.baidu.com，查看出现的结果。
 
 <center><img src="../assets/2-3.png" width = 400></center>
 <center>更改handshake.py代码中的证书文件路径</center>
@@ -45,7 +45,7 @@
     5ad8a5d6
     ln -s GlobalSign_Root_CA.pem 5ad8a5d6.0
 
-问题4：请同学们将www.baidu.com网站的测试过程截图保存在报告里，也可选用其他网站做测试。
+问题4：请同学们将 www.baidu.com 网站的测试过程截图保存在报告里，也可选用其他网站做测试。
 
 !!! info "提示 :sparkles:"
     如果找到网站需要的证书呢？我们可以根据第一步执行结果中的信息，查看subjec中的commonName信息，再根据代码中的证书路径/etc/ssl/certs找到对应的证书，copy到client-certs目录下。
