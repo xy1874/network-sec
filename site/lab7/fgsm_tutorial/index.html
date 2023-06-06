@@ -1075,6 +1075,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     威胁模型
   </a>
@@ -1212,6 +1219,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     威胁模型
   </a>
@@ -1321,35 +1335,28 @@
                 
 
 
-<div class="highlight"><pre><span></span><code><span class="c1"># For tips on running notebooks in Google Colab, see</span>
-<span class="c1"># https://pytorch.org/tutorials/beginner/colab</span>
-<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-</code></pre></div>
 <h1 id="_1">对抗性样本攻击实验</h1>
-<p>本实验根据 PyTorch 官网教程中 <a href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#sphx-glr-beginner-fgsm-tutorial-py">Adversarial Example Generation</a> 章节内容，完整实现 Fast Gradient Sign Attack (FGSM) 算法。</p>
-<p><strong>Author:</strong> <a href="https://github.com/inkawhich">Nathan Inkawhich</a>_</p>
-<p>如果你正在阅读这篇文章，希望你能理解一些机器学习模型是多么有效。研究不断推动ML模型更快、更准确、更高效。然而，设计和训练模型的一个经常被忽视的方面是安全性和健壮性，特别是在面对希望愚弄模型的对手时。</p>
-<p>本教程将提高您对ML模型的安全漏洞的认识，并将深入了解对抗性机器学习的热门话题。 大家可能会惊讶地发现，在图像中添加不可察觉的扰动会导致截然不同的模型性能。鉴于这是一个教程，我们将通过图像分类器上的示例来探讨这个主题。具体来说，我们将使用第一种也是最流行的攻击方法之一，Fast Gradient Sign Attack(FGSM)来欺骗MNIST分类器。</p>
+<p>本实验根据 PyTorch 官网教程中 <a href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#sphx-glr-beginner-fgsm-tutorial-py">Adversarial Example Generation</a> 章节内容完整实现 快速梯度符号攻击 （ Fast Gradient Sign Attack ） 算法。</p>
+<h2 id="overview">Overview</h2>
+<p>这是一篇机器学习中对抗样本攻击的入门实验教程。机器学习模型非常有效，大家都在致力于研究不断推动机器学习模型更快、更准确、更高效。然而，设计和训练模型一个经常被忽视的方面是安全性和健壮性，特别是在面对希望愚弄模型的对手时。</p>
+<p>本实验教程将提高您对机器学习模型的安全漏洞的认识，并将初步了解对抗性机器学习话题， 在图像中添加不可察觉的扰动会导致截然不同的模型性能。鉴于这是一个实验教程，我们将通过图像分类器上的示例来探讨这个主题。本次实验使用最流行的攻击方法之一，Fast Gradient Sign Attack 来欺骗MNIST分类器。</p>
+<p><strong>Fast Gradient Sign Attack(FGSM)</strong> 快速梯度符号攻击是由 Goodfellow 等人在[Explaining and Harnessing Adversarial Examples] (<a href="https://arxiv.org/abs/1412.6572)中提出">https://arxiv.org/abs/1412.6572)中提出</a>，是一种简单但是有效的对抗样本生成算法。它旨在通过利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。具体来说，针对每一个输入 x ，我们模型（参数为 W ）都可以得到一个输出（ y_true )。利用此输出 y_true 和 y_true' 属于的类别，可以对输入求梯度。接着根据梯度的方向来对输入进行微小的扰动, 则可以最大化的改变输出。</p>
+<p><center><img src="../assets/0-1.png" width = 500></center></p>
 <h2 id="_2">威胁模型</h2>
-<p>添加不可察觉对图像的扰动可以导致截然不同的模型性能。</p>
-<p>我们将探讨该主题通过图像分类器上的示例。具体来说，我们将使用其中之一第一种也是最流行的攻击方法，快速梯度符号攻击（FGSM），以愚弄MNIST分类器。</p>
-<p>有许多类别的对抗性攻击，每种攻击都有不同的目标和对攻击者知识的假设。但是，总体而言，首要目标是向输入数据添加最少量的扰动，从而导致所需的错误分类。攻击者的知识有几种假设，其中两种是：白盒和黑匣子。</p>
-<p>白盒攻击假设攻击者具有对模型的全部了解和访问权限，包括体系结构、输入、输出和权重。
-黑盒攻击假定攻击者只能访问模型的输入和输出，而对底层体系结构或权重一无所知。
-还有几种类型的目标，包括错误分类和源/目标错误分类。</p>
-<p>错误分类的目标意味着对手只希望输出分类是错误的，但并不关心新分类是什么。
-源/目标错误分类意味着对手想要更改原始属于特定源类的图像，以便将其分类为特定目标类。
-在这种情况下，FGSM 攻击是 白盒 攻击，其目标是错误分类。有了这些背景信息，我们现在就可以详细讨论攻击。</p>
+<p>对抗样本是在模型输入端实施攻击。通过对输入产生微小的扰动（肉眼不可见）从而使得模型输出错误的结果。攻击者在模型加入特定的扰动，输入微小扰动，输出巨大变化。
+具体来说，我们将使用快速梯度符号攻击（FGSM），以愚弄MNIST分类器。有许多类别的对抗性攻击，每种攻击都有不同的目标和对攻击者知识的假设。但是，总体而言，首要目标是向输入数据添加最少量的扰动，从而导致所需的错误分类。攻击者有几种假设，其中两种是：白盒和黑盒。</p>
+<p><strong>白盒攻击</strong> 假设攻击者具有对模型的全部了解和访问权限，包括体系结构、输入、输出和权重。
+<strong>黑盒攻击</strong> 假定攻击者只能访问模型的输入和输出，而对底层体系结构或权重一无所知。</p>
+<p>还有几种类型的目标，包括错误分类和源/目标错误分类。</p>
+<p><strong>错误分类的目标</strong> 意味着对手只希望输出分类是错误的，但并不关心新分类是什么。
+<strong>源/目标错误分类</strong> 意味着对手想要更改原始属于特定源类的图像，以便将其分类为特定目标类。</p>
+<p>FGSM 攻击是 白盒 攻击，其目标是错误分类。</p>
 <h2 id="fgsm">FGSM 快速梯度符号攻击</h2>
-<p>迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)，并由Goodfellow等人描述。
-它旨在通过以下方式攻击神经网络：利用他们的学习方式，梯度。这个想法很简单，而是而不是通过根据反向传播梯度，攻击调整输入数据以最大化基于相同反向传播梯度的损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。</p>
-<p>在我们跳入代码之前，让我们看看著名的FGSM 熊猫示例并提取一些符号。</p>
-<p><a href="https://arxiv.org/abs/1412.6572">FGSM</a>_ panda example and extract
-some notation.</p>
-<p>.. figure:: /_static/img/fgsm_panda_image.png
-   :alt: fgsm_panda_image</p>
-<p>在我们进入代码之前，让我们看一下著名的 FGSM熊猫示例 和摘录一些符号。</p>
-<p>从图中可以看出，x \mathbf{x}x 是原始输入图像正确归类为“熊猫”，y yy是地面真相标签for x \mathbf{x}x， θ \mathbf{\theta}θ 表示模型参数，J （ θ ， x ， y ） J（\mathbf{\theta}， \mathbf{x}， y）J（θ，x，y） 是损失用于训练网络。攻击反向传播梯度返回输入数据进行计算∇ x J （ θ ， x ， y ） \nabla_{x} J（\mathbf{\theta}， \mathbf{x}， y）∇xJ（θ，x，y）.然后，它调整按一小步输入数据（ϵ \epsilonϵ 或 0.007 0.0070.007中的图片）在方向（即s i g n （ ∇ x J （ θ ， x ， y ） ） sign（\nabla_{x} J（\mathbf{\theta}， \mathbf{x}， y））sign（∇xJ（θ，x，y）））最大化损失。由此产生的扰动图像x ′ x'x ′ ，则被目标网络错误地分类为“长臂猿”，当它仍然显然是一只“熊猫”。</p>
+<p>迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)。它旨在通过利用模型学习的方式和渐变来攻击神经 网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。
+以最常见的图像识别为例，我们希望在原始图片上做肉眼难以识别的修改，但是却可以让图像识别模型产生误判。假设图片原始数据为x，图片识别的结果为 y，原始图像上细微的变化肉眼难以识别, 模型最终识别错误，而我们肉眼却能正确识别。比如下图中加入对抗样本后模型识别结果为长臂猿，而我们肉眼却能正确识别出为熊猫。</p>
+<p><center><img src="../assets/0-2.png" width = 500></center></p>
+<p>在我们进入代码之前，让我们看一下著名的 FGSM熊猫示例和摘录一些符号。</p>
+<p>从图中可以看出，<script type="math/tex">\mathbf{x}</script> 是原始输入图像正确归类为“熊猫”， <script type="math/tex">y</script> 是 <script type="math/tex">\mathbf{x}</script> 的地面真相标签， <script type="math/tex">\mathbf{\theta}</script> 表示模型参数，<script type="math/tex">J(\mathbf{\theta}, \mathbf{x}, y)</script>  是损失用于训练网络。攻击反向传播梯度返回输入数据进行计算 <script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script> 。然后，它调整按一小步输入数据（<script type="math/tex">\epsilon</script> or <script type="math/tex">0.007</script> 中的图片）在方向（即 <script type="math/tex">sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))</script>）最大化损失。由此产生的扰动图像 <script type="math/tex">x'</script>  ，则被目标网络错误地分类为“长臂猿”，当它仍然显然是一只“熊猫”。</p>
 <p>下面进入代码实现</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -1373,16 +1380,16 @@ some notation.</p>
 <p>本教程只有三个输入，定义为：</p>
 <ul>
 <li>
-<p><code>epsilons</code> - 用于运行的 ϵ \epsilonϵ值的列表。重要的是在列表中保留 0，因为它表示模型原始测试集上的性能。此外，直观地说，我们会
-预期 ϵ \epsilonϵ越大，扰动越明显但攻击在退化模型方面越有效准确性。由于此处的数据范围是 [ 0 ， 1 ] [0，1][0，1]，因此没有 epsilon 值应超过 1。</p>
+<p><code>epsilons</code> - 用于运行的 <script type="math/tex">epsilon</script> 值的列表。重要的是在列表中保留 0，因为它表示模型原始测试集上的性能。此外，直观地说，我们会
+预期 <script type="math/tex">epsilon</script> 越大，扰动越明显但攻击在退化模型方面越有效准确性。由于此处的数据范围是  <script type="math/tex">[0,1]</script> ，因此没有 <script type="math/tex">epsilon</script> 值应超过 1。</p>
 </li>
 <li>
 <p><code>pretrained_model</code> - 通往预训练的MNIST模型的路径
    <a href="https://github.com/pytorch/examples/tree/master/mnist">pytorch/examples/mnist</a><em>.
-   For simplicity, download the pretrained model <a href="https://drive.google.com/drive/folders/1fn83DF14tWmit0RTKWRhPq5uVXt73e0h?usp=sharing">here</a></em>.</p>
+   可以从下面链接下面模型（T2210实验室环境已经下载完成，在C:\user\Administrator\data路径和D:\data路径下都有） <a href="https://drive.google.com/drive/folders/1fn83DF14tWmit0RTKWRhPq5uVXt73e0h?usp=sharing">here</a></em>.</p>
 </li>
 <li>
-<p><code>use_cuda</code> - 使用 CUDA 或不使用。本次实验中使用CPU速度也比较快，训练集比较小。</p>
+<p><code>use_cuda</code> - 使用 CUDA 或不使用。本次实验中使用CPU速度也比较快，训练集比较小，这里我们代码改成False, 如果你在cuda的GPU上跑该程序。</p>
 </li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="n">epsilons</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">.05</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="mf">.15</span><span class="p">,</span> <span class="mf">.2</span><span class="p">,</span> <span class="mf">.25</span><span class="p">,</span> <span class="mf">.3</span><span class="p">]</span>
@@ -1391,7 +1398,7 @@ some notation.</p>
 </code></pre></div>
 <h3 id="_4">受攻击的模型</h3>
 <p>如前所述，受到攻击的模型与来自<a href="https://github.com/pytorch/examples/tree/master/mnist">pytorch/examples/mnist</a>_.
-您可以训练并保存自己的MNIST模型，也可以下载并使用提供的模型。此处的 Net 定义和测试数据加载器具有是从 MNIST 示例复制的。</p>
+您可以训练并保存自己的MNIST模型，也可以下载并使用提供的模型(已下载完成)。此处的 Net 定义和测试数据加载器具有是从 MNIST 示例复制的。</p>
 <p>本节的目的是定义模型和数据加载器，然后初始化模型并加载预先训练的weight。</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># LeNet Model definition</span>
 <span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -1434,9 +1441,8 @@ some notation.</p>
 </code></pre></div>
 <h3 id="fgsm_2">FGSM 攻击函数</h3>
 <p>现在，我们可以通过以下方式定义创建对抗性示例的函数：</p>
-<p>扰动原始输入。fgsm_attack函数需要三个输入，图像是原始干净的图像 (<script type="math/tex">x</script>), <em>epsilon</em> 是像素级扰动量 (<script type="math/tex">\epsilon</script>), 和 <em>data_grad</em> 是输入图像的损耗的梯度 w.r.t
-(<script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script>). 功能
-然后创建扰动图像作为</p>
+<p>扰动原始输入。fgsm_attack 函数需要三个输入，图像是原始干净的图像 (<script type="math/tex">x</script>), <em>epsilon</em> 是像素级扰动量 (<script type="math/tex">\epsilon</script>), 和 <em>data_grad</em> 是输入图像的损耗的梯度(w.r.t) 
+(<script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script>). 然后创建扰动图像函数如下：</p>
 <p>
 <script type="math/tex; mode=display">\begin{align}perturbed\_image = image + epsilon*sign(data\_grad) = x + \epsilon * sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))\end{align}</script>
 </p>
@@ -1453,7 +1459,7 @@ some notation.</p>
     <span class="k">return</span> <span class="n">perturbed_image</span>
 </code></pre></div>
 <h3 id="_5">测试攻击效果函数</h3>
-<p>最后，本教程的核心结果来自 <code>test</code>。每次调用此测试函数都会执行一个完整的测试步骤MNIST测试集并报告最终精度。但是，请注意此函数还采用 <em>epsilon</em> 输入。这是因为“测试”函数报告受攻击的模型的准确性来自具有实力的对手  <script type="math/tex">\epsilon</script> 。更具体地说，对于测试集中的每个样本，该函数计算输入数据 (<script type="math/tex">data\_grad</script>) 的损失会产生扰动带有“fgsm_attack”(<script type="math/tex">perturbed\_data</script>) 的图像，然后检查以查看如果令人不安的例子是对抗性的。除了测试模型的精度，该函数还保存并返回一些成功的对抗性示例将在以后可视化。</p>
+<p>最后，本教程的核心结果来自测试攻击的结果。每次调用此测试函数都会在 MNIST 测试集上执行一个完整的测试步骤并报告最终精度。但是，请注意此函数还有一个 <em>epsilon</em> 参数输入，“测试”函数报告受攻击的模型的准确性来自  <script type="math/tex">\epsilon</script> 的输入。更具体地说，对于测试集中的每个样本，该函数计算输入数据 (<script type="math/tex">data\_grad</script>) 的损失会产生扰动带有 “fgsm_attack”(<script type="math/tex">perturbed\_data</script>) 的图像，然后检查以查看如果是对抗性的。除了测试模型的精度，该函数还保存并返回一些成功的对抗性示例将在以后可视化。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test</span><span class="p">(</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epsilon</span> <span class="p">):</span>
 
     <span class="c1"># Accuracy counter</span>
@@ -1517,8 +1523,8 @@ some notation.</p>
     <span class="k">return</span> <span class="n">final_acc</span><span class="p">,</span> <span class="n">adv_examples</span>
 </code></pre></div>
 <h3 id="_6">实施攻击</h3>
-<p>实现的最后一部分是实际运行攻击。在这里我们为 <em>epsilons</em> 输入中的每个 <script type="math/tex">\epsilon</script> 值运行完整的测试步骤。</p>
-<p>对于每一个 ε，我们还保存了最终的精度和一些成功的结果.在接下来的章节中，我们将列举一些对抗性的例子。注意随着ε值的增加，模型精度降低。而且注意 <script type="math/tex">\epsilon=0</script> 表示原始测试精度，即不进行攻击。</p>
+<p>本实验教程的最后一部分是实施攻击。在这里我们为 <em>epsilons</em> 输入中的每个 <script type="math/tex">\epsilon</script> 值运行完整的测试步骤。</p>
+<p>对于每一个 <em>epsilon</em> ，我们还保存了最终的精度和一些成功的结果。 在接下来的章节中，我们将列举一些对抗性的例子。注意随着 <em>epsilon</em>  值的增加，模型精度降低。而且注意 <script type="math/tex">\epsilon=0</script> 表示原始测试精度，即不进行攻击。</p>
 <div class="highlight"><pre><span></span><code><span class="n">accuracies</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -1530,11 +1536,13 @@ some notation.</p>
 </code></pre></div>
 <h2 id="_7">结果分析</h2>
 <h3 id="vs-epsilon">准确性 vs Epsilon</h3>
-<p>第一个结果是准确性与 epsilon 的关系图。</p>
-<p>如前所述，早些时候，随着 epsilon 的增加，我们预计测试精度会降低。</p>
-<p>这是因为更大的 epsilon 意味着我们在方向将最大化损失。请注意，即使 epsilon 值是线性间隔的，准确性也不是线性的。</p>
-<p>例如，<script type="math/tex">\epsilon=0.05</script> 时的精度仅低约4%
+<p>第一个结果是准确性与 epsilon 的关系图。
+如前所述，早些时候，随着 epsilon 的增加，我们预计测试精度会降低。
+这是因为更大的 epsilon 意味着我们在方向将最大化损失。请注意，即使 epsilon 值是线性间隔的，准确性也不是线性的。
+例如，<script type="math/tex">\epsilon=0.05</script> 时的精度仅低约4%
 大于 <script type="math/tex">\epsilon=0</script> ，但 <script type="math/tex">\epsilon=0.2</script> 时的准确率为 25%，低于  <script type="math/tex">\epsilon=0.15</script>。另外，请注意模型的准确性达到 10 类分类器的随机精度，介于 <script type="math/tex">\epsilon=0.25</script> 和 <script type="math/tex">\epsilon=0.3</script>。</p>
+<p><center><img src="../assets/0-3.png" width = 500></center></p>
+<p>代码如下：</p>
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epsilons</span><span class="p">,</span> <span class="n">accuracies</span><span class="p">,</span> <span class="s2">&quot;*-&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
@@ -1546,8 +1554,9 @@ some notation.</p>
 </code></pre></div>
 <h3 id="_8">对抗样本实例</h3>
 <p>还记得没有免费午餐的想法吗？在这种情况下，随着 epsilon 的增加，测试正确率降低但是扰动变得更加容易感知。</p>
-<p>实际上，攻击者必须考虑权衡。在这里，我们在每个 epsilon 上展示一些成功的对抗示例价值。图的每一行都显示不同的 epsilon 值。第一个行是 <script type="math/tex">\epsilon=0</script> 示例，表示原始“干净”的图像，无扰动。每个图像的标题显示原始分类 - &gt;对抗性分类。请注意，扰动在 <script type="math/tex">\epsilon=0.15</script> 时开始变得明显，并且很明显在 <script type="math/tex">\epsilon=0.3</script>。</p>
+<p>实际上，攻击者必须考虑权衡。在这里，我们在每个 epsilon 上展示一些成功的对抗示例价值。图的每一行都显示不同的 epsilon 值。第一个行是 <script type="math/tex">\epsilon=0</script> 示例，表示原始“干净”的图像，无扰动。每个图像的标题显示原始分类-&gt;对抗性分类。请注意，扰动在 <script type="math/tex">\epsilon=0.15</script> 时开始变得明显，并且在 <script type="math/tex">\epsilon=0.3</script> 变得很明显了。</p>
 <p>然而，在所有情况下，人类都是仍然能够识别正确的类。</p>
+<p><center><img src="../assets/0-4.png" width = 500></center></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Plot several examples of adversarial samples at each epsilon</span>
 <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -1566,7 +1575,7 @@ some notation.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="_9">接下来怎么做</h2>
-<p>希望本教程对对抗性机器学习的主题有一些见解。 从这里有许多潜在的方向要走。 这种攻击代表了对抗性攻击研究的开始，并且由于后续有许多关于如何攻击和保护ML模型免受对手攻击的想法。 事实上，在NIPS2017年有一个对抗性攻击和防御竞争，本文描述了竞争中使用的许多方法： <a href="https://arxiv.org/pdf/1804.00097.pdf">Adversarial Attacks and Defences Competition</a>.对抗性攻击和防御竞争。 在防御方面的工作也导致了这样的想法，即使机器学习模型在一般情况下更加健壮，既自然地令人不安，又有对抗性的输入。</p>
+<p>希望本实验教程对对抗性机器学习的主题有一些帮助。 这种攻击代表了对抗性攻击研究的开始，并且由于后续有许多关于如何攻击和保护机器学习模型免受对手攻击的想法。 事实上，在NIPS2017年有一个对抗性攻击和防御竞争，本文描述了竞争中使用的许多方法： <a href="https://arxiv.org/pdf/1804.00097.pdf">Adversarial Attacks and Defences Competition</a>.对抗性攻击和防御竞争。 在防御方面的工作也导致了这样的想法，即使机器学习模型在一般情况下更加健壮，既自然地令人不安，又有对抗性的输入。</p>
 <p>另一个方向是不同领域的对抗性攻击和防御。 对抗性研究不限于图像领域，请查看对语音到文本模型的这种攻击。尝试实现与NIPS2017年竞争不同的攻击，并看看它与FGSM有何不同。 然后，试着保护模型免受你自己的攻击。</p>
 
               
