@@ -26,7 +26,7 @@
 **错误分类的目标** 意味着对手只希望输出分类是错误的，但并不关心新分类是什么。
 **源/目标错误分类** 意味着对手想要更改原始属于特定源类的图像，以便将其分类为特定目标类。
 
-FGSM 攻击是 白盒攻击，其目标是错误分类。
+FGSM 攻击是 白盒 攻击，其目标是错误分类。
 
 ## FGSM 快速梯度符号攻击
 
@@ -39,7 +39,7 @@ FGSM 攻击是 白盒攻击，其目标是错误分类。
 
 在我们进入代码之前，让我们看一下著名的 FGSM熊猫示例和摘录一些符号。
 
-从图中可以看出，$\mathbf{x}$ 是原始输入图像，可以正确归类为“熊猫”， $y$ 是 $\mathbf{x}$ 的地面真相标签， $\mathbf{\theta}$ 表示模型参数，$J(\mathbf{\theta}, \mathbf{x}, y)$  是用于训练网络的损失。攻击者将梯度反向传播输入数据进行计算 $\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)$ 。然后，它调整输入数据（$\epsilon$ or $0.007$ 中的图片）在方向（即 $sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))$）最大化损失。由此产生的扰动图像 $x'$  ，则被目标网络会错误地见该图片分类为“长臂猿”，但是实际上它仍然显然是一只“熊猫”。
+从图中可以看出，$\mathbf{x}$ 是原始输入图像正确归类为“熊猫”， $y$ 是 $\mathbf{x}$ 的地面真相标签， $\mathbf{\theta}$ 表示模型参数，$J(\mathbf{\theta}, \mathbf{x}, y)$  是损失用于训练网络。攻击反向传播梯度返回输入数据进行计算 $\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)$ 。然后，它调整按一小步输入数据（$\epsilon$ or $0.007$ 中的图片）在方向（即 $sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))$）最大化损失。由此产生的扰动图像 $x'$  ，则被目标网络错误地分类为“长臂猿”，当它仍然显然是一只“熊猫”。
 
 下面进入代码实现
 
@@ -85,12 +85,9 @@ pretrained_model = "data/lenet_mnist_model.pth"
 use_cuda=True
 ```
 
-任务1：请大家修改epsilons的类别值，然后测试比较结果。
-
-
 ### 受攻击的模型
 
-如前所述，受到攻击的模型与来自[pytorch/examples/mnist](https://github.com/pytorch/examples/tree/master/mnist).
+如前所述，受到攻击的模型与来自[pytorch/examples/mnist](https://github.com/pytorch/examples/tree/master/mnist)_.
 您可以训练并保存自己的MNIST模型，也可以下载并使用提供的模型(已下载完成)。此处的 Net 定义和测试数据加载器具有是从 MNIST 示例复制的。
 
 本节的目的是定义模型和数据加载器，然后初始化模型并加载预先训练的weight。
@@ -142,7 +139,7 @@ model.eval()
 现在，我们可以通过以下方式定义创建对抗性示例的函数：
 
 扰动原始输入。fgsm_attack 函数需要三个输入，图像是原始干净的图像 ($x$), *epsilon* 是像素级扰动量 ($\epsilon$), 和 *data_grad* 是输入图像的损耗的梯度(w.r.t) 
-($\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)$). 然后fgsm_attack函数通过如下的方式来产生：
+($\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)$). 然后创建扰动图像函数如下：
 
 \begin{align}perturbed\_image = image + epsilon*sign(data\_grad) = x + \epsilon * sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))\end{align}
 
@@ -153,11 +150,11 @@ model.eval()
 # FGSM attack code
 def fgsm_attack(image, epsilon, data_grad):
     # Collect the element-wise sign of the data gradient
-    //todo
+    sign_data_grad = data_grad.sign()
     # Create the perturbed image by adjusting each pixel of the input image
-    //todo
+    perturbed_image = image + epsilon*sign_data_grad
     # Adding clipping to maintain [0,1] range
-    //todo
+    perturbed_image = torch.clamp(perturbed_image, 0, 1)
     # Return the perturbed image
     return perturbed_image
 ```

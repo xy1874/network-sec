@@ -1350,13 +1350,13 @@
 <p>还有几种类型的目标，包括错误分类和源/目标错误分类。</p>
 <p><strong>错误分类的目标</strong> 意味着对手只希望输出分类是错误的，但并不关心新分类是什么。
 <strong>源/目标错误分类</strong> 意味着对手想要更改原始属于特定源类的图像，以便将其分类为特定目标类。</p>
-<p>FGSM 攻击是 白盒 攻击，其目标是错误分类。</p>
+<p>FGSM 攻击是 白盒攻击，其目标是错误分类。</p>
 <h2 id="fgsm">FGSM 快速梯度符号攻击</h2>
 <p>迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)。它旨在通过利用模型学习的方式和渐变来攻击神经 网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。
 以最常见的图像识别为例，我们希望在原始图片上做肉眼难以识别的修改，但是却可以让图像识别模型产生误判。假设图片原始数据为x，图片识别的结果为 y，原始图像上细微的变化肉眼难以识别, 模型最终识别错误，而我们肉眼却能正确识别。比如下图中加入对抗样本后模型识别结果为长臂猿，而我们肉眼却能正确识别出为熊猫。</p>
 <p><center><img src="../assets/0-2.png" width = 500></center></p>
 <p>在我们进入代码之前，让我们看一下著名的 FGSM熊猫示例和摘录一些符号。</p>
-<p>从图中可以看出，<script type="math/tex">\mathbf{x}</script> 是原始输入图像正确归类为“熊猫”， <script type="math/tex">y</script> 是 <script type="math/tex">\mathbf{x}</script> 的地面真相标签， <script type="math/tex">\mathbf{\theta}</script> 表示模型参数，<script type="math/tex">J(\mathbf{\theta}, \mathbf{x}, y)</script>  是损失用于训练网络。攻击反向传播梯度返回输入数据进行计算 <script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script> 。然后，它调整按一小步输入数据（<script type="math/tex">\epsilon</script> or <script type="math/tex">0.007</script> 中的图片）在方向（即 <script type="math/tex">sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))</script>）最大化损失。由此产生的扰动图像 <script type="math/tex">x'</script>  ，则被目标网络错误地分类为“长臂猿”，当它仍然显然是一只“熊猫”。</p>
+<p>从图中可以看出，<script type="math/tex">\mathbf{x}</script> 是原始输入图像，可以正确归类为“熊猫”， <script type="math/tex">y</script> 是 <script type="math/tex">\mathbf{x}</script> 的地面真相标签， <script type="math/tex">\mathbf{\theta}</script> 表示模型参数，<script type="math/tex">J(\mathbf{\theta}, \mathbf{x}, y)</script>  是用于训练网络的损失。攻击者将梯度反向传播输入数据进行计算 <script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script> 。然后，它调整输入数据（<script type="math/tex">\epsilon</script> or <script type="math/tex">0.007</script> 中的图片）在方向（即 <script type="math/tex">sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))</script>）最大化损失。由此产生的扰动图像 <script type="math/tex">x'</script>  ，则被目标网络会错误地见该图片分类为“长臂猿”，但是实际上它仍然显然是一只“熊猫”。</p>
 <p>下面进入代码实现</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -1396,8 +1396,9 @@
 <span class="n">pretrained_model</span> <span class="o">=</span> <span class="s2">&quot;data/lenet_mnist_model.pth&quot;</span>
 <span class="n">use_cuda</span><span class="o">=</span><span class="kc">True</span>
 </code></pre></div>
+<p>任务1：请大家修改epsilons的类别值，然后测试比较结果。</p>
 <h3 id="_4">受攻击的模型</h3>
-<p>如前所述，受到攻击的模型与来自<a href="https://github.com/pytorch/examples/tree/master/mnist">pytorch/examples/mnist</a>_.
+<p>如前所述，受到攻击的模型与来自<a href="https://github.com/pytorch/examples/tree/master/mnist">pytorch/examples/mnist</a>.
 您可以训练并保存自己的MNIST模型，也可以下载并使用提供的模型(已下载完成)。此处的 Net 定义和测试数据加载器具有是从 MNIST 示例复制的。</p>
 <p>本节的目的是定义模型和数据加载器，然后初始化模型并加载预先训练的weight。</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># LeNet Model definition</span>
@@ -1442,7 +1443,7 @@
 <h3 id="fgsm_2">FGSM 攻击函数</h3>
 <p>现在，我们可以通过以下方式定义创建对抗性示例的函数：</p>
 <p>扰动原始输入。fgsm_attack 函数需要三个输入，图像是原始干净的图像 (<script type="math/tex">x</script>), <em>epsilon</em> 是像素级扰动量 (<script type="math/tex">\epsilon</script>), 和 <em>data_grad</em> 是输入图像的损耗的梯度(w.r.t) 
-(<script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script>). 然后创建扰动图像函数如下：</p>
+(<script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script>). 然后fgsm_attack函数通过如下的方式来产生：</p>
 <p>
 <script type="math/tex; mode=display">\begin{align}perturbed\_image = image + epsilon*sign(data\_grad) = x + \epsilon * sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))\end{align}</script>
 </p>
@@ -1450,11 +1451,11 @@
 <div class="highlight"><pre><span></span><code><span class="c1"># FGSM attack code</span>
 <span class="k">def</span> <span class="nf">fgsm_attack</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">data_grad</span><span class="p">):</span>
     <span class="c1"># Collect the element-wise sign of the data gradient</span>
-    <span class="n">sign_data_grad</span> <span class="o">=</span> <span class="n">data_grad</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span>
+    <span class="o">//</span><span class="n">todo</span>
     <span class="c1"># Create the perturbed image by adjusting each pixel of the input image</span>
-    <span class="n">perturbed_image</span> <span class="o">=</span> <span class="n">image</span> <span class="o">+</span> <span class="n">epsilon</span><span class="o">*</span><span class="n">sign_data_grad</span>
+    <span class="o">//</span><span class="n">todo</span>
     <span class="c1"># Adding clipping to maintain [0,1] range</span>
-    <span class="n">perturbed_image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">perturbed_image</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="o">//</span><span class="n">todo</span>
     <span class="c1"># Return the perturbed image</span>
     <span class="k">return</span> <span class="n">perturbed_image</span>
 </code></pre></div>
