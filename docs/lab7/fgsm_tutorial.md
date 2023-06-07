@@ -4,6 +4,24 @@
 
 ## 0 实验环境
 
+本次实验在Pytorch下完成，我们使用实验室（T2210）已经部署安装好的Anaconda集成环境。
+1. 选中桌面的Anaconda图标，右键->以管理员身份运行；
+
+<center><img src="../assets/1-1.png" width = 600></center>
+
+2. 进入Anaconda后，在base虚拟环境中运行网页版Jupyter；
+
+<center><img src="../assets/1-2.png" width = 600></center>
+
+3. 在网页版Jupyter中新建一个Python3文件并重命名；
+
+<center><img src="../assets/1-3.png" width = 600></center>
+
+<center><img src="../assets/1-4.png" width = 600></center>
+
+4. 最后就可以在网页版Jupyter编写并运行代码了，常用命令如下；
+
+<center><img src="../assets/1-5.png" width = 600></center>
 
 
 ## 1 Overview
@@ -14,7 +32,7 @@
 
 **Fast Gradient Sign Attack(FGSM)** 快速梯度符号攻击是由 Goodfellow 等人在[Explaining and Harnessing Adversarial Examples] (https://arxiv.org/abs/1412.6572)中提出，是一种简单但是有效的对抗样本生成算法。它旨在通过在梯度方向上添加一i个扰动生成的图像，能够使得神经网络模型被错误分类。利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。具体来说，针对每一个输入 x ，我们模型（参数为 W ）都可以得到一个输出（ y_true )。利用此输出 y_true 和 y_true' 属于的类别，可以对输入求梯度。接着根据梯度的方向来对输入进行微小的扰动, 则可以最大化的改变输出。
 
-<center><img src="../assets/0-1.png" width = 500></center>
+<center><img src="../assets/0-1.png" width = 600></center>
 
 **MINST数据集** MNIST是“Modified National Institute of Standards and Technology database”的简写，从MNIST的全称可以看出，该数据集来自美国国家标准与技术研究所，数据集合是由来自 250 个不同人手写的数字构成, 其中 50% 是高中学生, 50% 来自人口普查局 (the Census Bureau) 的工作人员，作为著名的手写数字机器视觉数据库，MNIST被广泛应用在各种图像分类与识别任务中。MNIST的发起人是当前著名深度学习学者（2019年图灵奖得主）Yann LeCun。
 
@@ -22,7 +40,7 @@ MNIST的训练集合中共有60 000个手写训练样本，测试集合中有10 
 
 在MNIST中，每个样本图像由28×28像素的手写数字组成。这些图片只包含灰度信息和它对应的标签（label）信息（即正确的手写数字），如下图所示。
 
-<center><img src="../assets/0-5.png" width = 500></center>
+<center><img src="../assets/0-5.png" width = 800></center>
 
 
 ## 2 威胁模型
@@ -48,7 +66,7 @@ FGSM 攻击是 白盒攻击，其目标是错误分类。
 迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)。它旨在通过利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。
 以最常见的图像识别为例，我们希望在原始图片上做肉眼难以识别的修改，但是却可以让图像识别模型产生误判。假设图片原始数据为x，图片识别的结果为 y，原始图像上细微的变化肉眼难以识别, 模型最终识别错误，而我们肉眼却能正确识别。比如下图中加入对抗样本后模型识别结果为长臂猿，而我们肉眼却能正确识别出为熊猫。
 
-<center><img src="../assets/0-2.png" width = 500></center>
+<center><img src="../assets/0-2.png" width = 600></center>
 
 
 

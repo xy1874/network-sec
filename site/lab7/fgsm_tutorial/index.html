@@ -1352,15 +1352,31 @@
 <h1 id="_1">对抗性样本攻击实验</h1>
 <p>本实验根据 PyTorch 官网教程中 <a href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#sphx-glr-beginner-fgsm-tutorial-py">Adversarial Example Generation</a> 章节内容完整实现快速梯度符号攻击 （ Fast Gradient Sign Attack ） 算法。</p>
 <h2 id="0">0 实验环境</h2>
+<p>本次实验在Pytorch下完成，我们使用实验室（T2210）已经部署安装好的Anaconda集成环境。
+1. 选中桌面的Anaconda图标，右键-&gt;以管理员身份运行；</p>
+<p><center><img src="../assets/1-1.png" width = 600></center></p>
+<ol>
+<li>进入Anaconda后，在base虚拟环境中运行网页版Jupyter；</li>
+</ol>
+<p><center><img src="../assets/1-2.png" width = 600></center></p>
+<ol>
+<li>在网页版Jupyter中新建一个Python3文件并重命名；</li>
+</ol>
+<p><center><img src="../assets/1-3.png" width = 600></center></p>
+<p><center><img src="../assets/1-4.png" width = 600></center></p>
+<ol>
+<li>最后就可以在网页版Jupyter编写并运行代码了，常用命令如下；</li>
+</ol>
+<p><center><img src="../assets/1-5.png" width = 600></center></p>
 <h2 id="1-overview">1 Overview</h2>
 <p>这是一篇机器学习中对抗样本攻击的入门实验教程。机器学习模型非常有效，大家都在致力于研究不断推动机器学习模型更快、更准确、更高效。然而，设计和训练模型一个经常被忽视的方面是安全性和健壮性，特别是在面对希望愚弄模型的对手时。</p>
 <p>本实验教程将提高您对机器学习模型的安全漏洞的认识，并将初步了解对抗性机器学习话题， 在图像中添加不可察觉的扰动会导致截然不同的模型性能。鉴于这是一个实验教程，我们将通过图像分类器上的示例来探讨这个主题。本次实验使用最流行的攻击方法之一，Fast Gradient Sign Attack 来欺骗MNIST分类器。</p>
 <p><strong>Fast Gradient Sign Attack(FGSM)</strong> 快速梯度符号攻击是由 Goodfellow 等人在[Explaining and Harnessing Adversarial Examples] (<a href="https://arxiv.org/abs/1412.6572)中提出">https://arxiv.org/abs/1412.6572)中提出</a>，是一种简单但是有效的对抗样本生成算法。它旨在通过在梯度方向上添加一i个扰动生成的图像，能够使得神经网络模型被错误分类。利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。具体来说，针对每一个输入 x ，我们模型（参数为 W ）都可以得到一个输出（ y_true )。利用此输出 y_true 和 y_true' 属于的类别，可以对输入求梯度。接着根据梯度的方向来对输入进行微小的扰动, 则可以最大化的改变输出。</p>
-<p><center><img src="../assets/0-1.png" width = 500></center></p>
+<p><center><img src="../assets/0-1.png" width = 600></center></p>
 <p><strong>MINST数据集</strong> MNIST是“Modified National Institute of Standards and Technology database”的简写，从MNIST的全称可以看出，该数据集来自美国国家标准与技术研究所，数据集合是由来自 250 个不同人手写的数字构成, 其中 50% 是高中学生, 50% 来自人口普查局 (the Census Bureau) 的工作人员，作为著名的手写数字机器视觉数据库，MNIST被广泛应用在各种图像分类与识别任务中。MNIST的发起人是当前著名深度学习学者（2019年图灵奖得主）Yann LeCun。</p>
 <p>MNIST的训练集合中共有60 000个手写训练样本，测试集合中有10 000个测试样本。但测试集合中的数据并不“单纯”，其前5000个样本完全是从训练集合中抽取的（可作为验证集合），后5000个样本才是真正异于训练集合的手写数字，属于真正的测试集合。</p>
 <p>在MNIST中，每个样本图像由28×28像素的手写数字组成。这些图片只包含灰度信息和它对应的标签（label）信息（即正确的手写数字），如下图所示。</p>
-<p><center><img src="../assets/0-5.png" width = 500></center></p>
+<p><center><img src="../assets/0-5.png" width = 800></center></p>
 <h2 id="2">2 威胁模型</h2>
 <p>**对抗样本**指的是攻击者在数据集原始输入样本通过添加人类无法察觉的细微扰动来形成新的输入样本，导致模型以高置信度给出一个错误的输出。它是在模型输入端实施攻击，攻击者在模型加入特定的扰动，输入微小扰动，输出巨大变化。</p>
 <p>对抗样本最早由Szegedy等人提出，通过在数据集中添加轻微扰动干扰原始样本，导致模型以高置信度给出错误输出。在许多情况下，人类不会察觉原始样本和对抗样本之间的差异，但是神经网络会做出很大差异性的错误预测。</p>
@@ -1374,7 +1390,7 @@
 <h2 id="3-fgsm">3 FGSM 快速梯度符号攻击</h2>
 <p>迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)。它旨在通过利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。
 以最常见的图像识别为例，我们希望在原始图片上做肉眼难以识别的修改，但是却可以让图像识别模型产生误判。假设图片原始数据为x，图片识别的结果为 y，原始图像上细微的变化肉眼难以识别, 模型最终识别错误，而我们肉眼却能正确识别。比如下图中加入对抗样本后模型识别结果为长臂猿，而我们肉眼却能正确识别出为熊猫。</p>
-<p><center><img src="../assets/0-2.png" width = 500></center></p>
+<p><center><img src="../assets/0-2.png" width = 600></center></p>
 <p>在我们进入代码之前，让我们看一下著名的 FGSM熊猫示例和摘录一些符号。</p>
 <p>从图中可以看出，<script type="math/tex">\mathbf{x}</script> 是原始输入图像，可以正确归类为“熊猫”， <script type="math/tex">y</script> 是 <script type="math/tex">\mathbf{x}</script> 的地面真相标签， <script type="math/tex">\mathbf{\theta}</script> 表示模型参数，<script type="math/tex">J(\mathbf{\theta}, \mathbf{x}, y)</script>  是用于训练网络的损失。攻击者将梯度反向传播输入数据进行计算 <script type="math/tex">\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y)</script> 。然后，它调整输入数据（<script type="math/tex">\epsilon</script> or <script type="math/tex">0.007</script> 中的图片）在方向（即 <script type="math/tex">sign(\nabla_{x} J(\mathbf{\theta}, \mathbf{x}, y))</script>）最大化损失。由此产生的扰动图像 <script type="math/tex">x'</script>  ，则被目标网络会错误地见该图片分类为“长臂猿”，但是实际上它仍然显然是一只“熊猫”。</p>
 <p>下面进入代码实现</p>
