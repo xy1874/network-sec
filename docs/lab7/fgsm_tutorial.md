@@ -5,23 +5,24 @@
 ## 0 实验环境
 
 本次实验在Pytorch下完成，我们使用实验室（T2210）已经部署安装好的Anaconda集成环境。
+
 1. 选中桌面的Anaconda图标，右键->以管理员身份运行；
 
-<center><img src="../assets/1-1.png" width = 600></center>
+<center><img src="../assets/1-1.png" width = 500></center>
 
 2. 进入Anaconda后，在base虚拟环境中运行网页版Jupyter；
 
-<center><img src="../assets/1-2.png" width = 600></center>
+<center><img src="../assets/1-2.png" width = 500></center>
 
 3. 在网页版Jupyter中新建一个Python3文件并重命名；
 
-<center><img src="../assets/1-3.png" width = 600></center>
+<center><img src="../assets/1-3.png" width = 500></center>
 
-<center><img src="../assets/1-4.png" width = 600></center>
+<center><img src="../assets/1-4.png" width = 500></center>
 
 4. 最后就可以在网页版Jupyter编写并运行代码了，常用命令如下；
 
-<center><img src="../assets/1-5.png" width = 600></center>
+<center><img src="../assets/1-5.png" width = 500></center>
 
 
 ## 1 Overview

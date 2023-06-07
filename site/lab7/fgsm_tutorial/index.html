@@ -1352,22 +1352,24 @@
 <h1 id="_1">对抗性样本攻击实验</h1>
 <p>本实验根据 PyTorch 官网教程中 <a href="https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#sphx-glr-beginner-fgsm-tutorial-py">Adversarial Example Generation</a> 章节内容完整实现快速梯度符号攻击 （ Fast Gradient Sign Attack ） 算法。</p>
 <h2 id="0">0 实验环境</h2>
-<p>本次实验在Pytorch下完成，我们使用实验室（T2210）已经部署安装好的Anaconda集成环境。
-1. 选中桌面的Anaconda图标，右键-&gt;以管理员身份运行；</p>
-<p><center><img src="../assets/1-1.png" width = 600></center></p>
+<p>本次实验在Pytorch下完成，我们使用实验室（T2210）已经部署安装好的Anaconda集成环境。</p>
+<ol>
+<li>选中桌面的Anaconda图标，右键-&gt;以管理员身份运行；</li>
+</ol>
+<p><center><img src="../assets/1-1.png" width = 500></center></p>
 <ol>
 <li>进入Anaconda后，在base虚拟环境中运行网页版Jupyter；</li>
 </ol>
-<p><center><img src="../assets/1-2.png" width = 600></center></p>
+<p><center><img src="../assets/1-2.png" width = 500></center></p>
 <ol>
 <li>在网页版Jupyter中新建一个Python3文件并重命名；</li>
 </ol>
-<p><center><img src="../assets/1-3.png" width = 600></center></p>
-<p><center><img src="../assets/1-4.png" width = 600></center></p>
+<p><center><img src="../assets/1-3.png" width = 500></center></p>
+<p><center><img src="../assets/1-4.png" width = 500></center></p>
 <ol>
 <li>最后就可以在网页版Jupyter编写并运行代码了，常用命令如下；</li>
 </ol>
-<p><center><img src="../assets/1-5.png" width = 600></center></p>
+<p><center><img src="../assets/1-5.png" width = 500></center></p>
 <h2 id="1-overview">1 Overview</h2>
 <p>这是一篇机器学习中对抗样本攻击的入门实验教程。机器学习模型非常有效，大家都在致力于研究不断推动机器学习模型更快、更准确、更高效。然而，设计和训练模型一个经常被忽视的方面是安全性和健壮性，特别是在面对希望愚弄模型的对手时。</p>
 <p>本实验教程将提高您对机器学习模型的安全漏洞的认识，并将初步了解对抗性机器学习话题， 在图像中添加不可察觉的扰动会导致截然不同的模型性能。鉴于这是一个实验教程，我们将通过图像分类器上的示例来探讨这个主题。本次实验使用最流行的攻击方法之一，Fast Gradient Sign Attack 来欺骗MNIST分类器。</p>
