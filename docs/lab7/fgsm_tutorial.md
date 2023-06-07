@@ -1,36 +1,51 @@
 # 对抗性样本攻击实验
 
-本实验根据 PyTorch 官网教程中 [Adversarial Example Generation](https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#sphx-glr-beginner-fgsm-tutorial-py) 章节内容完整实现 快速梯度符号攻击 （ Fast Gradient Sign Attack ） 算法。
+本实验根据 PyTorch 官网教程中 [Adversarial Example Generation](https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#sphx-glr-beginner-fgsm-tutorial-py) 章节内容完整实现快速梯度符号攻击 （ Fast Gradient Sign Attack ） 算法。
 
-## Overview
+## 0 实验环境
+
+
+
+## 1 Overview
 
 这是一篇机器学习中对抗样本攻击的入门实验教程。机器学习模型非常有效，大家都在致力于研究不断推动机器学习模型更快、更准确、更高效。然而，设计和训练模型一个经常被忽视的方面是安全性和健壮性，特别是在面对希望愚弄模型的对手时。
 
 本实验教程将提高您对机器学习模型的安全漏洞的认识，并将初步了解对抗性机器学习话题， 在图像中添加不可察觉的扰动会导致截然不同的模型性能。鉴于这是一个实验教程，我们将通过图像分类器上的示例来探讨这个主题。本次实验使用最流行的攻击方法之一，Fast Gradient Sign Attack 来欺骗MNIST分类器。
 
-**Fast Gradient Sign Attack(FGSM)** 快速梯度符号攻击是由 Goodfellow 等人在[Explaining and Harnessing Adversarial Examples] (https://arxiv.org/abs/1412.6572)中提出，是一种简单但是有效的对抗样本生成算法。它旨在通过利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。具体来说，针对每一个输入 x ，我们模型（参数为 W ）都可以得到一个输出（ y_true )。利用此输出 y_true 和 y_true' 属于的类别，可以对输入求梯度。接着根据梯度的方向来对输入进行微小的扰动, 则可以最大化的改变输出。
+**Fast Gradient Sign Attack(FGSM)** 快速梯度符号攻击是由 Goodfellow 等人在[Explaining and Harnessing Adversarial Examples] (https://arxiv.org/abs/1412.6572)中提出，是一种简单但是有效的对抗样本生成算法。它旨在通过在梯度方向上添加一i个扰动生成的图像，能够使得神经网络模型被错误分类。利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。具体来说，针对每一个输入 x ，我们模型（参数为 W ）都可以得到一个输出（ y_true )。利用此输出 y_true 和 y_true' 属于的类别，可以对输入求梯度。接着根据梯度的方向来对输入进行微小的扰动, 则可以最大化的改变输出。
 
 <center><img src="../assets/0-1.png" width = 500></center>
 
+**MINST数据集** MNIST是“Modified National Institute of Standards and Technology database”的简写，从MNIST的全称可以看出，该数据集来自美国国家标准与技术研究所，数据集合是由来自 250 个不同人手写的数字构成, 其中 50% 是高中学生, 50% 来自人口普查局 (the Census Bureau) 的工作人员，作为著名的手写数字机器视觉数据库，MNIST被广泛应用在各种图像分类与识别任务中。MNIST的发起人是当前著名深度学习学者（2019年图灵奖得主）Yann LeCun。
 
-## 威胁模型
+MNIST的训练集合中共有60 000个手写训练样本，测试集合中有10 000个测试样本。但测试集合中的数据并不“单纯”，其前5000个样本完全是从训练集合中抽取的（可作为验证集合），后5000个样本才是真正异于训练集合的手写数字，属于真正的测试集合。
 
-对抗样本是在模型输入端实施攻击。通过对输入产生微小的扰动（肉眼不可见）从而使得模型输出错误的结果。攻击者在模型加入特定的扰动，输入微小扰动，输出巨大变化。
+在MNIST中，每个样本图像由28×28像素的手写数字组成。这些图片只包含灰度信息和它对应的标签（label）信息（即正确的手写数字），如下图所示。
+
+<center><img src="../assets/0-5.png" width = 500></center>
+
+
+## 2 威胁模型
+
+**对抗样本**指的是攻击者在数据集原始输入样本通过添加人类无法察觉的细微扰动来形成新的输入样本，导致模型以高置信度给出一个错误的输出。它是在模型输入端实施攻击，攻击者在模型加入特定的扰动，输入微小扰动，输出巨大变化。
+
+对抗样本最早由Szegedy等人提出，通过在数据集中添加轻微扰动干扰原始样本，导致模型以高置信度给出错误输出。在许多情况下，人类不会察觉原始样本和对抗样本之间的差异，但是神经网络会做出很大差异性的错误预测。
+
 具体来说，我们将使用快速梯度符号攻击（FGSM），以愚弄MNIST分类器。有许多类别的对抗性攻击，每种攻击都有不同的目标和对攻击者知识的假设。但是，总体而言，首要目标是向输入数据添加最少量的扰动，从而导致所需的错误分类。攻击者有几种假设，其中两种是：白盒和黑盒。
 
 **白盒攻击** 假设攻击者具有对模型的全部了解和访问权限，包括体系结构、输入、输出和权重。
 **黑盒攻击** 假定攻击者只能访问模型的输入和输出，而对底层体系结构或权重一无所知。
 
-还有几种类型的目标，包括错误分类和源/目标错误分类。
+根据对抗特异性可以分为针对目标攻击和非针对目标攻击，包括错误分类和源/目标错误分类。
 
 **错误分类的目标** 意味着对手只希望输出分类是错误的，但并不关心新分类是什么。
 **源/目标错误分类** 意味着对手想要更改原始属于特定源类的图像，以便将其分类为特定目标类。
 
 FGSM 攻击是 白盒攻击，其目标是错误分类。
 
-## FGSM 快速梯度符号攻击
+## 3 FGSM 快速梯度符号攻击
 
-迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)。它旨在通过利用模型学习的方式和渐变来攻击神经 网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。
+迄今为止最早和最流行的对抗性攻击之一被称为快速梯度符号攻击(FGSM)。它旨在通过利用模型学习的方式和渐变来攻击神经网络。这个想法很简单，攻击调整输入数据以基于相同的反向传播梯度来最大化损失，而不是通过基于反向传播的梯度调整权重来最小化损失。换句话说，攻击使用损失的梯度 w.r.t 输入数据，然后调整输入数据以最大化损失。
 以最常见的图像识别为例，我们希望在原始图片上做肉眼难以识别的修改，但是却可以让图像识别模型产生误判。假设图片原始数据为x，图片识别的结果为 y，原始图像上细微的变化肉眼难以识别, 模型最终识别错误，而我们肉眼却能正确识别。比如下图中加入对抗样本后模型识别结果为长臂猿，而我们肉眼却能正确识别出为熊猫。
 
 <center><img src="../assets/0-2.png" width = 500></center>
@@ -61,11 +76,11 @@ opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 urllib.request.install_opener(opener)
 ```
 
-## FGSM 实现
+## 4 FGSM 实现
 
 在本节中，我们将讨论本教程的输入参数，定义受攻击的模型，然后对攻击进行编码并运行一些测试。
 
-### 输入
+### 4.1 输入
 
 本教程只有三个输入，定义为：
 
@@ -74,7 +89,7 @@ urllib.request.install_opener(opener)
 
 -  ``pretrained_model`` - 通往预训练的MNIST模型的路径
    [pytorch/examples/mnist](https://github.com/pytorch/examples/tree/master/mnist)_.
-   可以从下面链接下面模型（T2210实验室环境已经下载完成，在C:\user\Administrator\data路径和D:\data路径下都有） [here](https://drive.google.com/drive/folders/1fn83DF14tWmit0RTKWRhPq5uVXt73e0h?usp=sharing)_.
+   可以从下面链接下载模型（T2210实验室环境已经下载完成，在C:\user\Administrator\data路径和D:\data路径下都有） [下载模型](https://drive.google.com/drive/folders/1fn83DF14tWmit0RTKWRhPq5uVXt73e0h?usp=sharing)_.
 
 -  ``use_cuda`` - 使用 CUDA 或不使用。本次实验中使用CPU速度也比较快，训练集比较小，这里我们代码改成False, 如果你在cuda的GPU上跑该程序。
 
@@ -88,7 +103,7 @@ use_cuda=True
 任务1：请大家修改epsilons的类别值，然后测试比较结果。
 
 
-### 受攻击的模型
+### 4.2 受攻击的模型
 
 如前所述，受到攻击的模型与来自[pytorch/examples/mnist](https://github.com/pytorch/examples/tree/master/mnist).
 您可以训练并保存自己的MNIST模型，也可以下载并使用提供的模型(已下载完成)。此处的 Net 定义和测试数据加载器具有是从 MNIST 示例复制的。
@@ -137,7 +152,9 @@ model.load_state_dict(torch.load(pretrained_model, map_location='cpu'))
 model.eval()
 ```
 
-### FGSM 攻击函数
+
+
+### 4.3 FGSM 攻击函数
 
 现在，我们可以通过以下方式定义创建对抗性示例的函数：
 
@@ -162,7 +179,7 @@ def fgsm_attack(image, epsilon, data_grad):
     return perturbed_image
 ```
 
-### 测试攻击效果函数
+### 4.4 测试攻击效果函数
  
 最后，本教程的核心结果来自测试攻击的结果。每次调用此测试函数都会在 MNIST 测试集上执行一个完整的测试步骤并报告最终精度。但是，请注意此函数还有一个 *epsilon* 参数输入，“测试”函数报告受攻击的模型的准确性来自  $\epsilon$ 的输入。更具体地说，对于测试集中的每个样本，该函数计算输入数据 ($data\_grad$) 的损失会产生扰动带有 “fgsm_attack”($perturbed\_data$) 的图像，然后检查以查看如果是对抗性的。除了测试模型的精度，该函数还保存并返回一些成功的对抗性示例将在以后可视化。
 
@@ -231,7 +248,7 @@ def test( model, device, test_loader, epsilon ):
     return final_acc, adv_examples
 ```
 
-### 实施攻击
+### 4.5 实施攻击
 
 本实验教程的最后一部分是实施攻击。在这里我们为 *epsilons* 输入中的每个 $\epsilon$ 值运行完整的测试步骤。
 
@@ -249,9 +266,9 @@ for eps in epsilons:
     examples.append(ex)
 ```
 
-## 结果分析
+## 5 结果分析
 
-### 准确性 vs Epsilon
+### 5.1 准确性 vs Epsilon
 
 第一个结果是准确性与 epsilon 的关系图。
 如前所述，早些时候，随着 epsilon 的增加，我们预计测试精度会降低。
@@ -274,7 +291,7 @@ plt.ylabel("Accuracy")
 plt.show()
 ```
 
-### 对抗样本实例
+### 5.2 对抗样本实例
 
 还记得没有免费午餐的想法吗？在这种情况下，随着 epsilon 的增加，测试正确率降低但是扰动变得更加容易感知。
 
@@ -303,9 +320,8 @@ plt.tight_layout()
 plt.show()
 ```
 
-## 接下来怎么做
+## 6 接下来怎么做
 
-希望本实验教程对对抗性机器学习的主题有一些帮助。 这种攻击代表了对抗性攻击研究的开始，并且由于后续有许多关于如何攻击和保护机器学习模型免受对手攻击的想法。 事实上，在NIPS2017年有一个对抗性攻击和防御竞争，本文描述了竞争中使用的许多方法： [Adversarial Attacks and Defences Competition](https://arxiv.org/pdf/1804.00097.pdf).对抗性攻击和防御竞争。 在防御方面的工作也导致了这样的想法，即使机器学习模型在一般情况下更加健壮，既自然地令人不安，又有对抗性的输入。
+希望本实验教程对对抗性机器学习的主题有一些帮助。 这种攻击代表了对抗性攻击研究的开始，并且由于后续有许多关于如何攻击和保护机器学习模型免受对手攻击的想法。 在NIPS2017年有一个对抗性攻击和防御竞争，本文描述了竞争中使用的许多方法[Adversarial Attacks and Defences Competition](https://arxiv.org/pdf/1804.00097.pdf)对抗性攻击和防御竞争。
 
-另一个方向是不同领域的对抗性攻击和防御。 对抗性研究不限于图像领域，请查看对语音到文本模型的这种攻击。尝试实现与NIPS2017年竞争不同的攻击，并看看它与FGSM有何不同。 然后，试着保护模型免受你自己的攻击。
 
