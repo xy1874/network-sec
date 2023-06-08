@@ -1498,7 +1498,7 @@
     <span class="k">return</span> <span class="n">perturbed_image</span>
 </code></pre></div>
 <h3 id="44">4.4 测试攻击效果函数</h3>
-<p>最后，本教程的核心结果来自测试攻击的结果。每次调用此测试函数都会在 MNIST 测试集上执行一个完整的测试步骤并报告最终精度。但是，请注意此函数还有一个 <em>epsilon</em> 参数输入，“测试”函数报告受攻击的模型的准确性来自  <script type="math/tex">\epsilon</script> 的输入。更具体地说，对于测试集中的每个样本，该函数计算输入数据 (<script type="math/tex">data\_grad</script>) 的损失会产生扰动带有 “fgsm_attack”(<script type="math/tex">perturbed\_data</script>) 的图像，然后检查以查看如果是对抗性的。除了测试模型的精度，该函数还保存并返回一些成功的对抗性示例将在以后可视化。</p>
+<p>最后，本教程的核心结果来自测试攻击的结果。每次调用此测试函数都会在 MNIST 测试集上执行一个完整的测试步骤并报告最终精度。但是，请注意此函数还有一个 <em>epsilon</em> 参数输入，“测试”函数报告受攻击的模型的准确性来自  <script type="math/tex">\epsilon</script> 的输入。更具体地说，对于测试集中的每个样本，该函数计算输入数据 (<script type="math/tex">data\_grad</script>) 的损失会产生扰动带有 “fgsm_attack”(<script type="math/tex">perturbed\_data</script>) 的图像，然后检查以查看是否是对抗性的。除了测试模型的精度，该函数还保存并返回一些成功的对抗性示例，将在以后可视化。</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">test</span><span class="p">(</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epsilon</span> <span class="p">):</span>
 
     <span class="c1"># Accuracy counter</span>
@@ -1578,8 +1578,7 @@
 <p>第一个结果是准确性与 epsilon 的关系图。
 如前所述，早些时候，随着 epsilon 的增加，我们预计测试精度会降低。
 这是因为更大的 epsilon 意味着我们在方向将最大化损失。请注意，即使 epsilon 值是线性间隔的，准确性也不是线性的。
-例如，<script type="math/tex">\epsilon=0.05</script> 时的精度仅低约4%
-大于 <script type="math/tex">\epsilon=0</script> ，但 <script type="math/tex">\epsilon=0.2</script> 时的准确率为 25%，低于  <script type="math/tex">\epsilon=0.15</script>。另外，请注意模型的准确性达到 10 类分类器的随机精度，介于 <script type="math/tex">\epsilon=0.25</script> 和 <script type="math/tex">\epsilon=0.3</script>。</p>
+例如，<script type="math/tex">\epsilon=0.05</script> 时的精度比 <script type="math/tex">\epsilon=0</script> 降低约 4% ，但 <script type="math/tex">\epsilon=0.2</script> 时的精度却比 <script type="math/tex">\epsilon=0.15</script> 降低约 25%  。另外，注意介于 <script type="math/tex">\epsilon=0.25</script> 和 <script type="math/tex">\epsilon=0.3</script> 模型的精度达到 10 类分类器的随机精度。</p>
 <p><center><img src="../assets/0-3.png" width = 500></center></p>
 <p>代码如下：</p>
 <div class="highlight"><pre><span></span><code><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
