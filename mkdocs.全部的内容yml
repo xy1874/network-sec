@@ -1,0 +1,105 @@
+# 所有网页的统一标题
+# 标题建议统一格式，如：计算机体系结构实验（2022春季） | 哈工大（深圳）
+site_name: 网络与系统安全（2024春季） | 哈工大（深圳）
+# 版权信息————记得更新年份
+copyright: 'Copyright &copy; 2024 - 2025 哈尔滨工业大学（深圳）'
+# 仓库名称(非必须)————可自定义
+repo_name: 'NetworkSecurity'
+# 仓库URL(非必须)
+repo_url: 'https://gitee.com/hitsz-cslab/net-work-security'
+
+# 所使用的Markdown扩展————一般不需要改动
+markdown_extensions:
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  # 支持emoji表情
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed
+  - pymdownx.tilde
+  - admonition
+  - mdx_math:
+      enable_dollar_delimiter: True
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML
+  # - mathjaxhelper.js
+
+# GiteePage主题————使用统一模板：material
+theme:
+  language: 'zh'
+  name: material
+  features:
+    - navigation.tabs
+  icon:
+    # 网页标题左侧的图标————可更换成其他fontawesome图标，详见https://fontawesome.com/
+    logo: fontawesome/solid/microchip
+    repo: fontawesome/brands/git-alt
+    # favicon: fontawesome/solid/microchip
+  palette:
+    primary: 'blue'   # 网页底色
+    accent: 'red'    # 交互元素颜色
+
+# 导航设置
+# （1）最多三级缩进，每一级缩进对应一个级别层次
+# （2）可使用中文或其他语言的字符，但文字与markdown文件之间的冒号必须是英文冒号
+nav:
+  - 首页:
+    - 实验须知: index.md
+    - 作业提交说明: ojguide.md
+  - Seed实验环境搭建:
+    - Seed实验环境: lab8/step.md 
+  - 实验1：Meltdown Attack:
+    - 实验概述: lab1/overview.md
+    - 实验原理: lab1/theory.md
+    - 实验步骤: lab1/step.md
+  #  - 附加题: lab1-Meltdown/extra.md
+    - 验收与提交: lab1/submit.md
+  - 实验2：SQL注入:
+    - 实验概述: lab2/overview.md
+    - 实验原理: lab2/theory.md
+    - 实验步骤: lab2/step.md
+#  -  附加题: lab2/extra.md
+    - 验收与提交: lab2/submit.md
+  - 实验3：XSS 攻击:
+#     - SQL注入实验: lab3/SQLlab.md
+    - 实验概述: lab3/overview.md
+    - 实验原理: lab3/theory.md
+    - 实验步骤: lab3/step.md
+  #  - 附加题: lab3/extra.md
+    - 验收与提交: lab3/submit.md
+  - 实验4：PKI:
+    - 实验概述: lab4/overview.md
+    - 实验原理: lab4/theory.md
+    - 实验步骤: lab4/step.md
+  #  - 附加题: lab4/extra.md
+    - 验收与提交: lab4/submit.md
+  - 实验5：TLS:
+    - 实验概述: lab5/overview.md
+    - 实验原理: lab5/theory.md
+    - 实验步骤: lab5/step.md
+  #  - 附加题: lab4/extra.md
+    - 验收与提交: lab5/submit.md
+  - 实验6：防火墙 iptables:
+    - 实验概述: lab6/overview.md
+    - 实验原理: lab6/theory.md
+    - 实验步骤: lab6/step.md
+  #  - 附加题: lab5/extra.md
+    - 验收与提交: lab6/submit.md
+  - 实验7：对抗样本攻击:
+    - 对抗样本攻击: lab7/fgsm_tutorial.md
+    - 实验原理: lab7/theory.md
+    - 实验步骤: lab7/step.md
+  #  - 附加题: lab5/extra.md
+    - 验收与提交: lab7/submit.md
