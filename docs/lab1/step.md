@@ -19,11 +19,26 @@ Task8 给出一个更加实用的攻击效果。
 
 ## **关闭 Ubuntu 20.04 系统漏洞补丁**
 
-修改 /etc/default/grub 文件，找到 GRUB_CMDLINE_LINUX_DEFAULT，在后面引号内追加参数 mitigations = off ,引号里如果还有其他参数，直接在后面用空格隔开加上 mitigations = off 即可。
+修改 /etc/default/grub 文件，找到 GRUB_CMDLINE_LINUX_DEFAULT，在后面引号内追加参数 mitigations=off ,引号里如果还有其他参数，直接在后面用空格隔开加上 mitigations=off 即可。
+
+修改文件的命令,用 sudo 权限，打开文件， 用命令 i 在文件中增加内容。
+
+```
+sudo vi /etc/default/grub
+```
+
+修改后的文件内容如下， 按esc 后输入 :wq! 保存退出  
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT=“quiet splash mitigations=off”
+```
 
 然后执行
+
+```
     sudo update-grub
     sudo reboot
+```
 
 重启后用测试漏洞脚本函数查看是否漏洞存在, 脚本地址：https://github.com/speed47/spectre-meltdown-checker
 

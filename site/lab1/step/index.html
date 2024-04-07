@@ -914,10 +914,17 @@
 <p>所有的任务在编译时加上 -march=native 的标志，它会告诉编译器启用本地计算机支持的所有指令子集。所有本次实验需要的代码都在下载的资料Labsetup.zip中，也已上传到QQ群。</p>
 </div>
 <h2 id="ubuntu-2004"><strong>关闭 Ubuntu 20.04 系统漏洞补丁</strong></h2>
-<p>修改 /etc/default/grub 文件，找到 GRUB_CMDLINE_LINUX_DEFAULT，在后面引号内追加参数 mitigations = off ,引号里如果还有其他参数，直接在后面用空格隔开加上 mitigations = off 即可。</p>
-<p>然后执行
-    sudo update-grub
-    sudo reboot</p>
+<p>修改 /etc/default/grub 文件，找到 GRUB_CMDLINE_LINUX_DEFAULT，在后面引号内追加参数 mitigations=off ,引号里如果还有其他参数，直接在后面用空格隔开加上 mitigations=off 即可。</p>
+<p>修改文件的命令,用 sudo 权限，打开文件， 用命令 i 在文件中增加内容。</p>
+<div class="highlight"><pre><span></span><code>sudo vi /etc/default/grub
+</code></pre></div>
+<p>修改后的文件内容如下， 按esc 后输入 :wq! 保存退出  </p>
+<div class="highlight"><pre><span></span><code>GRUB_CMDLINE_LINUX_DEFAULT=“quiet splash mitigations=off”
+</code></pre></div>
+<p>然后执行</p>
+<div class="highlight"><pre><span></span><code>    sudo update-grub
+    sudo reboot
+</code></pre></div>
 <p>重启后用测试漏洞脚本函数查看是否漏洞存在, 脚本地址：<a href="https://github.com/speed47/spectre-meltdown-checker">https://github.com/speed47/spectre-meltdown-checker</a></p>
 <pre><code>sudo ./spectre-meltdown-checker.sh
 </code></pre>
