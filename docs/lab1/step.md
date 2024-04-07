@@ -17,6 +17,20 @@ Task8 给出一个更加实用的攻击效果。
 !!! info "提示 :sparkles:"
     所有的任务在编译时加上 -march=native 的标志，它会告诉编译器启用本地计算机支持的所有指令子集。所有本次实验需要的代码都在下载的资料Labsetup.zip中，也已上传到QQ群。
 
+## **关闭 Ubuntu 20.04 系统漏洞补丁**
+
+修改 /etc/default/grub 文件，找到 GRUB_CMDLINE_LINUX_DEFAULT，在后面引号内追加参数 mitigations = off ,引号里如果还有其他参数，直接在后面用空格隔开加上 mitigations = off 即可。
+
+然后执行
+    sudo update-grub
+    sudo reboot
+
+重启后用测试漏洞脚本函数查看是否漏洞存在
+
+    sudo ./spectre-meltdown-checker.sh
+
+ <center><img src="../assets/0-2.png" width = 400></center>
+
 ## **侧信道攻击CPU缓存**
 
 任务1和任务2目的是用侧信道攻击从CPU缓存中读取到被保护的数据。

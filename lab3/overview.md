@@ -3,19 +3,19 @@
 https://blog.csdn.net/xxx_qz/article/details/72621025
 https://blog.csdn.net/qq_51927659/article/details/122773139
 
-跨站点脚本（XSS）是通常在Web应用程序中发现的一种计算机安全漏洞。此漏洞可使攻击者将恶意代码（例如JavaScript）插入受害者的Web浏览器。使用这种恶意代码，攻击者可以窃取受害者的凭据，如Cookie。可以通过利用XSS漏洞来绕过浏览器用于保护这些凭据的访问控制策略（即，同源策略）。这类漏洞已经被利用来制作强大的网络钓鱼攻击和浏览器攻击。
+跨站点脚本（XSS）是通常在 Web 应用程序中发现的一种计算机安全漏洞。此漏洞可使攻击者将恶意代码（例如JavaScript）插入受害者的Web浏览器。使用这种恶意代码，攻击者可以窃取受害者的凭据，如 Cookie 。可以通过利用XSS漏洞来绕过浏览器用于保护这些凭据的访问控制策略（即，同源策略）。这类漏洞已经被利用来制作强大的网络钓鱼攻击和浏览器攻击。
 
-为了展示利用XSS漏洞攻击者可以做什么，我们在预制的Ubuntu VM映像中设置了名为Elgg的Web应用程序。Elgg是社交网络非常受欢迎的开源Web应用程序，它已经实施了一些对抗措施来弥补XSS的威胁。为了演示XSS攻击如何工作，我们已经在Elgg的安装中取消了这些对抗措施，故意使Elgg容易遭受XSS攻击。没有这些对抗措施，用户可以将任意消息（包括JavaScript程序）发布到user profiles。在这个实验中，学生们需要利用这个漏洞，对修改后的Elgg进行XSS攻击，其方式与Samy Kamkar在2005年通过臭名昭著的Samy蠕虫对MySpace做了类似的处理。这种攻击的最终目标是在用户之间传播XSS蠕虫，以便任何查看受感染用户个人资料的用户被感染，被感染的人会将你（即攻击者）添加到他/她的朋友列表中。
+本次实验在预制的 Ubuntu VM 映像中设置了名为 Elgg 的 Web 应用程序。Elgg 是社交网络非常受欢迎的开源 Web 应用程序，它本身实施了一些对抗措施来弥补 XSS 的威胁。本次实验为了演示 XSS 攻击如何工作，在 Elgg 的安装中取消了这些对抗措施，故意使 Elgg 容易遭受 XSS 攻击。没有这些对抗措施，用户可以将任意消息（包括 JavaScript 程序）发布到 user profiles 。在这个实验中，学生们需要利用这个漏洞，对修改后的 Elgg 进行 XSS 攻击，其方式与 Samy Kamkar 在2005年通过臭名昭著的 Samy 蠕虫对 MySpace 做了类似的处理。这种攻击的最终目标是在用户之间传播 XSS 蠕虫，以便任何查看受感染用户个人资料的用户被感染，被感染的人会将你（即攻击者）添加到他/她的朋友列表中。
 
 
 **实验目的**
 
 ```
 1. 掌握Cross-Site Scripting attack 的基本原理
-3.应用XSS worm以及了解 self-propagation
-4.掌握Session cookies的具体使用技巧
-5.熟练使用HTTP GET and POST requests
-6.了解JavaScript and Ajax的基本语法
+2. 应用XSS worm以及了解 self-propagation
+3. 掌握Session cookies的具体使用技巧
+4. 熟练使用HTTP GET and POST requests
+
 
 ```
 
