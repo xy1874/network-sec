@@ -808,7 +808,10 @@ mysql&gt; show tables;
 <h2 id="1-12sqlmap">1 任务1.2：sqlmap工具的使用</h2>
 <p>sqlmap是一个使用python语言开发的开源的渗透测试工具，可以用来进行自动化检测，利用 SQL 注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎，可以针对各种不同类型数据库的进行渗透测试，包括获取数据库中存储的数据，访问操作系统文件等。</p>
 <p>实验室环境中已经安装，如果自行安装，请用下面的命令安装</p>
-<div class="highlight"><pre><span></span><code>apt install sqlmap
+<p><div class="highlight"><pre><span></span><code>sudo apt install sqlmap
+</code></pre></div>
+如果上面的命令报错，可以使用下面的命令安装</p>
+<div class="highlight"><pre><span></span><code>sudo snap install sqlmap
 </code></pre></div>
 <p>安装好后，执行下面的命令可以帮助你了解 sqlmap 的相关命令</p>
 <div class="highlight"><pre><span></span><code>sqlmap -h  或者 sqlmap --h

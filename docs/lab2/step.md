@@ -96,7 +96,12 @@ sqlmap是一个使用python语言开发的开源的渗透测试工具，可以�
 实验室环境中已经安装，如果自行安装，请用下面的命令安装
 
 ```
-apt install sqlmap
+sudo apt install sqlmap
+```
+如果上面的命令报错，可以使用下面的命令安装
+
+```
+sudo snap install sqlmap
 ```
 
 安装好后，执行下面的命令可以帮助你了解 sqlmap 的相关命令
