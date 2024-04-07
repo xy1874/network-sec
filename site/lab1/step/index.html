@@ -918,10 +918,10 @@
 <p>然后执行
     sudo update-grub
     sudo reboot</p>
-<p>重启后用测试漏洞脚本函数查看是否漏洞存在</p>
+<p>重启后用测试漏洞脚本函数查看是否漏洞存在, 脚本地址：<a href="https://github.com/speed47/spectre-meltdown-checker">https://github.com/speed47/spectre-meltdown-checker</a></p>
 <pre><code>sudo ./spectre-meltdown-checker.sh
 </code></pre>
-<p><center><img src="../assets/0-2.png" width = 400></center></p>
+<p><center><img src="../assets/0-2.png" width = 600></center></p>
 <h2 id="cpu"><strong>侧信道攻击CPU缓存</strong></h2>
 <p>任务1和任务2目的是用侧信道攻击从CPU缓存中读取到被保护的数据。</p>
 <h3 id="1-cache">1. 分别测试从 Cache 读取和从内存读取数据的时间长度，对比时间差。</h3>

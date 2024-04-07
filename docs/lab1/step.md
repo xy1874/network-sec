@@ -25,11 +25,11 @@ Task8 给出一个更加实用的攻击效果。
     sudo update-grub
     sudo reboot
 
-重启后用测试漏洞脚本函数查看是否漏洞存在
+重启后用测试漏洞脚本函数查看是否漏洞存在, 脚本地址：https://github.com/speed47/spectre-meltdown-checker
 
     sudo ./spectre-meltdown-checker.sh
 
- <center><img src="../assets/0-2.png" width = 400></center>
+ <center><img src="../assets/0-2.png" width = 600></center>
 
 ## **侧信道攻击CPU缓存**
 
