@@ -926,8 +926,9 @@
     sudo reboot
 </code></pre></div>
 <p>重启后用测试漏洞脚本函数查看是否漏洞存在, 脚本地址：<a href="https://github.com/speed47/spectre-meltdown-checker">https://github.com/speed47/spectre-meltdown-checker</a></p>
-<pre><code>sudo ./spectre-meltdown-checker.sh
-</code></pre>
+<div class="highlight"><pre><span></span><code>    chmod +x spectre-meltdown-checker.sh  //给脚本加上可执行权限
+    sudo ./spectre-meltdown-checker.sh
+</code></pre></div>
 <p><center><img src="../assets/0-2.png" width = 600></center></p>
 <h2 id="cpu"><strong>侧信道攻击CPU缓存</strong></h2>
 <p>任务1和任务2目的是用侧信道攻击从CPU缓存中读取到被保护的数据。</p>

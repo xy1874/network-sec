@@ -42,7 +42,10 @@ GRUB_CMDLINE_LINUX_DEFAULT=“quiet splash mitigations=off”
 
 重启后用测试漏洞脚本函数查看是否漏洞存在, 脚本地址：https://github.com/speed47/spectre-meltdown-checker
 
+```
+    chmod +x spectre-meltdown-checker.sh  //给脚本加上可执行权限
     sudo ./spectre-meltdown-checker.sh
+```
 
  <center><img src="../assets/0-2.png" width = 600></center>
 
