@@ -3,9 +3,33 @@
 https://blog.csdn.net/xxx_qz/article/details/72621025
 https://blog.csdn.net/qq_51927659/article/details/122773139
 
+https://www.cnblogs.com/Yh136793/p/16278024.html
+
 跨站点脚本（XSS）是通常在 Web 应用程序中发现的一种计算机安全漏洞。此漏洞可使攻击者将恶意代码（例如JavaScript）插入受害者的Web浏览器。使用这种恶意代码，攻击者可以窃取受害者的凭据，如 Cookie 。可以通过利用XSS漏洞来绕过浏览器用于保护这些凭据的访问控制策略（即，同源策略）。这类漏洞已经被利用来制作强大的网络钓鱼攻击和浏览器攻击。
 
-本次实验在预制的 Ubuntu VM 映像中设置了名为 Elgg 的 Web 应用程序。Elgg 是社交网络非常受欢迎的开源 Web 应用程序，它本身实施了一些对抗措施来弥补 XSS 的威胁。本次实验为了演示 XSS 攻击如何工作，在 Elgg 的安装中取消了这些对抗措施，故意使 Elgg 容易遭受 XSS 攻击。没有这些对抗措施，用户可以将任意消息（包括 JavaScript 程序）发布到 user profiles 。在这个实验中，学生们需要利用这个漏洞，对修改后的 Elgg 进行 XSS 攻击，其方式与 Samy Kamkar 在2005年通过臭名昭著的 Samy 蠕虫对 MySpace 做了类似的处理。这种攻击的最终目标是在用户之间传播 XSS 蠕虫，以便任何查看受感染用户个人资料的用户被感染，被感染的人会将你（即攻击者）添加到他/她的朋友列表中。
+跨站脚本攻击利用的也是数据信息和代码没有做好隔离的漏洞，主要有三种方法：反射型 XSS 、 存储型 XSS 和 DOM 型 XSS。本次实验主要用到前面两种攻击类型，反射型 XSS 和 存储型 XSS。
+
+## 1.1 反射型 XSS 攻击
+
+从用户接收输入的信息，执行一些操作后返回给用户时携带用户信息这种行为称之为反射行为。
+
+攻击者可以在用户的输入信息中混入 JavaScript 代码，这样当输入内容被反射回浏览器的时候， JavaScript 的代码就被注入到该网页当中了。
+
+!!! Warning "注意 :sparkles:"
+    攻击代码的输入必须是从目标用户的计算机发出的。
+
+## 1.2 存储型 XSS 攻击
+
+攻击者把数据发给目标服务器网站，网站对数据进行持久性存储，之后，如果网站将存储数据发送给其他用户，那么就在攻击者和其他用户之间创建了一条通道。这一类型的攻击常常存在于社交网站的主页，用户评论等。
+
+## 1.3 DOM XSS 攻击
+
+
+## 1.4 XSS 造成的危害
+
+**1、污染网页** 比如将新闻篡改成假新闻。
+**2、欺骗请求** 比如偷发添加好友的请求。
+**3、窃取信息** 包括网页中的cookie、显示的个人信息等
 
 
 **实验目的**
@@ -15,11 +39,14 @@ https://blog.csdn.net/qq_51927659/article/details/122773139
 2. 应用XSS worm以及了解 self-propagation
 3. 掌握Session cookies的具体使用技巧
 4. 熟练使用HTTP GET and POST requests
+5. 
 
 
 ```
 
 # 2.实验环境
+
+本次实验在预制的 Ubuntu VM 映像中设置了名为 Elgg 的 Web 应用程序。Elgg 是社交网络非常受欢迎的开源 Web 应用程序，它本身实施了一些对抗措施来弥补 XSS 的威胁。本次实验为了演示 XSS 攻击如何工作，在 Elgg 的安装中取消了这些对抗措施，故意使 Elgg 容易遭受 XSS 攻击。没有这些对抗措施，用户可以将任意消息（包括 JavaScript 程序）发布到 user profiles 。在这个实验中，学生们需要利用这个漏洞，对修改后的 Elgg 进行 XSS 攻击，其方式与 Samy Kamkar 在2005年通过臭名昭著的 Samy 蠕虫对 MySpace 做了类似的处理。这种攻击的最终目标是在用户之间传播 XSS 蠕虫，以便任何查看受感染用户个人资料的用户被感染，被感染的人会将你（即攻击者）添加到他/她的朋友列表中。
 
 本次实验用到一个 web 应用程序，我们使用 Docker 来设置这个 web 应用程序。在实验中设置有两个 Docker ，一个用于托管 web 应用程序，另一个用于托管 web 应用程序的数据库。web 应用容器的IP地址为 10.9.0.5, web 应用程序的 URL 如下
 
@@ -27,7 +54,7 @@ https://blog.csdn.net/qq_51927659/article/details/122773139
 http://www.seed-server.com
 ```
 
-我们需要将主机名映射到 Docker 的 IP地址。请将以下条目添加到`/etc/hosts`文件。您需要使用根权限来更改此文件(使用`sudo`)。值得注意的是,由于其他一些实验可能重名如果它被映射到不同的IP地址， 旧的必须删除。
+我们需要将主机名映射到 Docker 的 IP地址。请将以下条目添加到`/etc/hosts`文件。您需要使用根权限来更改此文件(使用`sudo`)。
 
 修改文件的命令可以用 vi , 打开文件后可以用i插入语句，修改完成后先按 esc 键，然后 :wq!  表示保存修改退出。  
 
@@ -35,15 +62,20 @@ http://www.seed-server.com
 sudo vi /etc/hosts
 ```
 
-待添加的映射语句
+如果文件中包含如下内容，可以不做修改，否则，你需要把以下命令添加到hosts文件中，保存退出
 
 ```
-10.9.0.5 www.seed-server.com
+10.9.0.5 www.seed-server.com   // 如果打开的文件不是这个web地址，请修改
+10.9.0.5 www.example32a.com
+10.9.0.5 www.example32b.com
+10.9.0.5 www.example32c.com
+10.9.0.5 www.example60.com
+10.9.0.5 www.example70.com
 ```
 
 ## 2.1 容器安装和容器常用命令
 
-请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/) 文件到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。这个文件的内容和所有涉及的`Dockerfile`的详细说明可以在 [用户手册](https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md) 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。
+请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_XSS_Elgg/) 文件到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。这个文件的内容和所有涉及的`Dockerfile`的详细说明可以在 [用户手册](https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md) 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。
 
 下面，我们将列出一些与 Docker 和 Compose 相关的常用命令。因为我们后面也将非常频繁地使用这些命令，所以我们在 .bashrc文件中为它们创建了别名。
 
@@ -82,6 +114,8 @@ root@9652715c8e0a:/#
 
 ## 2.2 web应用程序
 
-我们已经创建了一个 web 应用程序，这是一个简单的员工管理应用程序。员工可以通过这个 web 应用程序查看和更新数据库中的个人信息。这个 web 应用程序主要有两个角色:管理员是一个特权角色，可以管理每个员工的个人档案信息;员工是正常角色，可以查看或更新自己的个人信息。所有员工信息如 表1 所示
+我们已经创建了一个 web 应用程序，这是一个简单的社交网站。用户可以通过它修改个人信息、添加好友、发博客等。这个 web 应用程序有两类角色:管理员是一个特权角色，可以管理每个人信息;用户是正常角色，可以查看或更新自己的个人信息、添加好友、浏览其他人的信息、发博客等。如下图所示：
 
 <center><img src="../assets/image-20230409151703983.png" width = 600></center>
+
+本次实验用到的用户信息,如下表所示：

@@ -2,7 +2,35 @@
 
 ## 0 环境准备
 
-请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/) 或者指导书位置下载[Lab2-Sql-Labsetup.zip] (https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt) 文件到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。
+请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_SQL_Injection/) 或者指导书位置下载[Lab3-XSS-Labsetup.zip] (https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt) 文件到你的虚拟机，或者QQ群里的实验3压缩文件，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。
+
+
+**主机名映射**
+
+本次实验用到一个web应用程序，我们使用Docker来设置这个web应用程序。在实验设置中有两个Docker，一个用于托管web应用程序，另一个用于托管web应用程序的数据库。web应用容器的IP地址为10.9.0.5,web应用程序的URL如下
+
+```
+http://www.seed-server.com
+```
+
+我们需要将主机名映射到 Docker 的 IP地址。请将以下条目添加到`/etc/hosts`文件。您需要使用根权限来更改此文件(使用`sudo`)。
+
+修改文件的命令可以用 vi , 打开文件后可以用i插入语句，修改完成后先按 esc 键，然后 :wq!  表示保存修改退出。  
+
+```
+sudo vi /etc/hosts
+```
+
+如果文件中包含如下内容，可以不做修改，否则，你需要把以下命令添加到hosts文件中，保存退出
+
+```
+10.9.0.5 www.seed-server.com   // 如果打开的文件不是这个web地址，请修改
+10.9.0.5 www.example32a.com
+10.9.0.5 www.example32b.com
+10.9.0.5 www.example32c.com
+10.9.0.5 www.example60.com
+10.9.0.5 www.example70.com
+```
 
  **创建容器**
 
@@ -22,21 +50,6 @@
 ```
 $ dcbuild
 ```
-
-**主机名映射**
-
-本次实验用到一个web应用程序，我们使用Docker来设置这个web应用程序。在实验设置中有两个Docker，一个用于托管web应用程序，另一个用于托管web应用程序的数据库。web应用容器的IP地址为10.9.0.5,web应用程序的URL如下
-
-```
-http://www.seed-server.com
-```
-
-我们需要将主机名映射到Docker的IP地址。请将以下条目添加到`/etc/hosts`文件。您需要使用根权限来更改此文件(使用`sudo`)。值得注意的是,由于其他一些实验可能重名如果它被映射到不同的IP地址， 旧的必须删除。
-
-```
-10.9.0.5 www.seed-server.com
-```
-
 
 **启动容器**
 
