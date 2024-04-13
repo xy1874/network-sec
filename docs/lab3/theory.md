@@ -20,7 +20,7 @@ XSS攻击最主要有如下分类：反射型、存储型、及 DOM-based型。 
 
 ### 1.2 反射型XSS攻击的示例
 
-（1）攻击者针对 http://www.example.com 的一个搜索页，在搜索页面的输入信息的对话框中输入如下脚本 <script>alert('XSS')</script> ，那么url上就会显示如下链接，且页面又反射出的攻击信息出现。
+（1）攻击者针对 http://www.example.com 的一个搜索页，在搜索页面的输入信息的对话框中输入如下脚本（query等号后面的内容） ，那么url上就会显示如下链接，且页面又反射出的攻击信息出现。
 
 ```
 http://www.example.com/search?query=<script>alert('XSS')</script>

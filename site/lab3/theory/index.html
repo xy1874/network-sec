@@ -1358,7 +1358,7 @@ XSS攻击最主要有如下分类：反射型、存储型、及 DOM-based型。 
 <p>（3）受害者点击链接时，恶意脚本会被浏览器解析并执行，从而执行攻击者的意图。</p>
 <p><center><img src="../assets/攻击示意图.png" width = 600></center></p>
 <h3 id="12-xss">1.2 反射型XSS攻击的示例</h3>
-<p>（1）攻击者针对 <a href="http://www.example.com">http://www.example.com</a> 的一个搜索页，在搜索页面的输入信息的对话框中输入如下脚本 <script>alert('XSS')</script> ，那么url上就会显示如下链接，且页面又反射出的攻击信息出现。</p>
+<p>（1）攻击者针对 <a href="http://www.example.com">http://www.example.com</a> 的一个搜索页，在搜索页面的输入信息的对话框中输入如下脚本（query等号后面的内容） ，那么url上就会显示如下链接，且页面又反射出的攻击信息出现。</p>
 <div class="highlight"><pre><span></span><code>http://www.example.com/search?query=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
 </code></pre></div>
 <p>（2）攻击者将连接发送给被攻击者</p>
