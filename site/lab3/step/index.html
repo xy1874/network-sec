@@ -1300,7 +1300,7 @@
 <p>这些任务描述了一系列跨站脚本（XSS）攻击的场景，旨在演示如何通过嵌入恶意JavaScript代码来执行不当行为。下面是对这些任务的简要解释和翻译。</p>
 <h2 id="1">任务1：发布恶意消息以显示警告窗口</h2>
 <p>这个任务的目标是在你的Elgg个人资料中嵌入一个JavaScript程序，以便当其他用户查看你的个人资料时，JavaScript程序将被执行并显示一个警告窗口。给出的JavaScript 程序将显示一个警告窗口：</p>
-<div class="highlight"><pre><span></span><code>&lt;script&gt;alert(&quot;XSS&quot;);&lt;/script&gt;
+<div class="highlight"><pre><span></span><code>&lt;script&gt;警告脚本;&lt;/script&gt;  //警告脚本可以是 alert(&quot;XSS&quot;)
 </code></pre></div>
 <p>如果你将上述JavaScript代码嵌入到你的个人资料中（例如在简短描述字段中  Brief description 字段），那么任何查看你个人资料的用户都将看到这个警告窗口。</p>
 <h2 id="2cookies">任务2：发布恶意消息以显示Cookies</h2>

@@ -76,7 +76,7 @@ $ dockps
 这个任务的目标是在你的Elgg个人资料中嵌入一个JavaScript程序，以便当其他用户查看你的个人资料时，JavaScript程序将被执行并显示一个警告窗口。给出的JavaScript 程序将显示一个警告窗口：
 
 ```
-<script>alert("XSS");</script>
+<script>警告脚本;</script>  //警告脚本可以是 alert("XSS")
 ```
 
 如果你将上述JavaScript代码嵌入到你的个人资料中（例如在简短描述字段中  Brief description 字段），那么任何查看你个人资料的用户都将看到这个警告窗口。
