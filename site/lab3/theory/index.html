@@ -1379,7 +1379,7 @@ XSS攻击最主要有如下分类：反射型、存储型、及 DOM-based型。 
 <p><center><img src="../assets/攻击示意图.png" width = 600></center></p>
 <h3 id="22-xss">2.2 存储型XSS攻击的示例</h3>
 <p>（1）攻击者针对 <a href="http://www.example.com">http://www.example.com</a> 中的个人主页修改中嵌入如下信息</p>
-<div class="highlight"><pre><span></span><code>&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
+<div class="highlight"><pre><span></span><code>&lt;script&gt;警告脚本;&lt;/script&gt;  //警告脚本可以是 alert(&quot;XSS&quot;)
 </code></pre></div>
 <p>（2）被攻击者访问该攻击者的主页</p>
 <p>（3）被攻击者点开链接后，页面会显示攻击者嵌入的脚本 XSS ，从而实现攻击者的意图。</p>

@@ -65,7 +65,7 @@ http://www.example.com/search?query=<script>alert('XSS')</script>
 （1）攻击者针对 http://www.example.com 中的个人主页修改中嵌入如下信息
 
 ```
-<script>alert('XSS')</script>
+<script>警告脚本;</script>  //警告脚本可以是 alert("XSS")
 ```
 
 （2）被攻击者访问该攻击者的主页
