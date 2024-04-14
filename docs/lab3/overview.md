@@ -24,31 +24,34 @@ DOM 型 XSS 攻击是一种利用 DOM 基于 HTML 解析过程中的安全漏洞
 ## 1.4 XSS 造成的危害
 
 **1、污染网页** 比如将新闻篡改成假新闻。
+
 **2、欺骗请求** 比如偷发添加好友的请求。
+
 **3、窃取信息** 包括网页中的cookie、显示的个人信息等
 
-
-**实验目的**
-
-```
-1. 掌握 Cross-Site Scripting attack 的基本原理
-2. 应用 XSS worm 以及了解 self-propagation
-3. 掌握 Session cookies 的具体使用技巧
-4. 熟练使用 HTTP GET and POST requests
-5. 熟悉 CSP 安全政策防止XSS攻击
+# 2.实验目的
 
 
-```
+**1. 掌握 Cross-Site Scripting attack 的基本原理**
 
-# 2.实验环境
+**2. 应用 XSS worm 以及了解 self-propagation**
+
+**3. 掌握 Session cookies 的具体使用技巧**
+
+**4. 熟练使用 HTTP GET and POST requests**
+
+**5. 熟悉 CSP 安全政策防止XSS攻击**
+
+
+# 3.实验环境
 
 本次实验在预制的 Ubuntu VM 映像中设置了名为 Elgg 的 Web 应用程序。Elgg 是社交网络非常受欢迎的开源 Web 应用程序，它本身实施了一些对抗措施来弥补 XSS 的威胁。本次实验为了演示 XSS 攻击如何工作，在 Elgg 的安装中取消了这些对抗措施，故意使 Elgg 容易遭受 XSS 攻击。没有这些对抗措施，用户可以将任意消息（包括 JavaScript 程序）发布到 user profiles 。在这个实验中，学生需要利用这个漏洞对修改后的 Elgg 发动 XSS 攻击，方式与 2005 年萨米·卡姆卡尔（Samy Kamkar）对 MySpace 发起的臭名昭著的 Samy 蠕虫攻击相似。这次攻击的最终目标是在用户之间传播一个 XSS 蠕虫，使得任何查看被感染用户个人资料的人都会被感染，而被感染的人则会将你（即攻击者）添加为联系人。
 
 
 
-## 2.1 容器安装和容器常用命令
+## 3.1 容器安装和容器常用命令
 
-请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_XSS_Elgg/) 文件到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。这个文件的内容和所有涉及的`Dockerfile`的详细说明可以在 [用户手册](https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md) 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。
+请从SEED网站下载 [Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Web/Web_XSS_Elgg/) 文件或者指导书位置下载[Lab3-XSS-Labsetup.zip] (https://gitee.com/hitsz-cslab/net-work-security/tree/master/stupkt) 文件到你的虚拟机到你的虚拟机，解压缩，进入`Labsetup`文件夹，使用`docker-compose.yml`文件来设置实验环境。这个文件的内容和所有涉及的`Dockerfile`的详细说明可以在 [用户手册](https://github.com/seed-labs/seed-labs/blob/master/manuals/docker/SEEDManual-Container.md) 中找到，用户手册链接到本实验的网站。如果这是您第一次使用容器设置SEED实验室环境，那么阅读用户手册是非常重要的。
 
 下面，我们将列出一些与 Docker 和 Compose 相关的常用命令。因为我们后面也将非常频繁地使用这些命令，所以我们在 .bashrc文件中为它们创建了别名。
 
@@ -85,10 +88,12 @@ root@9652715c8e0a:/#
  sudo rm -rf mysql_data
 ```
 
-## 2.2 web应用程序
+## 3.2 web应用程序
 
 我们已经创建了一个 web 应用程序，这是一个简单的社交网站。用户可以通过它修改个人信息、添加好友、发博客等。这个 web 应用程序有两类角色:管理员是一个特权角色，可以管理每个人信息;用户是正常角色，可以查看或更新自己的个人信息、添加好友、浏览其他人的主页、发博客等。如下图所示：
 
 <center><img src="../assets/2.png" width = 600></center>
 
 本次实验用到的用户信息,如下表所示：
+
+<center><img src="../assets/3.png" width = 600></center>
