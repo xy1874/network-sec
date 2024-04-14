@@ -786,7 +786,7 @@
       
         <li class="md-nav__item">
   <a href="#3cookies" class="md-nav__link">
-    任务3：从受害者的机器上窃取Cookies
+    任务3：窃取受害者的Cookies
   </a>
   
 </li>
@@ -1222,7 +1222,7 @@
       
         <li class="md-nav__item">
   <a href="#3cookies" class="md-nav__link">
-    任务3：从受害者的机器上窃取Cookies
+    任务3：窃取受害者的Cookies
   </a>
   
 </li>
@@ -1326,7 +1326,7 @@
 <div class="highlight"><pre><span></span><code>&lt;script&gt;alert(document.cookie);&lt;/script&gt;
 </code></pre></div>
 <p>请将查看到的cookie信息截图贴在报告中。</p>
-<h2 id="3cookies">任务3：从受害者的机器上窃取Cookies</h2>
+<h2 id="3cookies">任务3：窃取受害者的Cookies</h2>
 <p>在前面的任务中，攻击者编写的恶意 JavaScript 代码可以打印出用户的 Cookie ，但只有用户能看到这些 Cookie ，攻击者无法看到。</p>
 <p>在这个任务中，攻击者希望 JavaScript 代码能将 Cookie 发送给他/她自己。为了实现这一点，恶意的 JavaScript 代码需要向攻击者发送一个 HTTP 请求，并在请求中附加 Cookie 。我们可以通过让恶意的 JavaScript 插入一个 <img> 标签，并将其 src 属性设置为攻击者的机器来实现这一点。当 JavaScript 插入 img 标签时，浏览器会尝试从 src 字段中的 URL 加载图像；这将导致向攻击者的机器发送一个 HTTP GET 请求。下面给出的 JavaScript 代码将 Cookie 发送到攻击者机器的5555 端口（假如IP地址为10.9.0.1），攻击者的 TCP 服务器在该端口监听。</p>
 <p>脚本如下，需要将下面的 10.9.0.1 换成自己虚拟机的 IP 地址，端口你可以选择5555也可以选取其他不常用的端口，但是这里填写的端口必须和监听的端口一致，比如我们实验室的虚拟机 IP 地址可能是 192.168.56.101</p>
@@ -1429,6 +1429,10 @@ window.onload = function () {
 </div>
 <p>请将samy作为攻击者，先感染alice再感染boby，观察结果并截图贴到报告中，并思考上述代码的内容为什么能够觉有自我传播功能。</p>
 <h2 id="7cspxss">任务7：使用CSP（内容安全策略）抵御XSS攻击</h2>
+<p>跨站脚本攻击（XSS）漏洞的根本问题是HTML允许JavaScript代码与数据混合。因此，为了解决这个根本问题，我们需要将代码与数据分离。在HTML页面中包含JavaScript代码有两种方式，一种是内联方式，另一种是链接方式。</p>
+<p>内联方式直接将代码嵌入页面内，而链接方式则将代码放在外部文件中，然后从页面内部链接到它。</p>
+<p>内联方式是导致跨站脚本攻击（XSS）漏洞的罪魁祸首，因为浏览器不知道代码最初来自哪里：是来自可信任的Web服务器还是来自不可信任的用户？没有这些知识，浏览器就不知道哪些代码是安全的，哪些是危险的。链接方式为浏览器提供了一个非常重要的信息，即代码的来源。然后，网站可以告诉浏览器哪些来源是可信的，这样浏览器就知道哪段代码是安全的。尽管攻击者也可以使用链接方式在输入中包含代码，但他们无法将其代码放置在那些可信任的位置。</p>
+<p>网站如何告诉浏览器哪个代码源是可信的，这是通过使用一种称为内容安全策略（CSP）的安全机制来实现的。这种机制是专门为击败跨站脚本攻击（XSS）和点击劫持攻击而设计的。它已成为一种标准，现在大多数浏览器都支持它。CSP不仅限制JavaScript代码，还限制其他页面内容，例如限制图片、音频和视频的来源，以及限制页面是否可以放在iframe中（用于击败点击劫持攻击）。在这里，我们将只关注如何使用CSP来击败跨站脚本攻击（XSS）。</p>
 <p>Elgg确实有内置的对抗措施来防御XSS攻击。我们已经停用并注释掉了这些对抗措施，以便攻击能够起作用。Elgg网络应用程序上有一个自定义的安全插件HTMLawed，激活后，它会验证用户输入并移除输入中的标签。这个特定的插件在elgg/engine/lib/input.php文件的function filter tags中注册。</p>
 <p>要启用对抗措施，请以管理员身份登录应用程序，转到“帐户”-&gt;“管理”（屏幕右上角）-&gt;“插件”（右侧面板），然后在页面顶部的过滤器选项中点击“安全和垃圾邮件”。您应该会在下面找到HTMLawed插件。点击“激活”以启用对抗措施。</p>
 <p>除了Elgg中的HTMLawed 1.9安全插件外，还有另一种内置的PHP方法称为htmlspecialchars()，该方法用于对用户输入中的特殊字符进行编码，例如将“&lt;”编码为&amp;lt，“&gt;”编码为&amp;gt等。请转到/var/www/XSS/Elgg/vendor/elgg/elgg/views/default/output/，并在text.php、url.php、dropdown.php和email.php文件中找到函数调用htmlspecialchars。在每个文件中取消注释相应的“htmlspecialchars”函数调用。</p>

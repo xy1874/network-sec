@@ -1371,7 +1371,7 @@
 <p>（1）攻击者构造一个带有恶意脚本的链接，其链接参数包含用户的输入。</p>
 <p>（2）将链接发送给受害者。</p>
 <p>（3）受害者点击链接时，恶意脚本会被浏览器解析并执行，从而执行攻击者的意图。</p>
-<p><center><img src="../assets/攻击示意图.png" width = 600></center></p>
+<p><center><img src="../assets/13.png" width = 600></center></p>
 <h3 id="12-xss">1.2 反射型XSS攻击的示例</h3>
 <p>（1）攻击者针对 <a href="http://www.example.com">http://www.example.com</a> 的一个搜索页，在搜索页面的输入信息的对话框中输入如下脚本（query等号后面的内容） ，那么url上就会显示如下链接，且页面又反射出的攻击信息出现。</p>
 <div class="highlight"><pre><span></span><code>http://www.example.com/search?query=&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;
@@ -1391,7 +1391,7 @@
 <p>（3）网站接收到含有恶意代码的表单数据，将其存储到数据库中。此时，攻击者的恶意代码已经写入到数据库中并保存下来。</p>
 <p>（4）受害用户访问这个包含恶意代码的页面时，恶意代码从数据库中提取出来并在受害用户的浏览器上执行，触发攻击者设定的操作。</p>
 <p>（5）攻击者利用受害用户的会话标记等获取受害者的身份和敏感信息。例如，可以利用恶意脚本窃取用户的个人信息、登录凭据或信用卡信息，并发送给攻击者。</p>
-<p><center><img src="../assets/攻击示意图.png" width = 600></center></p>
+<p><center><img src="../assets/14.png" width = 600></center></p>
 <h3 id="22-xss">2.2 存储型XSS攻击的示例</h3>
 <p>（1）攻击者针对 <a href="http://www.seed-server.com">http://www.seed-server.com</a> 中的个人主页修改中嵌入如下信息</p>
 <div class="highlight"><pre><span></span><code>&lt;script&gt;警告脚本;&lt;/script&gt;  //警告脚本可以是 alert(&quot;XSS&quot;)
