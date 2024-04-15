@@ -1320,7 +1320,7 @@
 <p>需要选择一个用户登录（除admin外）， 选择 Edit Profile 菜单，在 Aboutme 或者 Birefdescription 等信息框中嵌入你的告警字段。</p>
 <p><center><img src="../assets/12.png" width = 600></center></p>
 <p>请将下面警告页面 “XSS” 显示 你的学号+Hacker 字样。并截图贴在报告中。</p>
-<p><center><img src="../assets/9.png" width = 600></center></p>
+<p><center><img src="../assets/9.PNG" width = 600></center></p>
 <h2 id="2cookies">任务2：发布恶意消息以显示Cookies</h2>
 <p>这个任务的目标是在你的Elgg个人资料中嵌入一个 JavaScript 程序，以便当其他用户查看你的个人资料时，用户的 Cookies 将在警告窗口中显示。这可以通过在前面的任务中的 JavaScript 程序添加一些额外的代码来完成，可以将下面的代码替换任务1中的简短描述字段中：</p>
 <div class="highlight"><pre><span></span><code>&lt;script&gt;alert(document.cookie);&lt;/script&gt;
@@ -1344,9 +1344,9 @@
 <p>在这一项和下一项任务中，我们将执行类似于 2005 年 Samy 对 MySpace 进行的攻击（即 Samy 蠕虫病毒）。我们将编写一个跨站脚本（XSS）蠕虫病毒，该病毒会将访问 Samy 页面的任何其他用户添加 Samy 为好友。这种蠕虫病毒不会自我传播；在任务6中，我们将使其具有自我传播能力。</p>
 <p>在这项任务中，我们需要编写一个恶意的 JavaScript 程序，该程序能够直接从受害者的浏览器中伪造HTTP请求，而无需攻击者的干预。攻击的目的是将Samy添加为受害者的好友。我们已经在 Elgg 服务器上创建了一个名为 Samy 的用户（用户名为 samy ）。</p>
 <p>为了给受害者添加好友，我们首先应该了解合法用户在 Elgg 中如何添加好友。更具体地说，我们需要弄清楚当用户添加好友时，会向服务器发送什么信息。Firefox 的HTTP 开发工具可以帮助我们获取这些信息。它可以显示从浏览器发送的任何 HTTP 请求消息的内容。从内容中，我们可以识别请求中的所有参数。下面三幅图显示如何打开这个工具并查看具体消息的参数。</p>
-<p><center><img src="../assets/5.png" width = 600></center></p>
-<p><center><img src="../assets/7.png" width = 600></center></p>
-<p><center><img src="../assets/11.png" width = 600></center></p>
+<p><center><img src="../assets/5.PNG" width = 600></center></p>
+<p><center><img src="../assets/7.PNG" width = 600></center></p>
+<p><center><img src="../assets/11.PNG" width = 600></center></p>
 <p>一旦我们了解了添加好友的HTTP请求是什么样的，我们就可以编写一个 JavaScript 程序来发送相同的 HTTP 请求。我们提供了一个框架 JavaScript 代码，以帮助完成任务。</p>
 <p>下面 firend = 56 这个 id 的值要根据实际用户的 id 替换，可以参上图中的具体信息，里面有 id 的值。</p>
 <div class="highlight"><pre><span></span><code>&lt;script type=&quot;text/javascript&quot;&gt;

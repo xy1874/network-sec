@@ -19,7 +19,7 @@ XSS攻击最主要有如下分类：反射型、存储型、及 DOM-based型。 
 
 （3）受害者点击链接时，恶意脚本会被浏览器解析并执行，从而执行攻击者的意图。
 
-<center><img src="../assets/13.png" width = 600></center>
+<center><img src="../assets/13.PNG" width = 600></center>
 
 ### 1.2 反射型XSS攻击的示例
 

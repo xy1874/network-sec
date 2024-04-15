@@ -88,7 +88,7 @@ $ dockps
 
 请将下面警告页面 “XSS” 显示 你的学号+Hacker 字样。并截图贴在报告中。
 
-<center><img src="../assets/9.png" width = 600></center>
+<center><img src="../assets/9.PNG" width = 600></center>
 
 
 ##  任务2：发布恶意消息以显示Cookies
@@ -132,11 +132,11 @@ $ nc -lknv 5555
 
 为了给受害者添加好友，我们首先应该了解合法用户在 Elgg 中如何添加好友。更具体地说，我们需要弄清楚当用户添加好友时，会向服务器发送什么信息。Firefox 的HTTP 开发工具可以帮助我们获取这些信息。它可以显示从浏览器发送的任何 HTTP 请求消息的内容。从内容中，我们可以识别请求中的所有参数。下面三幅图显示如何打开这个工具并查看具体消息的参数。
 
-<center><img src="../assets/5.png" width = 600></center>
+<center><img src="../assets/5.PNG" width = 600></center>
 
-<center><img src="../assets/7.png" width = 600></center>
+<center><img src="../assets/7.PNG" width = 600></center>
 
-<center><img src="../assets/11.png" width = 600></center>
+<center><img src="../assets/11.PNG" width = 600></center>
 
 
 一旦我们了解了添加好友的HTTP请求是什么样的，我们就可以编写一个 JavaScript 程序来发送相同的 HTTP 请求。我们提供了一个框架 JavaScript 代码，以帮助完成任务。
