@@ -1437,7 +1437,7 @@ window.onload = function () {
 <p>要启用对抗措施，请以管理员身份登录应用程序，转到“帐户”-&gt;“管理”（屏幕右上角）-&gt;“插件”（右侧面板），然后在页面顶部的过滤器选项中点击“安全和垃圾邮件”。您应该会在下面找到HTMLawed插件。点击“激活”以启用对抗措施。</p>
 <p>除了Elgg中的HTMLawed 1.9安全插件外，还有另一种内置的PHP方法称为htmlspecialchars()，该方法用于对用户输入中的特殊字符进行编码，例如将“&lt;”编码为&amp;lt，“&gt;”编码为&amp;gt等。请转到/var/www/XSS/Elgg/vendor/elgg/elgg/views/default/output/，并在text.php、url.php、dropdown.php和email.php文件中找到函数调用htmlspecialchars。在每个文件中取消注释相应的“htmlspecialchars”函数调用。</p>
 <p>一旦您知道如何启用这些对抗措施，请执行以下操作（请不要更改任何其他代码，并确保没有语法错误）：</p>
-<p>激活HTMLawed对抗措施或者激活htmlspecialchars，任选一种对抗措施；访问任意一个受害者的个人资料，并在报告中描述你的观察结果。</p>
+<p>激活HTMLawed对抗措施或者激活htmlspecialchars，任选一种对抗措施；访问任意一个受害者的个人资料，并在报告中描述你修改的内容和观察结果。</p>
 
               
             </article>
