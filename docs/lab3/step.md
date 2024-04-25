@@ -253,14 +253,22 @@ window.onload = function () {
 网站如何告诉浏览器哪个代码源是可信的，这是通过使用一种称为内容安全策略（CSP）的安全机制来实现的。这种机制是专门为击败跨站脚本攻击（XSS）和点击劫持攻击而设计的。它已成为一种标准，现在大多数浏览器都支持它。CSP不仅限制JavaScript代码，还限制其他页面内容，例如限制图片、音频和视频的来源，以及限制页面是否可以放在iframe中（用于击败点击劫持攻击）。在这里，我们将只关注如何使用CSP来击败跨站脚本攻击（XSS）。
 
 
-Elgg确实有内置的对抗措施来防御XSS攻击。我们已经停用并注释掉了这些对抗措施，以便攻击能够起作用。Elgg网络应用程序上有一个自定义的安全插件HTMLawed，激活后，它会验证用户输入并移除输入中的标签。这个特定的插件在elgg/engine/lib/input.php文件的function filter tags中注册。
+Elgg确实有内置的对抗措施来防御XSS攻击。我们已经停用并注释掉了这些对抗措施，以便攻击能够起作用。内置的PHP方法称为htmlspecialchars()，该方法用于对用户输入中的特殊字符进行编码，例如将“<”编码为&lt，“>”编码为&gt等。
 
-要启用对抗措施，请以管理员身份登录应用程序，转到“帐户”->“管理”（屏幕右上角）->“插件”（右侧面板），然后在页面顶部的过滤器选项中点击“安全和垃圾邮件”。您应该会在下面找到HTMLawed插件。点击“激活”以启用对抗措施。
+请用 docksh 命令查看 web服务器的 docker id，然后采用 dockps 命令进入到该容器。下面命令的显示结果因虚拟机不同而不同，大家要注意变换参数
 
-除了Elgg中的HTMLawed 1.9安全插件外，还有另一种内置的PHP方法称为htmlspecialchars()，该方法用于对用户输入中的特殊字符进行编码，例如将“<”编码为&lt，“>”编码为&gt等。请转到/var/www/XSS/Elgg/vendor/elgg/elgg/views/default/output/，并在text.php、url.php、dropdown.php和email.php文件中找到函数调用htmlspecialchars。在每个文件中取消注释相应的“htmlspecialchars”函数调用。
+```
+$ dockps
+20c3333a8cd5  www-10.9.0.5
+4a101760d086  mysql-10.9.0.6
+```
 
-一旦您知道如何启用这些对抗措施，请执行以下操作（请不要更改任何其他代码，并确保没有语法错误）：
+```
+$ docksh 20   // 这里的 20 是取上面 dockps 命令中的 web 容器的前两个字母
+```
 
-本实验环境中没有HTMLawed 1.9安全插件，大家可以忽略这种方式。
+进入到web容器后，cd 到 /var/www/elgg/vendor/elgg/elgg/views/default/output 目录下，在 longtext.php文件中找到函数调用htmlspecialchars，取消注释相应的“htmlspecialchars”函数调用。
 
-激活htmlspecialchars，然后访问任意一个受害者的个人资料，并在报告中描述你修改的内容和观察结果。
+在容器中没有 vim 工具，大家可以使用 nano 命令修改文件。修改完成后请重启容器。 
+
+激活htmlspecialchars然后访问任意一个受害者的个人资料，并在报告中描述你修改的内容和观察结果。
